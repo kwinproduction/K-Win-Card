@@ -4,461 +4,126 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>K-Win</title>
-<!-- K-Win PWA Manifest -->
-
+    
     <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiSy1XaW4gUHJvZHVjdGlvbiIsInNob3J0X25hbWUiOiJLLVdpbiIsInN0YXJ0X3VybCI6ImluZGV4Lmh0bWwiLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3ciOiIjMGExOTJmIiwidGhlbWVfY29sb3ciOiIjNjRmZmRhIiwib3JpZW50YXRpb24iOiJwb3J0cmFpdCIsImljb25zIjpbeyJzcmMiOiJodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20va3dpbnByb2R1Y3Rpb24vSy1XaW4tRWNhcmQvbWFpbi9sb2dvLmpwZWciLCJzaXplcyI6IjUxMng1MTIiLCJ0eXBlIjoiaW1hZ2UvanBlZyIsInB1cnBvc2UiOiJhbnkgbWFza2FibGUifV19">
-
     <link rel="icon" type="image/jpeg" href="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg">
-
     <meta name="theme-color" content="#64ffda">
 
     <style>
         :root { --primary: #50e3c2; --gold: #ffcc00; --dark-blue: #0a192f; --glass: rgba(255, 255, 255, 0.08); }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { 
-            background: radial-gradient(circle at top, #112240, #000); 
+            background: #050a14; 
             color: white; 
-            font-family: 'Segoe UI', 'Latha', 'Tamil', sans-serif; 
+            font-family: 'Segoe UI', sans-serif; 
             margin: 0; padding: 0;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            height: 100vh; width: 100vw; overflow: hidden; 
+            min-height: 100vh; width: 100vw; overflow-x: hidden; 
         }
 
-        /* Top Bar & Lang Switch */
-        .top-bar { position: absolute; top: 20px; width: 100%; display: flex; justify-content: center; z-index: 5000; }
-        .lang-switch { display: flex; gap: 5px; background: var(--glass); padding: 5px; border-radius: 20px; backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); }
-        .lang-btn { background: transparent; border: none; color: rgba(255,255,255,0.6); padding: 8px 15px; border-radius: 15px; cursor: pointer; font-size: 0.75rem; transition: 0.3s; }
-        .lang-btn.active { background: var(--primary); color: #0a192f; font-weight: bold; box-shadow: 0 4px 15px rgba(80, 227, 194, 0.3); }
+        /* Background Orbs */
+        .bg-animations { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; }
+        .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.4; animation: moveOrb 20s infinite alternate ease-in-out; }
+        .orb-1 { width: 300px; height: 300px; background: var(--primary); top: -50px; left: -50px; }
+        .orb-2 { width: 400px; height: 400px; background: #007bff; bottom: -100px; right: -50px; animation-duration: 25s; }
+        @keyframes moveOrb { from { transform: translate(0, 0); } to { transform: translate(30px, 50px); } }
 
         /* Card Stylings */
-        .card { width: 92%; max-width: 380px; background: var(--glass); padding: 25px 20px; border-radius: 35px; border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(25px); text-align: center; position: relative; box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
-        .p-img { width: 90px; height: 90px; border-radius: 50%; border: 3px solid var(--gold); padding: 4px; object-fit: cover; box-shadow: 0 0 20px rgba(255, 204, 0, 0.2); }
+        .card { width: 92%; max-width: 380px; background: rgba(255, 255, 255, 0.05); padding: 25px 20px; border-radius: 35px; border: 1px solid rgba(255, 255, 255, 0.15); backdrop-filter: blur(30px); text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
+        .p-img { width: 90px; height: 90px; border-radius: 50%; border: 3px solid var(--gold); padding: 4px; object-fit: cover; }
         .info-box { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 20px; margin: 15px 0; border-left: 4px solid var(--primary); text-align: left; font-size: 0.8rem; line-height: 1.6; }
         
-        /* Buttons */
+        /* Button Styles */
         .btn-save, .btn-tt { width: 100%; padding: 14px; border-radius: 18px; font-weight: bold; cursor: pointer; border: none; margin-top: 10px; font-size: 0.9rem; transition: 0.3s; }
-        .btn-save { background: #fff; color: #0a192f; box-shadow: 0 10px 20px rgba(255,255,255,0.1); }
+        .btn-save { background: #fff; color: #0a192f; }
         .btn-tt { background: linear-gradient(135deg, var(--primary), #3db89e); color: #0a192f; }
-        .btn-save:active, .btn-tt:active { transform: scale(0.97); }
 
-        /* Action Grid & Smooth Dropdowns */
-        .action-grid { display: none; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-top: 10px; }
-        .btn-action { width: 100%; padding: 12px 5px; font-size: 0.8rem; border-radius: 15px; border: none; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn-wa { background: #128C7E; } .btn-call { background: #007bff; }
-        .btn-sms { background: #f39c12; color: #000; } .btn-email { background: #e74c3c; }
+        /* Action Grid */
+        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-top: 10px; }
+        .btn-action { width: 100%; padding: 12px 5px; font-size: 0.8rem; border-radius: 15px; border: none; color: white; font-weight: bold; cursor: pointer; }
+        .btn-wa { background: #128C7E; grid-column: span 2; } /* WhatsApp wide */
+        .btn-call { background: #007bff; }
+        .btn-sms { background: #f39c12; color: #000; }
+        .btn-email { background: #e74c3c; grid-column: span 2; }
 
+        /* Dropdowns */
         .dropdown { position: relative; width: 100%; }
         .dropdown-content { 
-            display: none; position: absolute; background: rgba(255, 255, 255, 0.95); 
-            width: 100%; border-radius: 18px; z-index: 9000; bottom: 120%; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4); overflow: hidden;
-            animation: slideUp 0.3s ease-out;
+            display: none; position: absolute; background: white; 
+            width: 100%; border-radius: 15px; z-index: 99; bottom: 110%; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3); overflow: hidden;
         }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .dropdown-content a { color: #111; padding: 14px; text-decoration: none; display: block; font-size: 0.85rem; font-weight: 600; border-bottom: 1px solid rgba(0,0,0,0.05); transition: 0.2s; }
-        .dropdown-content a:active { background: var(--primary); }
+        .dropdown-content a { color: #111; padding: 12px; text-decoration: none; display: block; font-size: 0.8rem; border-bottom: 1px solid #eee; }
         .show { display: block !important; }
 
-        /* Social Section */
+        /* Socials */
         .social-button-container { width: 92%; max-width: 380px; margin-top: 20px; text-align: center; }
-        .section-title { font-size: 10px; color: rgba(255,255,255,0.4); margin-bottom: 12px; letter-spacing: 2px; text-transform: uppercase; }
-        .location-btn { display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; color: white; font-weight: 600; border-radius: 18px; padding: 14px; background: linear-gradient(45deg, #4285F4, #34A853); margin-bottom: 10px; font-size: 0.85rem; box-shadow: 0 10px 20px rgba(66, 133, 244, 0.2); }
-        
-        .social-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-        .grid-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; text-decoration: none; color: white; font-size: 0.6rem; border-radius: 15px; padding: 10px 5px; background: var(--glass); border: 1px solid rgba(255, 255, 255, 0.1); transition: 0.3s; }
-        .grid-btn img, .location-btn img { width: 22px; height: 22px; }
-        .grid-btn:active { background: rgba(255,255,255,0.2); transform: translateY(-3px); }
+        .social-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px; }
+        .grid-btn { display: flex; flex-direction: column; align-items: center; background: var(--glass); padding: 10px 5px; border-radius: 15px; text-decoration: none; color: white; font-size: 0.6rem; border: 1px solid rgba(255,255,255,0.1); }
+        .grid-btn img { width: 20px; height: 20px; margin-bottom: 5px; }
 
-        /* Timetable Overlay */
-        .tt-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 10000; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
-        .tt-container { width: 100%; max-width: 400px; background: #0a192f; border-radius: 30px; border: 1px solid var(--primary); padding: 25px; max-height: 80vh; overflow-y: auto; box-shadow: 0 0 50px rgba(80, 227, 194, 0.2); }
-        .close-tt { float: right; background: var(--primary); border: none; width: 35px; height: 35px; border-radius: 50%; font-size: 20px; font-weight: bold; cursor: pointer; color: #0a192f; }
-        .tt-day-group { margin-bottom: 20px; }
-        .tt-day-name { color: var(--gold); font-size: 1.1rem; font-weight: 800; margin-bottom: 8px; display: block; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px; }
-        .tt-class { background: rgba(255,255,255,0.05); padding: 12px; border-radius: 15px; margin-bottom: 8px; border-left: 4px solid var(--primary); font-size: 0.85rem; }
-
-        /* Toast */
-     .status-toast { 
-    position: fixed; bottom: -200px; left: 50%; transform: translateX(-50%); 
-    background: #ffffff; color: #333; padding: 15px 20px; border-radius: 20px; 
-    box-shadow: 0 10px 40px rgba(0,0,0,0.4); z-index: 20000; width: 90%; max-width: 360px; 
-    transition: all 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55); display: flex; align-items: center; 
-}
-.status-toast.active { bottom: 30px; }
-.status-toast.active {
-    bottom: 30px; /* active වුණාම screen එක ඇතුළට එනවා */
-}
-
-.toast-content {
-    display: flex;
-    align-items: flex-start;
-    gap: 15px;
-}
-
-.toast-icon {
-    font-size: 24px;
-}
-
-.toast-details h4 {
-    margin: 0;
-    font-size: 16px;
-    color: #333;
-}
-
-.toast-details p {
-    margin: 5px 0 0;
-    font-size: 13px;
-    color: #666;
-    line-height: 1.4;
-}
-/* CSS කොටස */
-.status-indicator {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 0.7rem;
-    font-weight: bold;
-    padding: 5px 10px;
-    border-radius: 20px;
-    background: rgba(255,255,255,0.1);
-    margin-bottom: 10px;
-}
-.dot { height: 8px; width: 8px; border-radius: 50%; display: inline-block; }
-.dot-green { background: #2ecc71; box-shadow: 0 0 10px #2ecc71; }
-.dot-red { background: #e74c3c; }
-
-.live-dot {
-    height: 8px;
-    width: 8px;
-    background-color: #50e3c2;
-    border-radius: 50%;
-    display: inline-block;
-    box-shadow: 0 0 10px #50e3c2;
-    animation: pulse-live 1.5s infinite;
-}
-
-@keyframes pulse-live {
-    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(80, 227, 194, 0.7); }
-    70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(80, 227, 194, 0); }
-    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(80, 227, 194, 0); }
-}
-        /* Background එකේ ඇති Orbs වල මූලික සැකසුම */
-        body {
-    background: #050a14; /* ඉතා තද වර්ණයක් පාවිච්චි කරන්න */
-    /* අනිත් body styles එලෙසම තබන්න */
-}
-.bg-animations {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    z-index: -1; /* Card එකට පිටුපසින් තැබීමට */
-    overflow: hidden;
-}
-
-.orb {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(80px); /* හොඳින් බොඳ කිරීමට */
-    opacity: 0.5;
-    animation: moveOrb 20s infinite alternate ease-in-out;
-}
-
-/* Orbs 3ක් සඳහා වර්ණ සහ ප්‍රමාණයන් */
-.orb-1 {
-    width: 300px; height: 300px;
-    background: #50e3c2; /* Primary Green */
-    top: -50px; left: -50px;
-}
-
-.orb-2 {
-    width: 400px; height: 400px;
-    background: #007bff; /* Blue */
-    bottom: -100px; right: -50px;
-    animation-duration: 25s;
-    animation-delay: -5s;
-}
-
-.orb-3 {
-    width: 250px; height: 250px;
-    background: #ffcc00; /* Gold */
-    top: 40%; left: 60%;
-    animation-duration: 15s;
-    animation-delay: -2s;
-}
-
-/* Orbs චලනය වන ආකාරය */
-@keyframes moveOrb {
-    0% { transform: translate(0, 0) scale(1); }
-    33% { transform: translate(30px, 50px) scale(1.1); }
-    66% { transform: translate(-20px, 20px) scale(0.9); }
-    100% { transform: translate(0, 0) scale(1); }
-}
-
-/* දැනට පවතින Card එක තවත් පැහැදිලි වීමට මේ CSS එක පොඩ්ඩක් වෙනස් කරන්න */
-.card {
-    background: rgba(255, 255, 255, 0.05) !important;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
-    backdrop-filter: blur(30px) !important; /* Blur ගතිය වැඩි කරන්න */
-}
+        /* Overlay */
+        .tt-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; align-items: center; justify-content: center; }
     </style>
 </head>
 <body>
-<div id="pwa-installer" style="display:none; position:fixed; top:10px; width:90%; max-width:360px; background:rgba(0,0,0,0.9); padding:15px; border-radius:15px; z-index:9999; border:1px solid var(--primary); left:50%; transform:translateX(-50%); text-align:center;">
-    <span id="pwa-text" style="font-size:0.85rem; display:block; margin-bottom:10px;">📲 K-Win App එක Install කරගන්න</span>
-    <button id="btn-install-main" style="background:var(--primary); color:#0a192f; border:none; padding:10px 20px; border-radius:10px; cursor:pointer; font-weight:bold; width:100%;">Install Now</button>
-</div>
-<div class="bg-animations">
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
-</div>
-    
-    <div class="top-bar">
-        <div class="lang-switch">
-            <button id="btn-si" class="lang-btn active" onclick="setLanguage('si')">සිංහල</button>
-            <button id="btn-en" class="lang-btn" onclick="setLanguage('en')">English</button>
-            <button id="btn-ta" class="lang-btn" onclick="setLanguage('ta')">தமிழ்</button>
-        </div>
+
+    <div class="bg-animations">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
     </div>
 
     <div class="card">
         <div style="color: var(--primary); font-size: 0.6rem; letter-spacing: 3px; font-weight: 800; margin-bottom: 12px;">ADM HIGHER EDUCATION</div>
-        <div id="live-class-container" style="display: none; margin-bottom: 10px;">
-    <div style="display: inline-flex; align-items: center; background: rgba(0, 255, 127, 0.1); border: 1px solid #50e3c2; padding: 5px 12px; border-radius: 20px; gap: 8px;">
-        <span class="live-dot"></span>
-        <span id="live-class-text" style="color: #50e3c2; font-size: 0.7rem; font-weight: bold; letter-spacing: 0.5px; text-transform: uppercase;"></span>
-    </div>
-</div>
-        <img src="" class="p-img" alt="Profile">
-        <h2 id="u-name" style="margin: 12px 0 4px 0; font-size: 1.5rem; letter-spacing: -0.5px;">K-Win</h2>
-       
+        <img src="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg" class="p-img" alt="Profile">
+        <h2 id="u-name" style="margin: 12px 0 4px 0;">K-Win</h2>
         
         <div class="info-box">
-            <span id="lbl-addr">📍 Kurunegala, Srilanka (60000) </span><br>
-            <span id="lbl-phone">📞 071 733 7818 </span><br>
+            <span id="lbl-addr">📍 Kurunegala, Sri Lanka</span><br>
+            <span id="lbl-phone">📞 071 733 7818</span><br>
             <span id="lbl-email">📧 kindwin2026@gmail.com</span>
         </div>
 
+        <!-- Main Save Contact Button -->
         <button id="mainSaveBtn" onclick="saveVCard()" class="btn-save">👤 SAVE CONTACT</button>
 
-     <div class="dropdown" style="width: 100%;">
-    <button class="btn-action btn-wa" id="btn-wa-txt" onclick="window.location.href='https://wa.me/94707140730'">
-        WhatsApp
-    </button>
-</div>
-            </div>
+        <!-- Hidden Action Grid (Shown after save) -->
+        <div id="actionGrid" class="action-grid" style="display: none;">
+            <button class="btn-action btn-wa" onclick="window.location.href='https://wa.me/94707140730'">WhatsApp</button>
+            
             <div class="dropdown">
                 <button class="btn-action btn-call" id="btn-call-txt" onclick="toggleMenu('callMenu')">Call</button>
                 <div id="callMenu" class="dropdown-content">
                     <a href="tel:0717337818">071 733 7818</a>
-                    <a href="tel:0767902944">076 790 2944 </a>
-                      <a href="tel:0704073730">070 407 3730 </a>
+                    <a href="tel:0767902944">076 790 2944</a>
                 </div>
             </div>
+
             <div class="dropdown">
                 <button class="btn-action btn-sms" id="btn-sms-txt" onclick="toggleMenu('smsMenu')">SMS</button>
                 <div id="smsMenu" class="dropdown-content">
-                  <a href="tel:0717337818">071 733 7818</a>
-                    <a href="tel:0767902944">076 790 2944 </a>
-                      <a href="tel:0704073730">070 407 3730 </a>
+                    <a href="sms:0717337818">071 733 7818</a>
+                    <a href="sms:0767902944">076 790 2944</a>
                 </div>
             </div>
-            <button class="btn-action btn-email" id="btn-email-txt" onclick="window.location.href='mailto:kindwin2026@gmail.com'">Email</button>
+
+            <button class="btn-action btn-email" onclick="window.location.href='mailto:kindwin2026@gmail.com'">Email</button>
         </div>
-        <button onclick="openTimetable()" class="btn-tt">📅 <span id="btn-tt-txt"> Opening Hours </span></button>
+
+        <button onclick="openTimetable()" class="btn-tt">📅 <span id="btn-tt-txt">Opening Hours</span></button>
     </div>
-    <div id="ttOverlay" class="tt-overlay">
-    <div class="tt-container">
-        <button class="close-tt" onclick="closeTimetable()">×</button>
-        <h3 id="tt-title" style="color: var(--primary); margin-top: 0;">Weekly Timetable</h3>
-        <div id="tt-list"></div>
-    </div>
-</div>
+
     <div class="social-button-container">
-        <p id="social-title" class="section-title">CONNECT WITH US</p>
-        <a id="loc-btn" href="https://maps.app.goo.gl/3Sr1ZUirrj4jtW3m6?g_st=ac" class="location-btn">
-            <img src="https://cdn-icons-png.flaticon.com/512/854/854878.png" alt="Loc">
-            <span id="loc-txt">GET DIRECTIONS (MAPS)</span>
-        </a>
-
-     <div class="social-grid">
-    <a href="#" id="fb-link" class="grid-btn">
-        <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="FB">
-        <span>Facebook</span>
-    </a>
-
-    <a href="#" id="yt-link" class="grid-btn">
-        <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YT">
-        <span>YouTube</span>
-
-    </a>
-
-    <a href="#" id="tt-link" class="grid-btn">
-        <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png" alt="TT">
-        <span>TikTok</span>
-    </a>
-
-    <a href="#" id="ig-link" class="grid-btn">
-        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="IG">
-        <span>Instagram</span>
-    </a>
-</div>
-    </div>
-
-<div id="footer-credit" style="margin-top: 15px; font-size: 0.55rem; opacity: 0.5; letter-spacing: 1px;"> Powered by K-Win | Design by Janith Didula </div>
-    <div id="statusToast" class="status-toast">
-    <div class="toast-content">
-        <span class="toast-icon"></span> <div class="toast-details">
-            <h4 id="toast-title"></h4>
-            <p id="toast-msg"></p>
+        <div class="social-grid">
+            <a href="https://facebook.com" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png"><span>Facebook</span></a>
+            <a href="https://youtube.com" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"><span>YouTube</span></a>
+            <a href="https://tiktok.com" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png"><span>TikTok</span></a>
+            <a href="https://instagram.com" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"><span>Instagram</span></a>
         </div>
+        <div id="footer-credit" style="margin-top: 15px; font-size: 0.6rem; opacity: 0.5;">Design by Janith Didula</div>
     </div>
-</div>
-    
+
     <script>
-
-       let currentLang = 'en';
-
-const translations = {
-    si: { 
-        name: "K-Win",  
-        save: "👤 CONTACT එක SAVE කරන්න", 
-        ttBtn: "කාලසටහන බලන්න", 
-        ttTitle: "විවෘතව තබන වේලාවන්", 
-        addr: "📍 කුරුණෑගල, ශ්‍රී ලංකා. (60000)", 
-        socialTitle: "අප හා සම්බන්ධ වන්න", 
-        locTxt: "ආයතනයට පැමිණෙන මග (Maps)", 
-        credit: "Powered by K-Win | නිර්මාණය: ජනිත් දිදුල",
-        call: "ඇමතුම්", 
-        sms: "පණිවිඩ", 
-        email: "ඊමේල්",
-        wa: "WhatsApp",
-        toastTitle: "ආයතන තත්ත්වය", 
-        toastMsg: "තොරතුරු පරීක්ෂා කරමින්...",
-        days: ["සඳුදා", "අඟහරුවාදා", "බදාදා", "බ්‍රහස්පතින්දා", "සිකුරාදා", "සෙනසුරාදා", "ඉරිදා"] 
-    },
-    en: { 
-        name: "K-Win",  
-        save: "👤 SAVE CONTACT", 
-        ttBtn: "View Timetable", 
-        ttTitle: "Opening Hours", 
-        addr: "📍 Kurunegala, Sri Lanka. (60000)", 
-        socialTitle: "CONNECT WITH US", 
-        locTxt: "GET DIRECTIONS (MAPS)", 
-        credit: "Powered by K-Win | Design by Janith Didula",
-        call: "Call", 
-        sms: "SMS", 
-        email: "Email",
-        wa: "WhatsApp",
-        toastTitle: "Institute Status", 
-        toastMsg: "Checking status...",
-        days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] 
-    },
-    ta: { 
-        name: "K-Win",  
-        save: "👤 தொடர்பைச் சேமிக்கவும்", 
-        ttBtn: "கால அட்டவணை", 
-        ttTitle: "திறந்திருக்கும் நேரங்கள்", 
-        addr: "📍 குருநாகல், இலங்கை. (60000)", 
-        socialTitle: "எங்களுடன் இணையுங்கள்", 
-        locTxt: "வரைபடம் (Maps)", 
-        credit: "K-Win மூலம் இயக்கப்படுகிறது | ஜனித் திதுல නිර්මාණය",
-        call: "அழைப்பு", 
-        sms: "செய்தி", 
-        email: "மின்னஞ்சல்",
-        wa: "WhatsApp",
-        toastTitle: "நிறுவன நிலை", 
-        toastMsg: "நிலைமையை சரிபார்க்கிறது...",
-        days: ["திங்கள்", "செவ்வாய்", "புதன்", "வியாழன்", "வெள்ளி", "சனி", "ஞாயிறு"] 
-    }
-};
-
-const timetable = [
-    { day: 0, classes: [ // සඳුදා
-        { time: "08:30 AM - 04:00 PM", si: "විවෘතව පවතී", en: "Open", ta: "திறந்திருக்கும்" }
-    ]},
-    { day: 1, classes: [ // අඟහරුවාදා
-        { time: "08:30 AM - 04:00 PM", si: "විවෘතව පවතී", en: "Open", ta: "திறந்திருக்கும்" }
-    ]},
-    { day: 2, classes: [ // බදාදා
-        { time: "08:30 AM - 04:00 PM", si: "විවෘතව පවතී", en: "Open", ta: "திறந்திருக்கும்" }
-    ]},
-    { day: 3, classes: [ // බ්‍රහස්පතින්දා
-        { time: "08:30 AM - 04:00 PM", si: "විවෘතව පවතී", en: "Open", ta: "திறந்திருக்கும்" }
-    ]},
-    { day: 4, classes: [ // සිකුරාදා
-        { time: "08:30 AM - 04:00 PM", si: "විවෘතව පවතී", en: "Open", ta: "திறந்திருக்கும்" }
-    ]},
-    { day: 5, classes: [ // සෙනසුරාදා
-        { time: "Closed", si: "ආයතනය වසා තබනු ලැබේ", en: "Institute is Closed", ta: "நிறுவனம் மூடப்பட்டுள்ளது" }
-    ]},
-    { day: 6, classes: [ // ඉරිදා
-        { time: "08:30 AM - 04:00 PM", si: "විවෘතව පවතී", en: "Open", ta: "திறந்திருக்கும்" }
-    ]}
-];
-
-        function setLanguage(lang) {
-            currentLang = lang;
-            document.getElementById('u-name').innerText = translations[lang].name;
-            document.getElementById('txt-role').innerText = translations[lang].role;
-            document.getElementById('mainSaveBtn').innerText = translations[lang].save;
-            document.getElementById('btn-tt-txt').innerText = translations[lang].ttBtn;
-            document.getElementById('tt-title').innerText = translations[lang].ttTitle;
-            document.getElementById('toast-title').innerText = translations[lang].toastTitle;
-            document.getElementById('toast-msg').innerText = translations[lang].toastMsg;
-            document.getElementById('lbl-addr').innerText = translations[lang].addr;
-            document.getElementById('social-title').innerText = translations[lang].socialTitle;
-            document.getElementById('loc-txt').innerText = translations[lang].locTxt;
-            document.getElementById('footer-credit').innerText = translations[lang].credit;
-            document.getElementById('btn-call-txt').innerText = translations[lang].call;
-            document.getElementById('btn-sms-txt').innerText = translations[lang].sms;
-            document.getElementById('btn-email-txt').innerText = translations[lang].email;
-            
-            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(`btn-${lang}`).classList.add('active');
-            setupAppLinks();
-        }
-
-        function setupAppLinks() {
-          const links = [
-        { 
-            id: 'fb-link', 
-            // Facebook App එකෙන් කෙලින්ම Profile එක open වීමට (Deep Link)
-            app: 'fb://facewebmodal/f?href=https://www.facebook.com/profile.php?id=61569786773421', 
-            // Browser එකෙන් open වීමට සාමාන්‍ය ලින්ක් එක
-            web: 'https://www.facebook.com/profile.php?id=61569786773421' 
-        }
-    ];
-
-            links.forEach(link => {
-                const el = document.getElementById(link.id);
-                el.onclick = (e) => {
-                    e.preventDefault();
-                    const start = Date.now();
-                    window.location.href = link.app;
-                    setTimeout(() => { if (Date.now() - start < 1500) window.location.href = link.web; }, 1000);
-                };
-            });
-
-        }
-
-        function openTimetable() {
-            const list = document.getElementById('tt-list');
-            list.innerHTML = '';
-            timetable.forEach(d => {
-                let dayHtml = `<div class="tt-day-group"><span class="tt-day-name">${translations[currentLang].days[d.day]}</span>`;
-                d.classes.forEach(c => {
-                    dayHtml += `<div class="tt-class"><span class="tt-time-label">🕒 ${c.time}</span><br>${c[currentLang]}</div>`;
-                });
-                dayHtml += `</div>`;
-                list.innerHTML += dayHtml;
-            });
-            document.getElementById('ttOverlay').style.display = 'flex';
-        }
-
-        function closeTimetable() { document.getElementById('ttOverlay').style.display = 'none'; }
-        
         function toggleMenu(id) {
             const menu = document.getElementById(id);
             const isShown = menu.classList.contains('show');
@@ -467,195 +132,33 @@ const timetable = [
         }
 
         async function saveVCard() {
-            const vcard = "BEGIN:VCARD\nVERSION:3.0\nFN:Janith Didula (ADM)\nTEL;TYPE=CELL:0710658051\nEND:VCARD";
+            const vcard = "BEGIN:VCARD\nVERSION:3.0\nFN:K-Win (ADM)\nTEL;0717337818\nEND:VCARD";
             const vblob = new Blob([vcard], { type: 'text/vcard' });
-            const vurl = URL.createObjectURL(vblob);
             const a = document.createElement('a');
-            a.href = vurl; a.download = 'Janith_ADM.vcf'; a.click();
+            a.href = URL.createObjectURL(vblob);
+            a.download = 'K-Win_Contact.vcf';
+            a.click();
+            
             localStorage.setItem('contact_saved', 'true');
-            setTimeout(() => {
-                document.getElementById('mainSaveBtn').style.display = 'none';
-                document.getElementById('actionGrid').style.display = 'grid';
-            }, 800);
+            showActionGrid();
         }
 
-        // Close dropdowns when clicking outside
-        window.addEventListener('click', function(e) {
+        function showActionGrid() {
+            document.getElementById('mainSaveBtn').style.display = 'none';
+            document.getElementById('actionGrid').style.display = 'grid';
+        }
+
+        window.onload = () => {
+            if (localStorage.getItem('contact_saved') === 'true') {
+                showActionGrid();
+            }
+        };
+
+        window.onclick = (e) => {
             if (!e.target.matches('.btn-action')) {
                 document.querySelectorAll('.dropdown-content').forEach(m => m.classList.remove('show'));
             }
-        });
-
-function setupPWAInstall() {
-    let deferredPrompt;
-    const pwaContainer = document.getElementById('pwa-installer');
-    const pwaBtn = document.getElementById('btn-install-main');
-
-    //  දැනටමත් App එකක් විදිහට (Standalone) වැඩ කරනවා නම් පෙන්වන්න එපා
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-        return; // මෙතනින් නවතින්න
-    }
-
-    //  බ්‍රවුසරය Install කරන්න සූදානම් නම් පමණක් පෙන්වන්න
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        // බ්‍රවුසරයේදී පමණක් පෙනෙන්න සලස්වන්න
-        if(pwaContainer) pwaContainer.style.display = 'block';
-    });
-
-    if(pwaBtn) {
-        pwaBtn.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
-                    if(pwaContainer) pwaContainer.style.display = 'none';
-                }
-                deferredPrompt = null;
-            }
-        });
-    }
-
-    //  Install වුණාම හංගන්න
-    window.addEventListener('appinstalled', () => {
-        if(pwaContainer) pwaContainer.style.display = 'none';
-    });
-}
-
-}
-        
-        // --- 1. Contact එක Save කරලා Button මාරු කරන Function එක ---
-async function saveVCard() {
-    const vcard = "BEGIN:VCARD\nVERSION:3.0\nFN:Janith Didula (ADM)\nTEL;TYPE=CELL:0710658051\nEND:VCARD";
-    const vblob = new Blob([vcard], { type: 'text/vcard' });
-    const vurl = URL.createObjectURL(vblob);
-    const a = document.createElement('a');
-    a.href = vurl; a.download = 'Janith_ADM.vcf'; a.click();
-    
-    localStorage.setItem('contact_saved', 'true');
-
-    // බටන් මාරු කිරීම
-    document.getElementById('mainSaveBtn').style.display = 'none';
-    document.getElementById('actionGrid').style.display = 'grid';
-}
-
-function openTimetable() {
-    // Timetable පෙන්වන logic එක
-    document.getElementById('ttOverlay').style.display = 'flex';
-}
-
-function closeTimetable() { document.getElementById('ttOverlay').style.display = 'none'; }
-
-function toggleMenu(id) {
-    const menu = document.getElementById(id);
-    const isShown = menu.classList.contains('show');
-    document.querySelectorAll('.dropdown-content').forEach(m => m.classList.remove('show'));
-    if (!isShown) menu.classList.add('show');
-}
-
-window.onclick = function(e) {
-    if (!e.target.matches('.btn-action')) {
-        document.querySelectorAll('.dropdown-content').forEach(m => m.classList.remove('show'));
-    }
-}
-// ---  Service Worker & Notification Logic (Registration) ---
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', async () => {
-        try {
-            // Service Worker එක Register කිරීම
-            const reg = await navigator.serviceWorker.register('sw.js');
-            console.log('ADM: Service Worker Registered! ✅');
-
-            // Notification සඳහා අවසර පරීක්ෂාව සහ ඉල්ලීම
-            if (Notification.permission === 'default') {
-                await Notification.requestPermission();
-            }
-
-            // Background Sync Register කිරීම (ඩේටා ඔන් කළ සැණින් වැඩ කිරීමට)
-            if ('sync' in reg) {
-                await reg.sync.register('data-on-check');
-            }
-
-        } catch (err) {
-            console.error('K-Win: SW Registration Failed!', err);
-        }
-    });
-}
-
-// ---  Online වූ සැණින් Notification එක Trigger කිරීම (Manual Check) ---
-window.addEventListener('online', async () => {
-    if ('serviceWorker' in navigator) {
-        const reg = await navigator.serviceWorker.ready;
-        if ('sync' in reg) {
-            await reg.sync.register('data-on-check');
-        }
-    }
-});
-function openTimetable() {
-    const list = document.getElementById('tt-list');
-    list.innerHTML = ''; // කලින් තිබුණ ඒවා අයින් කරන්න
-    
-    timetable.forEach(d => {
-        let dayHtml = `<div class="tt-day-group">
-            <span class="tt-day-name">${translations[currentLang].days[d.day]}</span>`;
-        
-        d.classes.forEach(c => {
-            dayHtml += `<div class="tt-class">
-                <span style="color: var(--gold); font-size: 0.75rem;">🕒 ${c.time}</span><br>
-                ${c[currentLang]}
-            </div>`;
-        });
-        
-        dayHtml += `</div>`;
-        list.innerHTML += dayHtml;
-    });
-    
-    document.getElementById('ttOverlay').style.display = 'flex';
-}
-
-function closeTimetable() {
-    document.getElementById('ttOverlay').style.display = 'none';
-}
-// ✅ සියල්ල එකට එකතු කළ නිවැරදි Window Load එක
-window.onload = () => {
-    // 1. මූලික Functions ක්‍රියාත්මක කිරීම
-    setLanguage('en');
-    setupAppLinks();
-    if (typeof setupPWAInstall === "function") setupPWAInstall(); 
-
-    // 2. Buttons පාලනය (Save Button vs Action Grid)
-    const saveBtn = document.getElementById('mainSaveBtn');
-    const actGrid = document.getElementById('actionGrid');
-
-    if (localStorage.getItem('contact_saved') === 'true') {
-        if (saveBtn) saveBtn.style.display = 'none';
-        if (actGrid) actGrid.style.display = 'grid';
-    } else {
-        if (saveBtn) saveBtn.style.display = 'block';
-        if (actGrid) actGrid.style.display = 'none';
-    }
-
-    // 3. ආයතන තත්ත්වය පරීක්ෂා කිරීම (අවශ්‍ය නම් පමණක්)
-    if (typeof checkInstituteStatus === "function") {
-        // checkInstituteStatus(); 
-    }
-};
-   function setBadgeCount(id, count) {
-    const badge = document.getElementById(id);
-    if (count > 0) {
-        badge.innerText = count;
-        badge.classList.add('show'); // Badge eka pennanna
-    } else {
-        badge.classList.remove('show'); // 0 nam badge eka hanganna
-    }
-}
-// Info box එකේ තොරතුරු copy කිරීමට
-function copyToClipboard(text, label) {
-    navigator.clipboard.writeText(text).then(() => {
-        showToast("Copied!", `${label} copied to clipboard.`);
-    });
-     
-    </script>     
+        };
+    </script>
 </body>
 </html>
