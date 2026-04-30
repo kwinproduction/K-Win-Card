@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>K-Win</title>
+    <title>K-Win Digital Card</title>
     
-    <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiSy1XaW4gUHJvZHVjdGlvbiIsInNob3J0X25hbWUiOiJLLVdpbiIsInN0YXJ0X3VybCI6ImluZGV4Lmh0bWwiLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3ciOiIjMGExOTJmIiwidGhlbWVfY29sb3ciOiIjNjRmZmRhIiwib3JpZW50YXRpb24iOiJwb3J0cmFpdCIsImljb25zIjpbeyJzcmMiOiJodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20va3dpbnByb2R1Y3Rpb24vSy1XaW4tRWNhcmQvbWFpbi9sb2dvLmpwZWciLCJzaXplcyI6IjUxMng1MTIiLCJ0eXBlIjoiaW1hZ2UvanBlZyIsInB1cnBvc2UiOiJhbnkgbWFza2FibGUifV19">
     <link rel="icon" type="image/jpeg" href="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg">
     <meta name="theme-color" content="#64ffda">
 
@@ -15,7 +14,7 @@
         body { 
             background: #050a14; 
             color: white; 
-            font-family: 'Segoe UI', sans-serif; 
+            font-family: 'Segoe UI', Roboto, sans-serif; 
             margin: 0; padding: 0;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             min-height: 100vh; width: 100vw; overflow-x: hidden; 
@@ -25,91 +24,63 @@
         .bg-animations { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; }
         .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.4; animation: moveOrb 20s infinite alternate ease-in-out; }
         .orb-1 { width: 300px; height: 300px; background: var(--primary); top: -50px; left: -50px; }
-        .orb-2 { width: 400px; height: 400px; background: #007bff; bottom: -100px; right: -50px; animation-duration: 25s; }
+        .orb-2 { width: 400px; height: 400px; background: #007bff; bottom: -100px; right: -50px; }
         @keyframes moveOrb { from { transform: translate(0, 0); } to { transform: translate(30px, 50px); } }
+
+        /* Top Bar & Language */
+        .top-bar { margin-bottom: 20px; z-index: 10; }
+        .lang-switch { display: flex; gap: 10px; background: var(--glass); padding: 5px; border-radius: 50px; }
+        .lang-btn { background: none; border: none; color: #8892b0; padding: 8px 15px; cursor: pointer; border-radius: 50px; font-size: 0.8rem; transition: 0.3s; }
+        .lang-btn.active { background: var(--primary); color: #0a192f; font-weight: bold; }
 
         /* Card Stylings */
         .card { width: 92%; max-width: 380px; background: rgba(255, 255, 255, 0.05); padding: 25px 20px; border-radius: 35px; border: 1px solid rgba(255, 255, 255, 0.15); backdrop-filter: blur(30px); text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
         .p-img { width: 90px; height: 90px; border-radius: 50%; border: 3px solid var(--gold); padding: 4px; object-fit: cover; }
-        .info-box { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 20px; margin: 15px 0; border-left: 4px solid var(--primary); text-align: left; font-size: 0.8rem; line-height: 1.6; }
+        .info-box { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 20px; margin: 15px 0; border-left: 4px solid var(--primary); text-align: left; font-size: 0.85rem; line-height: 1.8; }
         
-        /* Button Styles */
+        /* Buttons */
         .btn-save, .btn-tt { width: 100%; padding: 14px; border-radius: 18px; font-weight: bold; cursor: pointer; border: none; margin-top: 10px; font-size: 0.9rem; transition: 0.3s; }
         .btn-save { background: #fff; color: #0a192f; }
-        .btn-tt { background: linear-gradient(135deg, var(--primary), #3db89e); color: #0a192f; }
-
-        /* Timetable Overlay */
-        .tt-overlay { 
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.9); z-index: 1000; align-items: center; justify-content: center; 
-        }
-        .tt-content { background: #111; width: 85%; max-width: 320px; padding: 25px; border-radius: 25px; border: 1px solid var(--primary); text-align: left; }
-        .tt-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 0.85rem; }
-        .close-tt { background: var(--primary); color: #000; width: 100%; padding: 10px; border: none; border-radius: 12px; margin-top: 15px; font-weight: bold; cursor: pointer; }
+        .btn-tt { background: linear-gradient(135deg, var(--primary), #3db89e); color: #0a192f; margin-top: 20px; }
 
         /* Action Grid */
-.action-grid { 
-    display: grid; 
-    grid-template-columns: 1fr 1fr; /* තීරු දෙකක් */
-    gap: 10px; 
-    width: 100%; 
-    margin-top: 15px; 
-}
-
-.btn-action { 
-    width: 100%; 
-    padding: 15px 5px; 
-    font-size: 0.85rem; 
-    border-radius: 18px; 
-    border: none; 
-    color: white; 
-    font-weight: bold; 
-    cursor: pointer; 
-    transition: 0.3s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* බොත්තම් වල වර්ණ - span 2 ඉවත් කර ඇත */
-.btn-wa { background: #128C7E; } 
-.btn-call { background: #007bff; }
-.btn-sms { background: #f39c12; color: #000; }
-.btn-email { background: #e74c3c; }
-
-.btn-action:active { transform: scale(0.95); }
+        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-top: 15px; }
+        .btn-action { width: 100%; padding: 15px 5px; font-size: 0.85rem; border-radius: 18px; border: none; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-wa { background: #128C7E; } 
+        .btn-call { background: #007bff; }
+        .btn-sms { background: #f39c12; color: #000; }
+        .btn-email { background: #e74c3c; }
 
         /* Dropdowns */
         .dropdown { position: relative; width: 100%; }
-        .dropdown-content { 
-            display: none; position: absolute; background: white; 
-            width: 100%; border-radius: 15px; z-index: 99; bottom: 110%; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3); overflow: hidden;
-        }
+        .dropdown-content { display: none; position: absolute; background: white; width: 100%; border-radius: 15px; z-index: 99; bottom: 110%; box-shadow: 0 10px 25px rgba(0,0,0,0.3); overflow: hidden; }
         .dropdown-content a { color: #111; padding: 12px; text-decoration: none; display: block; font-size: 0.8rem; border-bottom: 1px solid #eee; }
         .show { display: block !important; }
 
-        /* Socials */
-        .social-button-container { width: 92%; max-width: 380px; margin-top: 20px; text-align: center; }
-        .social-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px; }
-        .grid-btn { display: flex; flex-direction: column; align-items: center; background: var(--glass); padding: 10px 5px; border-radius: 15px; text-decoration: none; color: white; font-size: 0.6rem; border: 1px solid rgba(255,255,255,0.1); }
-        .grid-btn img { width: 20px; height: 20px; margin-bottom: 5px; }
-
-        /* Overlay */
+        /* Timetable Overlay */
         .tt-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; align-items: center; justify-content: center; }
-  
+        .tt-content { background: #111; width: 85%; max-width: 320px; padding: 25px; border-radius: 25px; border: 1px solid var(--primary); }
+        .tt-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 0.8rem; }
+        .close-tt { background: var(--primary); color: #000; width: 100%; padding: 12px; border: none; border-radius: 12px; margin-top: 20px; font-weight: bold; cursor: pointer; }
+
+        /* Socials */
+        .social-button-container { width: 92%; max-width: 380px; margin-top: 25px; text-align: center; }
+        .social-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px; }
+        .grid-btn { display: flex; flex-direction: column; align-items: center; background: var(--glass); padding: 12px 5px; border-radius: 15px; text-decoration: none; color: white; font-size: 0.65rem; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
+        .grid-btn img { width: 22px; height: 22px; margin-bottom: 8px; }
+        .grid-btn:active { transform: scale(0.9); background: rgba(255,255,255,0.15); }
     </style>
 </head>
 <body>
-<div id="pwa-installer" style="display:none; position:fixed; top:10px; width:90%; max-width:360px; background:rgba(0,0,0,0.9); padding:15px; border-radius:15px; z-index:9999; border:1px solid var(--primary); left:50%; transform:translateX(-50%); text-align:center;">
-    <span id="pwa-text" style="font-size:0.85rem; display:block; margin-bottom:10px;">📲 K-Win App එක Install කරගන්න</span>
-    <button id="btn-install-main" style="background:var(--primary); color:#0a192f; border:none; padding:10px 20px; border-radius:10px; cursor:pointer; font-weight:bold; width:100%;">Install Now</button>
-</div>
-<div class="bg-animations">
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
-</div>
+    
+ <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiSy1XaW4gUHJvZHVjdGlvbiIsInNob3J0X25hbWUiOiJLLVdpbiIsInN0YXJ0X3VybCI6ImluZGV4Lmh0bWwiLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3ciOiIjMGExOTJmIiwidGhlbWVfY29sb3ciOiIjNjRmZmRhIiwib3JpZW50YXRpb24iOiJwb3J0cmFpdCIsImljb25zIjpbeyJzcmMiOiJodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20va3dpbnByb2R1Y3Rpb24vSy1XaW4tRWNhcmQvbWFpbi9sb2dvLmpwZWciLCJzaXplcyI6IjUxMng1MTIiLCJ0eXBlIjoiaW1hZ2UvanBlZyIsInB1cnBvc2UiOiJhbnkgbWFza2FibGUifV19">
+    <link rel="icon" type="image/jpeg" href="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg">
+    <meta name="theme-color" content="#64ffda">
+    <div class="bg-animations">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+         <div class="orb orb-3"></div>
+    </div>
     
     <div class="top-bar">
         <div class="lang-switch">
@@ -120,7 +91,7 @@
     </div>
 
     <div class="card">
-        <div style="color: var(--primary); font-size: 0.6rem; letter-spacing: 3px; font-weight: 800; margin-bottom: 12px;"> <h1>K-Win Team</h1> </div>
+        <div style="color: var(--primary); font-size: 0.7rem; letter-spacing: 3px; font-weight: 800; margin-bottom: 12px; text-transform: uppercase;">K-Win Team</div>
         <img src="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg" class="p-img" alt="Profile">
        
         <div class="info-box">
@@ -129,47 +100,42 @@
             <span id="lbl-email">📧 kindwin2026@gmail.com</span>
         </div>
 
-        <!-- Main Save Contact Button -->
         <button id="mainSaveBtn" onclick="saveVCard()" class="btn-save">👤 SAVE CONTACT</button>
-<!-- Hidden Action Grid (Shown after save) -->
-<div id="actionGrid" class="action-grid" style="display: none;">
-    <!-- WhatsApp -->
-    <button class="btn-action btn-wa" onclick="window.location.href='https://wa.me/94717337818'">WhatsApp</button>
-    
-    <!-- Call Dropdown -->
-    <div class="dropdown">
-        <button class="btn-action btn-call" id="btn-call-txt" onclick="toggleMenu('callMenu')">Call</button>
-        <div id="callMenu" class="dropdown-content">
-            <a href="tel:0717337818">071 733 7818</a>
-            <a href="tel:0767902944">076 790 2944</a>
+
+        <div id="actionGrid" class="action-grid" style="display: none;">
+            <button class="btn-action btn-wa" onclick="window.location.href='https://wa.me/94717337818'">WhatsApp</button>
+            
+            <div class="dropdown">
+                <button class="btn-action btn-call" id="btn-call-txt" onclick="toggleMenu('callMenu')">Call</button>
+                <div id="callMenu" class="dropdown-content">
+                    <a href="tel:0717337818">071 733 7818</a>
+                    <a href="tel:0767902944">076 790 2944</a>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <button class="btn-action btn-sms" id="btn-sms-txt" onclick="toggleMenu('smsMenu')">SMS</button>
+                <div id="smsMenu" class="dropdown-content">
+                    <a href="sms:0717337818">071 733 7818</a>
+                    <a href="sms:0767902944">076 790 2944</a>
+                </div>
+            </div>
+
+            <button class="btn-action btn-email" id="btn-email-txt" onclick="window.location.href='mailto:kindwin2026@gmail.com'">Email</button>
         </div>
-    </div>
 
-    <!-- SMS Dropdown -->
-    <div class="dropdown">
-        <button class="btn-action btn-sms" id="btn-sms-txt" onclick="toggleMenu('smsMenu')">SMS</button>
-        <div id="smsMenu" class="dropdown-content">
-            <a href="sms:0717337818">071 733 7818</a>
-            <a href="sms:0767902944">076 790 2944</a>
-        </div>
-    </div>
-
-    <!-- Email -->
-    <button class="btn-action btn-email" onclick="window.location.href='mailto:kindwin2026@gmail.com'">Email</button>
-</div>
-
-</div>
         <button onclick="openTimetable()" class="btn-tt">📅 <span id="btn-tt-txt">View Timetable</span></button>
     </div>
-    <div id="ttOverlay" class="tt-overlay">
-    <div class="tt-container">
-        <button class="close-tt" onclick="closeTimetable()">×</button>
-        <h3 id="tt-title" style="color: var(--primary); margin-top: 0;">Weekly Timetable</h3>
-        <div id="tt-list"></div>
-    </div>
-</div>
 
-             
+    <!-- Timetable Overlay -->
+    <div id="ttOverlay" class="tt-overlay">
+        <div class="tt-content">
+            <h3 id="tt-title" style="color: var(--primary); margin-top: 0; text-align: center;">Weekly Timetable</h3>
+            <div id="tt-list"></div>
+            <button class="close-tt" onclick="closeTimetable()">CLOSE</button>
+        </div>
+    </div>
+
     <div class="social-button-container">
         <div class="social-grid">
             <a href="https://facebook.com" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png"><span>Facebook</span></a>
@@ -177,94 +143,68 @@
             <a href="https://tiktok.com" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png"><span>TikTok</span></a>
             <a href="https://instagram.com" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"><span>Instagram</span></a>
         </div>
-        <div id="footer-credit" style="margin-top: 15px; font-size: 0.6rem; opacity: 0.5;"> Powered by K-Win | Design by Janith Didula</div>
+        <div id="footer-credit" style="margin-top: 20px; font-size: 0.6rem; opacity: 0.5;">Powered by K-Win | Design by Janith Didula</div>
     </div>
 
     <script>
-        let currentLang = 'en';
+        let currentLang = 'si';
 
-const translations = {
-    si: { 
-        name: "K-Win",  
-        save: "👤 CONTACT එක SAVE කරන්න", 
-        ttBtn: "කාලසටහන බලන්න", 
-        ttTitle: "විවෘතව තබන වේලාවන්", 
-        addr: "📍 කුරුණෑගල, ශ්‍රී ලංකා. (60000)", 
-        socialTitle: "අප හා සම්බන්ධ වන්න", 
-        locTxt: "ආයතනයට පැමිණෙන මග (Maps)", 
-        credit: "Powered by K-Win | නිර්මාණය: ජනිත් දිදුල",
-        call: "ඇමතුම්", 
-        sms: "පණිවිඩ", 
-        email: "ඊමේල්",
-        wa: "WhatsApp",
-        toastTitle: "ආයතන තත්ත්වය", 
-        toastMsg: "තොරතුරු පරීක්ෂා කරමින්...",
-        days: ["සඳුදා", "අඟහරුවාදා", "බදාදා", "බ්‍රහස්පතින්දා", "සිකුරාදා", "සෙනසුරාදා", "ඉරිදා"] 
-    },
-    en: { 
-        name: "K-Win",  
-        save: "👤 SAVE CONTACT", 
-        ttBtn: "View Timetable", 
-        ttTitle: "Opening Hours", 
-        addr: "📍 Kurunegala, Sri Lanka. (60000)", 
-        socialTitle: "CONNECT WITH US", 
-        locTxt: "GET DIRECTIONS (MAPS)", 
-        credit: "Powered by K-Win | Design by Janith Didula",
-        call: "Call", 
-        sms: "SMS", 
-        email: "Email",
-        wa: "WhatsApp",
-        toastTitle: "Institute Status", 
-        toastMsg: "Checking status...",
-        days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] 
-    },
-    ta: { 
-        name: "K-Win",  
-        save: "👤 தொடர்பைச் சேமிக்கவும்", 
-        ttBtn: "கால அட்டவணை", 
-        ttTitle: "திறந்திருக்கும் நேரங்கள்", 
-        addr: "📍 குருநாகல், இலங்கை. (60000)", 
-        socialTitle: "எங்களுடன் இணையுங்கள்", 
-        locTxt: "வரைபடம் (Maps)", 
-        credit: "K-Win மூலம் இயக்கப்படுகிறது | ஜனித் திதுல නිර්මාණය",
-        call: "அழைப்பு", 
-        sms: "செய்தி", 
-        email: "மின்னஞ்சல்",
-        wa: "WhatsApp",
-        toastTitle: "நிறுவன நிலை", 
-        toastMsg: "நிலைமையை சரிபார்க்கிறது...",
-        days: ["திங்கள்", "செவ்வாய்", "புதன்", "வியாழன்", "வெள்ளி", "சனி", "ஞாயிறு"] 
-    }
-};
-        const timetable = [
-    { day: 0, classes: [ // සඳුදා
-        { time: "08:30 AM - 04:00 PM", si: "විවෘතව පවතී", en: "Open", ta: "திறந்திருக்கும்" }
-    ]},
-    { day: 1, classes: [ // අඟහරුවාදා
-        { time: "08:30 AM - 04:00 PM", si: "විවෘතව පවතී", en: "Open", ta: "திறந்திருக்கும்" }
-    ]},
-    { day: 2, classes: [ // බදාදා
-        { time: "08:30 AM - 04:00 PM", si: "විවෘතව පවතී", en: "Open", ta: "திறந்திருக்கும்" }
-    ]},
-    { day: 3, classes: [ // බ්‍රහස්පතින්දා
-        { time: "08:30 AM - 04:00 PM", si: "විවෘතව පවතී", en: "Open", ta: "திறந்திருக்கும்" }
-    ]},
-    { day: 4, classes: [ // සිකුරාදා
-        { time: "08:30 AM - 04:00 PM", si: "විවෘතව පවතී", en: "Open", ta: "திறந்திருக்கும்" }
-    ]},
-    { day: 5, classes: [ // සෙනසුරාදා
-        { time: "Closed", si: "ආයතනය වසා තබනු ලැබේ", en: "Institute is Closed", ta: "நிறுவனம் மூடப்பட்டுள்ளது" }
-    ]},
-    { day: 6, classes: [ // ඉරිදා
-        { time: "08:30 AM - 04:00 PM", si: "විවෘතව පවතී", en: "Open", ta: "திறந்திருக்கும்" }
-    ]}
-];
+        const translations = {
+            si: { 
+                save: "👤 CONTACT එක SAVE කරන්න", 
+                ttBtn: "කාලසටහන බලන්න", 
+                ttTitle: "විවෘතව තබන වේලාවන්", 
+                addr: "📍 කුරුණෑගල, ශ්‍රී ලංකා. (60000)", 
+                credit: "Powered by K-Win | නිර්මාණය: ජනිත් දිදුල",
+                call: "ඇමතුම්", sms: "පණිවිඩ", email: "ඊමේල්", close: "වසන්න",
+                days: ["සඳුදා", "අඟහරුවාදා", "බදාදා", "බ්‍රහස්පතින්දා", "සිකුරාදා", "සෙනසුරාදා", "ඉරිදා"] 
+            },
+            en: { 
+                save: "👤 SAVE CONTACT", 
+                ttBtn: "View Timetable", 
+                ttTitle: "Opening Hours", 
+                addr: "📍 Kurunegala, Sri Lanka. (60000)", 
+                credit: "Powered by K-Win | Design by Janith Didula",
+                call: "Call", sms: "SMS", email: "Email", close: "CLOSE",
+                days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] 
+            },
+            ta: { 
+                save: "👤 தொடர்பைச் சேමිக்கவும்", 
+                ttBtn: "கால அட்டவணை", 
+                ttTitle: "திறந்திருக்கும் நேரங்கள்", 
+                addr: "📍 குருநாகல், இலங்கை. (60000)", 
+                credit: "K-Win மூலம் இயக்கப்படுகிறது | ஜනිත් திதுல",
+                call: "அழைப்பு", sms: "செய்தி", email: "மின்னஞ்சல்", close: "மூடு",
+                days: ["திங்கள்", "செவ்வாய்", "புதன்", "வியாழன்", "வெள்ளி", "சனி", "ஞாயிறு"] 
+            }
+        };
 
-         function setupAppLinks() {
-            const links = [
-                { id: 'fb-link', app: 'fb://facewebmodal/f?href=https://www.facebook.com/K.Win', web: 'https://www.facebook.com/K.Win' },
-                
-            ];
+        const timetableData = [
+            { time: "08:30 AM - 04:00 PM", status: { si: "විවෘතයි", en: "Open", ta: "திறந்துள்ளது" }},
+            { time: "08:30 AM - 04:00 PM", status: { si: "විවෘතයි", en: "Open", ta: "திறந்துள்ளது" }},
+            { time: "08:30 AM - 04:00 PM", status: { si: "විවෘතයි", en: "Open", ta: "திறந்துள்ளது" }},
+            { time: "08:30 AM - 04:00 PM", status: { si: "විවෘතයි", en: "Open", ta: "திறந்துள்ளது" }},
+            { time: "08:30 AM - 04:00 PM", status: { si: "විවෘතයි", en: "Open", ta: "திறந்துள்ளது" }},
+            { time: "Closed", status: { si: "වසා ඇත", en: "Closed", ta: "மூடப்பட்டுள்ளது" }},
+            { time: "08:30 AM - 04:00 PM", status: { si: "විවෘතයි", en: "Open", ta: "திறந்துள்ளது" }}
+        ];
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('btn-' + lang).classList.add('active');
+
+            document.getElementById('mainSaveBtn').innerText = translations[lang].save;
+            document.getElementById('btn-tt-txt').innerText = translations[lang].ttBtn;
+            document.getElementById('lbl-addr').innerText = translations[lang].addr;
+            document.getElementById('footer-credit').innerText = translations[lang].credit;
+            document.getElementById('btn-call-txt').innerText = translations[lang].call;
+            document.getElementById('btn-sms-txt').innerText = translations[lang].sms;
+            document.getElementById('btn-email-txt').innerText = translations[lang].email;
+            document.getElementById('tt-title').innerText = translations[lang].ttTitle;
+            document.querySelector('.close-tt').innerText = translations[lang].close;
+        }
+
         function toggleMenu(id) {
             const menu = document.getElementById(id);
             const isShown = menu.classList.contains('show');
@@ -272,11 +212,12 @@ const translations = {
             if (!isShown) menu.classList.add('show');
         }
 
-        async function saveVCard() {
-            const vcard = "BEGIN:VCARD\nVERSION:3.0\nFN:K-Win (ADM)\nTEL;0717337818\nEND:VCARD";
-            const vblob = new Blob([vcard], { type: 'text/vcard' });
+        function saveVCard() {
+            const vcard = "BEGIN:VCARD\nVERSION:3.0\nFN:K-Win Team\nTEL:0717337818\nEMAIL:kindwin2026@gmail.com\nEND:VCARD";
+            const blob = new Blob([vcard], { type: 'text/vcard' });
+            const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = URL.createObjectURL(vblob);
+            a.href = url;
             a.download = 'K-Win_Contact.vcf';
             a.click();
             
@@ -289,7 +230,24 @@ const translations = {
             document.getElementById('actionGrid').style.display = 'grid';
         }
 
+        function openTimetable() {
+            const list = document.getElementById('tt-list');
+            list.innerHTML = '';
+            timetableData.forEach((item, index) => {
+                const row = document.createElement('div');
+                row.className = 'tt-row';
+                row.innerHTML = `<span>${translations[currentLang].days[index]}</span><span>${item.time === 'Closed' ? item.status[currentLang] : item.time}</span>`;
+                list.appendChild(row);
+            });
+            document.getElementById('ttOverlay').style.display = 'flex';
+        }
+
+        function closeTimetable() {
+            document.getElementById('ttOverlay').style.display = 'none';
+        }
+
         window.onload = () => {
+            setLanguage('si');
             if (localStorage.getItem('contact_saved') === 'true') {
                 showActionGrid();
             }
@@ -300,15 +258,6 @@ const translations = {
                 document.querySelectorAll('.dropdown-content').forEach(m => m.classList.remove('show'));
             }
         };
-             function setLanguage(lang) {
-    currentLang = lang;
-    // ... අනෙක් ලිපිනයන් ...
-    document.getElementById('btn-call-txt').innerText = translations[lang].call;
-    document.getElementById('btn-sms-txt').innerText = translations[lang].sms;
-    
-    // WhatsApp සහ Email වලට id ලබා දී ඇත්නම් ඒවාද මෙසේ වෙනස් කළ හැක
-    // උදා: document.querySelector('.btn-wa').innerText = translations[lang].wa;
-}
     </script>
 </body>
 </html>
