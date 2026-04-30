@@ -211,12 +211,6 @@
     </div>
 
     <div class="card">
-        <div class="status-badge">
-            <div class="pulse-dot"></div>
-            <span id="lbl-status">Active Now</span>
-        </div>
-
-    <div class="card">
         <div style="color: var(--primary); font-size: 0.6rem; letter-spacing: 3px; font-weight: 800; margin-bottom: 12px;"> K-Win Team </div>
         <img src="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg" class="p-img" alt="Profile">
         <h2 id="u-name" style="margin: 12px 0 4px 0;">K-Win</h2>
@@ -253,27 +247,14 @@
             <button class="btn-action btn-email" onclick="window.location.href='mailto:kindwin2026@gmail.com'">Email</button>
         </div>
 
-        <button onclick="openTimetable()" class="btn-tt">📅 <span id="btn-tt-txt">Opening Hours</span></button>
+       <div id="ttOverlay" class="tt-overlay" style="display: none;">
+    <div class="tt-content">
+        <h3 id="tt-title">Opening Hours</h3>
+        <div id="tt-list"></div>
+        <button class="close-btn" onclick="toggleTimetable(false)">CLOSE</button>
     </div>
+</div>
         
-<a href="https://maps.app.goo.gl/3f8HshL948N6Y8pP7" class="btn btn-map" id="btn-map-txt">📍 GET DIRECTIONS (MAPS)</a>
-        
-    <button onclick="toggleTimetable(true)" class="btn btn-tt">📅 <span id="btn-tt-txt">Opening Hours</span></button>
-    </div>
-
-    <!-- Timetable Modal -->
-    <div id="ttOverlay" class="tt-overlay">
-        <div class="tt-content">
-            <div class="tt-header">
-                <h3 id="tt-title">Opening Hours</h3>
-            </div>
-            <div id="tt-list">
-                <!-- Dynamically filled -->
-            </div>
-            <button class="close-btn" id="btn-close-tt" onclick="toggleTimetable(false)">CLOSE</button>
-        </div>
-    </div>
-    
     <div class="social-button-container">
         <div class="social-grid">
             <a href="https://facebook.com" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png"><span>Facebook</span></a>
