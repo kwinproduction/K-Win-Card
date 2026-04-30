@@ -48,12 +48,36 @@
         .close-tt { background: var(--primary); color: #000; width: 100%; padding: 10px; border: none; border-radius: 12px; margin-top: 15px; font-weight: bold; cursor: pointer; }
 
         /* Action Grid */
-        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-top: 10px; }
-        .btn-action { width: 100%; padding: 12px 5px; font-size: 0.8rem; border-radius: 15px; border: none; color: white; font-weight: bold; cursor: pointer; }
-        .btn-wa { background: #128C7E; grid-column: span 2; } /* WhatsApp wide */
-        .btn-call { background: #007bff; }
-        .btn-sms { background: #f39c12; color: #000; }
-        .btn-email { background: #e74c3c; grid-column: span 2; }
+.action-grid { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; /* තීරු දෙකක් */
+    gap: 10px; 
+    width: 100%; 
+    margin-top: 15px; 
+}
+
+.btn-action { 
+    width: 100%; 
+    padding: 15px 5px; 
+    font-size: 0.85rem; 
+    border-radius: 18px; 
+    border: none; 
+    color: white; 
+    font-weight: bold; 
+    cursor: pointer; 
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* බොත්තම් වල වර්ණ - span 2 ඉවත් කර ඇත */
+.btn-wa { background: #128C7E; } 
+.btn-call { background: #007bff; }
+.btn-sms { background: #f39c12; color: #000; }
+.btn-email { background: #e74c3c; }
+
+.btn-action:active { transform: scale(0.95); }
 
         /* Dropdowns */
         .dropdown { position: relative; width: 100%; }
@@ -107,29 +131,32 @@
 
         <!-- Main Save Contact Button -->
         <button id="mainSaveBtn" onclick="saveVCard()" class="btn-save">👤 SAVE CONTACT</button>
-
-        <!-- Hidden Action Grid (Shown after save) -->
-        <div id="actionGrid" class="action-grid" style="display: none;">
-            <button class="btn-action btn-wa" onclick="window.location.href='https://wa.me/94717337818'">WhatsApp</button>
-            
-            <div class="dropdown">
-                <button class="btn-action btn-call" id="btn-call-txt" onclick="toggleMenu('callMenu')">Call</button>
-                <div id="callMenu" class="dropdown-content">
-                    <a href="tel:0717337818">071 733 7818</a>
-                    <a href="tel:0767902944">076 790 2944</a>
-                </div>
-            </div>
-
-            <div class="dropdown">
-                <button class="btn-action btn-sms" id="btn-sms-txt" onclick="toggleMenu('smsMenu')">SMS</button>
-                <div id="smsMenu" class="dropdown-content">
-                    <a href="sms:0717337818">071 733 7818</a>
-                    <a href="sms:0767902944">076 790 2944</a>
-                </div>
-            </div>
-
-            <button class="btn-action btn-email" onclick="window.location.href='mailto:kindwin2026@gmail.com'">Email</button>
+<!-- Hidden Action Grid (Shown after save) -->
+<div id="actionGrid" class="action-grid" style="display: none;">
+    <!-- WhatsApp -->
+    <button class="btn-action btn-wa" onclick="window.location.href='https://wa.me/94717337818'">WhatsApp</button>
+    
+    <!-- Call Dropdown -->
+    <div class="dropdown">
+        <button class="btn-action btn-call" id="btn-call-txt" onclick="toggleMenu('callMenu')">Call</button>
+        <div id="callMenu" class="dropdown-content">
+            <a href="tel:0717337818">071 733 7818</a>
+            <a href="tel:0767902944">076 790 2944</a>
         </div>
+    </div>
+
+    <!-- SMS Dropdown -->
+    <div class="dropdown">
+        <button class="btn-action btn-sms" id="btn-sms-txt" onclick="toggleMenu('smsMenu')">SMS</button>
+        <div id="smsMenu" class="dropdown-content">
+            <a href="sms:0717337818">071 733 7818</a>
+            <a href="sms:0767902944">076 790 2944</a>
+        </div>
+    </div>
+
+    <!-- Email -->
+    <button class="btn-action btn-email" onclick="window.location.href='mailto:kindwin2026@gmail.com'">Email</button>
+</div>
 
 </div>
         <button onclick="openTimetable()" class="btn-tt">📅 <span id="btn-tt-txt">View Timetable</span></button>
@@ -273,6 +300,15 @@ const translations = {
                 document.querySelectorAll('.dropdown-content').forEach(m => m.classList.remove('show'));
             }
         };
+             function setLanguage(lang) {
+    currentLang = lang;
+    // ... අනෙක් ලිපිනයන් ...
+    document.getElementById('btn-call-txt').innerText = translations[lang].call;
+    document.getElementById('btn-sms-txt').innerText = translations[lang].sms;
+    
+    // WhatsApp සහ Email වලට id ලබා දී ඇත්නම් ඒවාද මෙසේ වෙනස් කළ හැක
+    // උදා: document.querySelector('.btn-wa').innerText = translations[lang].wa;
+}
     </script>
 </body>
 </html>
