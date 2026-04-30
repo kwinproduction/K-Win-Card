@@ -74,7 +74,7 @@
     </div>
 
     <div class="card">
-        <div style="color: var(--primary); font-size: 0.6rem; letter-spacing: 3px; font-weight: 800; margin-bottom: 12px;">ADM HIGHER EDUCATION</div>
+        <div style="color: var(--primary); font-size: 0.6rem; letter-spacing: 3px; font-weight: 800; margin-bottom: 12px;"> K-Win Team </div>
         <img src="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg" class="p-img" alt="Profile">
         <h2 id="u-name" style="margin: 12px 0 4px 0;">K-Win</h2>
         
@@ -89,7 +89,7 @@
 
         <!-- Hidden Action Grid (Shown after save) -->
         <div id="actionGrid" class="action-grid" style="display: none;">
-            <button class="btn-action btn-wa" onclick="window.location.href='https://wa.me/94707140730'">WhatsApp</button>
+            <button class="btn-action btn-wa" onclick="window.location.href='https://wa.me/94717337818'">WhatsApp</button>
             
             <div class="dropdown">
                 <button class="btn-action btn-call" id="btn-call-txt" onclick="toggleMenu('callMenu')">Call</button>
@@ -124,6 +124,84 @@
     </div>
 
     <script>
+        let currentLang = 'en';
+
+const translations = {
+    si: { 
+        name: "K-Win",  
+        save: "👤 CONTACT එක SAVE කරන්න", 
+        ttBtn: "කාලසටහන බලන්න", 
+        ttTitle: "විවෘතව තබන වේලාවන්", 
+        addr: "📍 කුරුණෑගල, ශ්‍රී ලංකා. (60000)", 
+        socialTitle: "අප හා සම්බන්ධ වන්න", 
+        locTxt: "ආයතනයට පැමිණෙන මග (Maps)", 
+        credit: "Powered by K-Win | නිර්මාණය: ජනිත් දිදුල",
+        call: "ඇමතුම්", 
+        sms: "පණිවිඩ", 
+        email: "ඊමේල්",
+        wa: "WhatsApp",
+        toastTitle: "ආයතන තත්ත්වය", 
+        toastMsg: "තොරතුරු පරීක්ෂා කරමින්...",
+        days: ["සඳුදා", "අඟහරුවාදා", "බදාදා", "බ්‍රහස්පතින්දා", "සිකුරාදා", "සෙනසුරාදා", "ඉරිදා"] 
+    },
+    en: { 
+        name: "K-Win",  
+        save: "👤 SAVE CONTACT", 
+        ttBtn: "View Timetable", 
+        ttTitle: "Opening Hours", 
+        addr: "📍 Kurunegala, Sri Lanka. (60000)", 
+        socialTitle: "CONNECT WITH US", 
+        locTxt: "GET DIRECTIONS (MAPS)", 
+        credit: "Powered by K-Win | Design by Janith Didula",
+        call: "Call", 
+        sms: "SMS", 
+        email: "Email",
+        wa: "WhatsApp",
+        toastTitle: "Institute Status", 
+        toastMsg: "Checking status...",
+        days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] 
+    },
+    ta: { 
+        name: "K-Win",  
+        save: "👤 தொடர்பைச் சேமிக்கவும்", 
+        ttBtn: "கால அட்டவணை", 
+        ttTitle: "திறந்திருக்கும் நேரங்கள்", 
+        addr: "📍 குருநாகல், இலங்கை. (60000)", 
+        socialTitle: "எங்களுடன் இணையுங்கள்", 
+        locTxt: "வரைபடம் (Maps)", 
+        credit: "K-Win மூலம் இயக்கப்படுகிறது | ஜனித் திதுல නිර්මාණය",
+        call: "அழைப்பு", 
+        sms: "செய்தி", 
+        email: "மின்னஞ்சல்",
+        wa: "WhatsApp",
+        toastTitle: "நிறுவன நிலை", 
+        toastMsg: "நிலைமையை சரிபார்க்கிறது...",
+        days: ["திங்கள்", "செவ்வாய்", "புதன்", "வியாழன்", "வெள்ளி", "சனி", "ஞாயிறு"] 
+    }
+};
+        const timetable = [
+    { day: 0, classes: [ // සඳුදා
+        { time: "08:30 AM - 04:00 PM", si: "විවෘතව පවතී", en: "Open", ta: "திறந்திருக்கும்" }
+    ]},
+    { day: 1, classes: [ // අඟහරුවාදා
+        { time: "08:30 AM - 04:00 PM", si: "විවෘතව පවතී", en: "Open", ta: "திறந்திருக்கும்" }
+    ]},
+    { day: 2, classes: [ // බදාදා
+        { time: "08:30 AM - 04:00 PM", si: "විවෘතව පවතී", en: "Open", ta: "திறந்திருக்கும்" }
+    ]},
+    { day: 3, classes: [ // බ්‍රහස්පතින්දා
+        { time: "08:30 AM - 04:00 PM", si: "විවෘතව පවතී", en: "Open", ta: "திறந்திருக்கும்" }
+    ]},
+    { day: 4, classes: [ // සිකුරාදා
+        { time: "08:30 AM - 04:00 PM", si: "විවෘතව පවතී", en: "Open", ta: "திறந்திருக்கும்" }
+    ]},
+    { day: 5, classes: [ // සෙනසුරාදා
+        { time: "Closed", si: "ආයතනය වසා තබනු ලැබේ", en: "Institute is Closed", ta: "நிறுவனம் மூடப்பட்டுள்ளது" }
+    ]},
+    { day: 6, classes: [ // ඉරිදා
+        { time: "08:30 AM - 04:00 PM", si: "විවෘතව පවතී", en: "Open", ta: "திறந்திருக்கும்" }
+    ]}
+];
         function toggleMenu(id) {
             const menu = document.getElementById(id);
             const isShown = menu.classList.contains('show');
