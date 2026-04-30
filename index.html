@@ -254,7 +254,22 @@
         <button class="close-btn" onclick="toggleTimetable(false)">CLOSE</button>
     </div>
 </div>
-        
+        <button onclick="openTimetable()" class="btn-tt">📅 <span id="btn-tt-txt">View Timetable</span></button>
+    </div>
+    <div id="ttOverlay" class="tt-overlay">
+    <div class="tt-container">
+        <button class="close-tt" onclick="closeTimetable()">×</button>
+        <h3 id="tt-title" style="color: var(--primary); margin-top: 0;">Weekly Timetable</h3>
+        <div id="tt-list"></div>
+    </div>
+</div>
+         <div class="social-button-container">
+        <p id="social-title" class="section-title">CONNECT WITH US</p>
+        <a id="loc-btn" href="https://maps.app.goo.gl/oqcwyunNTEzB69WF7" class="location-btn">
+            <img src="https://cdn-icons-png.flaticon.com/512/854/854878.png" alt="Loc">
+            <span id="loc-txt">GET DIRECTIONS (MAPS)</span>
+        </a>
+             
     <div class="social-button-container">
         <div class="social-grid">
             <a href="https://facebook.com" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png"><span>Facebook</span></a>
@@ -344,6 +359,12 @@ const translations = {
         { time: "08:30 AM - 04:00 PM", si: "විවෘතව පවතී", en: "Open", ta: "திறந்திருக்கும்" }
     ]}
 ];
+
+         function setupAppLinks() {
+            const links = [
+                { id: 'fb-link', app: 'fb://facewebmodal/f?href=https://www.facebook.com/K.Win', web: 'https://www.facebook.com/K.Win' },
+                
+            ];
         function toggleMenu(id) {
             const menu = document.getElementById(id);
             const isShown = menu.classList.contains('show');
