@@ -38,6 +38,15 @@
         .btn-save { background: #fff; color: #0a192f; }
         .btn-tt { background: linear-gradient(135deg, var(--primary), #3db89e); color: #0a192f; }
 
+        /* Timetable Overlay */
+        .tt-overlay { 
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.9); z-index: 1000; align-items: center; justify-content: center; 
+        }
+        .tt-content { background: #111; width: 85%; max-width: 320px; padding: 25px; border-radius: 25px; border: 1px solid var(--primary); text-align: left; }
+        .tt-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 0.85rem; }
+        .close-tt { background: var(--primary); color: #000; width: 100%; padding: 10px; border: none; border-radius: 12px; margin-top: 15px; font-weight: bold; cursor: pointer; }
+
         /* Action Grid */
         .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-top: 10px; }
         .btn-action { width: 100%; padding: 12px 5px; font-size: 0.8rem; border-radius: 15px; border: none; color: white; font-weight: bold; cursor: pointer; }
