@@ -199,16 +199,22 @@
     </style>
 </head>
 <body>
-<div class="lang-switch">
+<div class="bg-animations">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+
+    <div class="lang-switch">
         <button class="lang-btn active" id="l-en" onclick="setLanguage('en')">English</button>
         <button class="lang-btn" id="l-si" onclick="setLanguage('si')">සිංහල</button>
         <button class="lang-btn" id="l-ta" onclick="setLanguage('ta')">தமிழ்</button>
     </div>
-    
-    <div class="bg-animations">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-    </div>
+
+    <div class="card">
+        <div class="status-badge">
+            <div class="pulse-dot"></div>
+            <span id="lbl-status">Active Now</span>
+        </div>
 
     <div class="card">
         <div style="color: var(--primary); font-size: 0.6rem; letter-spacing: 3px; font-weight: 800; margin-bottom: 12px;"> K-Win Team </div>
@@ -249,7 +255,25 @@
 
         <button onclick="openTimetable()" class="btn-tt">📅 <span id="btn-tt-txt">Opening Hours</span></button>
     </div>
+        
+<a href="https://maps.app.goo.gl/3f8HshL948N6Y8pP7" class="btn btn-map" id="btn-map-txt">📍 GET DIRECTIONS (MAPS)</a>
+        
+    <button onclick="toggleTimetable(true)" class="btn btn-tt">📅 <span id="btn-tt-txt">Opening Hours</span></button>
+    </div>
 
+    <!-- Timetable Modal -->
+    <div id="ttOverlay" class="tt-overlay">
+        <div class="tt-content">
+            <div class="tt-header">
+                <h3 id="tt-title">Opening Hours</h3>
+            </div>
+            <div id="tt-list">
+                <!-- Dynamically filled -->
+            </div>
+            <button class="close-btn" id="btn-close-tt" onclick="toggleTimetable(false)">CLOSE</button>
+        </div>
+    </div>
+    
     <div class="social-button-container">
         <div class="social-grid">
             <a href="https://facebook.com" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png"><span>Facebook</span></a>
@@ -257,7 +281,7 @@
             <a href="https://tiktok.com" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png"><span>TikTok</span></a>
             <a href="https://instagram.com" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"><span>Instagram</span></a>
         </div>
-        <div id="footer-credit" style="margin-top: 15px; font-size: 0.6rem; opacity: 0.5;">Design by Janith Didula</div>
+        <div id="footer-credit" style="margin-top: 15px; font-size: 0.6rem; opacity: 0.5;"> Powerd by K-Win | Design by Janith Didula</div>
     </div>
 
     <script>
