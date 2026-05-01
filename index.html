@@ -123,7 +123,7 @@
             <button class="btn-action btn-wa" onclick="window.location.href='https://wa.me/94717337818'">✅ WhatsApp</button>
             
             <div class="dropdown">
-                <button class="btn-action btn-call" id="btn-call-txt" onclick="toggleMenu('callMenu')">📞 Call</button>
+                <button class="btn-action btn-call" id="btn-call-txt" onclick="toggleMenu('callMenu')"> 📞 Call</button>
                 <div id="callMenu" class="dropdown-content">
                     <a href="tel:0717337818">📞 071 733 7818</a>
                     <a href="tel:0767902944">📞 076 790 2944</a>
@@ -141,15 +141,15 @@
             <button class="btn-action btn-email" id="btn-email-txt" onclick="window.location.href='mailto:kindwin2026@gmail.com'">📧 Email</button>
         </div>
 
-        <button onclick="openTimetable()" class="btn-tt">📅 <span id="btn-tt-txt">View Timetable</span></button>
+        <button onclick="openTimetable()" class="btn-tt">📅 <span id="btn-tt-txt">⏰ Opening Hours </span></button>
     </div>
 
     <!-- Timetable Overlay -->
     <div id="ttOverlay" class="tt-overlay">
         <div class="tt-content">
-            <h3 id="tt-title" style="color: var(--primary); margin-top: 0; text-align: center;">Weekly Timetable</h3>
+            <h3 id="tt-title" style="color: var(--primary); margin-top: 0; text-align: center;"> ⏰ Weekly Timetable</h3>
             <div id="tt-list"></div>
-            <button class="close-tt" onclick="closeTimetable()">CLOSE</button>
+            <button class="close-tt" onclick="closeTimetable()">❌ CLOSE</button>
         </div>
     </div>
 
@@ -169,29 +169,29 @@
         const translations = {
             si: { 
                 save: "👤 CONTACT එක SAVE කරන්න", 
-                ttBtn: "කාලසටහන බලන්න", 
-                ttTitle: "විවෘතව තබන වේලාවන්", 
+                ttBtn: "⏰ විවෘතව තබන වේලාවන්", 
+                ttTitle: "⏰ විවෘතව තබන වේලාවන්", 
                 addr: "📍 කුරුණෑගල, ශ්‍රී ලංකා. (60000)", 
-                credit: "Powered by K-Win | නිර්මාණය: ජනිත් දිදුල",
-                call: "ඇමතුම්", sms: "පණිවිඩ", email: "ඊමේල්", close: "වසන්න",
+                credit: "K-Win වෙතින් | ජනිත් දිදුලගේ නිර්මාණයකි",
+                call: "📞 ඇමතුම්", sms: "💬 පණිවිඩ", email: "📧 ඊමේල්", close: "❌ වසන්න",
                 days: ["සඳුදා", "අඟහරුවාදා", "බදාදා", "බ්‍රහස්පතින්දා", "සිකුරාදා", "සෙනසුරාදා", "ඉරිදා"] 
             },
             en: { 
                 save: "👤 SAVE CONTACT", 
-                ttBtn: "View Timetable", 
-                ttTitle: "Opening Hours", 
+                ttBtn: "⏰ Opening Hours", 
+                ttTitle: "⏰ Opening Hours", 
                 addr: "📍 Kurunegala, Sri Lanka. (60000)", 
                 credit: "Powered by K-Win | Design by Janith Didula",
-                call: "Call", sms: "SMS", email: "Email", close: "CLOSE",
+                call: "📞 Call", sms: "💬 SMS", email: "📧 Email", close: "❌ CLOSE",
                 days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] 
             },
             ta: { 
                 save: "👤 தொடர்பைச் சேමිக்கவும்", 
-                ttBtn: "கால அட்டவணை", 
-                ttTitle: "திறந்திருக்கும் நேரங்கள்", 
+                ttBtn: "⏰ திறந்திருக்கும் நேரங்கள்", 
+                ttTitle: "⏰ திறந்திருக்கும் நேரங்கள்", 
                 addr: "📍 குருநாகல், இலங்கை. (60000)", 
-                credit: "K-Win மூலம் இயக்கப்படுகிறது | ஜනිත් திதுல",
-                call: "அழைப்பு", sms: "செய்தி", email: "மின்னஞ்சல்", close: "மூடு",
+                credit: "K-Win மூலம் இயக்கப்படுகிறது | வடிவமைப்பு: ஜனித் திதுல ",
+                call: "📞 அழைப்பு", sms: "💬 செய்தி", email: "📧 மின்னஞ்சல்", close: "❌ மூடு",
                 days: ["திங்கள்", "செவ்வாய்", "புதன்", "வியாழன்", "வெள்ளி", "சனி", "ஞாயிறு"] 
             }
         };
