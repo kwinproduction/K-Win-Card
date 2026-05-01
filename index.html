@@ -72,11 +72,21 @@
         .grid-btn { display: flex; flex-direction: column; align-items: center; background: var(--glass); padding: 12px 5px; border-radius: 15px; text-decoration: none; color: white; font-size: 0.65rem; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
         .grid-btn img { width: 22px; height: 22px; margin-bottom: 8px; }
         .grid-btn:active { transform: scale(0.9); background: rgba(255,255,255,0.15); }
+        #btn-install-main {
+    animation: pulse 2s infinite;
+    box-shadow: 0 0 15px rgba(255, 204, 0, 0.4);
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
     </style>
 </head>
 <body>
    <div id="pwa-installer" style="display:none; position:fixed; top:10px; width:90%; max-width:360px; background:rgba(0,0,0,0.9); padding:15px; border-radius:15px; z-index:9999; border:1px solid var(--primary); left:50%; transform:translateX(-50%); text-align:center;">
-    <span id="pwa-text" style="font-size:0.85rem; display:block; margin-bottom:10px;">📲 ADM App එක Install කරගන්න</span>
+    <span id="pwa-text" style="font-size:0.85rem; display:block; margin-bottom:10px;">📲 K-Win App එක Install කරගන්න</span>
     <button id="btn-install-main" style="background:var(--primary); color:#0a192f; border:none; padding:10px 20px; border-radius:10px; cursor:pointer; font-weight:bold; width:100%;">Install Now</button>
 </div>
     
@@ -265,21 +275,27 @@
                 document.querySelectorAll('.dropdown-content').forEach(m => m.classList.remove('show'));
             }
         };
-        function setupPWAInstall() {
+       // 1. Service Worker එක Register කිරීම (අනිවාර්යයි)
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js') // මෙහි sw.js නම නිවැරදි දැයි බලන්න
+    .then(() => console.log("K-Win Service Worker Registered"));
+}
+
+// 2. ඔබ ලබා දුන් setupPWAInstall Function එක
+function setupPWAInstall() {
     let deferredPrompt;
     const pwaContainer = document.getElementById('pwa-installer');
     const pwaBtn = document.getElementById('btn-install-main');
 
-    //  දැනටමත් App එකක් විදිහට (Standalone) වැඩ කරනවා නම් පෙන්වන්න එපා
+    // දැනටමත් App එකක් ලෙස වැඩ කරයි නම් පෙන්වන්න එපා
     if (window.matchMedia('(display-mode: standalone)').matches) {
-        return; // මෙතනින් නවතින්න
+        return; 
     }
 
-    //  බ්‍රවුසරය Install කරන්න සූදානම් නම් පමණක් පෙන්වන්න
+    // Install prompt එක සූදානම් වූ විට Container එක පෙන්වන්න
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;
-        // බ්‍රවුසරයේදී පමණක් පෙනෙන්න සලස්වන්න
         if(pwaContainer) pwaContainer.style.display = 'block';
     });
 
@@ -296,11 +312,22 @@
         });
     }
 
-    //  Install වුණාම හංගන්න
+    // Install වූ පසු හංගන්න
     window.addEventListener('appinstalled', () => {
         if(pwaContainer) pwaContainer.style.display = 'none';
+        console.log('K-Win App installed successfully!');
     });
 }
+
+// 3. Window Load එකේදී function එක call කිරීම
+window.onload = () => {
+    setLanguage('si'); // ඔබේ පැරණි function එක
+    setupPWAInstall(); // අලුත් PWA function එක
+    
+    if (localStorage.getItem('contact_saved') === 'true') {
+        showActionGrid();
+    }
+};
     </script>
 </body>
 </html>
