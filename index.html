@@ -82,6 +82,27 @@
     50% { transform: scale(1.02); }
     100% { transform: scale(1); }
 }
+        body { 
+    margin: 0; padding: 0; 
+    display: flex; flex-direction: column; align-items: center; 
+    justify-content: center; min-height: 100vh; width: 100vw; 
+    overflow-x: hidden; /* පැත්තට scroll වීම වළක්වයි */
+}
+
+.card { 
+    width: 90%; /* ෆෝන් එකේ දෙපැත්තෙන් ඉඩ තබයි */
+    max-width: 380px; /* ලොකු screens වලදී ඕනෑවට වඩා ලොකු වීම වළක්වයි */
+    padding: 20px;
+    border-radius: 30px;
+    box-sizing: border-box;
+}
+
+.action-grid { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; /* Buttons දෙක බැගින් පේළියට */
+    gap: 10px; 
+    width: 100%; 
+}
     </style>
 </head>
 <body>
@@ -108,7 +129,7 @@
     </div>
 
     <div class="card">
-        <div style="color: var(--primary); font-size: 0.7rem; letter-spacing: 3px; font-weight: 800; margin-bottom: 12px; text-transform: uppercase;">K-Win Team</div>
+        <div style="color: var(--primary); font-size: 0.7rem; letter-spacing: 3px; font-weight: 800; margin-bottom: 12px; text-transform: uppercase;"><h1>K-Win Team</h1>K-Win Team</div>
         <img src="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg" class="p-img" alt="Profile">
        
         <div class="info-box">
