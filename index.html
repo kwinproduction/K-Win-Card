@@ -5,95 +5,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>K-Win </title>
     
-    <!-- K-Win සඳහා පමණක් සකස් කළ Manifest (Base64) -->
     <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiS1dpbiIsInNob3J0X25hbWUiOiJLLVdpbiIsInN0YXJ0X3VybCI6ImluZGV4Lmh0bWwiLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3ciOiIjMDAwMDAwIiwidGhlbWVfY29sb3ciOiIjZmZkYTAwIiwib3JpZW50YXRpb24iOiJwb3J0cmFpdCIsImljb25zIjpbeyJzcmMiOiJodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20va3dpbnByb2R1Y3Rpb24vSy1XaW4tRWNhcmQvbWFpbi9sb2dvLmpwZWciLCJzaXplcyI6IjUxMng1MTIiLCJ0eXBlIjoiaW1hZ2UvanBlZyIsInB1cnBvc2UiOiJhbnkgbWFza2FibGUifV19">
     
     <link rel="icon" type="image/jpeg" href="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg">
     <meta name="theme-color" content="#ffda00">  
-
     <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg">
-
-<meta name="apple-mobile-web-app-capable" content="yes">
-
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
-<meta name="apple-mobile-web-app-title" content="K-Win">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <style>
-        /* iPhone Safari නෙවෙයි නම් විතරක් පේන Overlay එක */
-#safari-only-overlay {
-    display: none;
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: #050a14; /* Dark Background */
-    z-index: 100000;
-    color: white;
-    padding: 30px;
-    box-sizing: border-box;
-    text-align: center;
-    font-family: 'Segoe UI', sans-serif;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-}
-
-.safari-icon { width: 80px; margin-bottom: 20px; }
-
-.instruction-step {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 15px;
-    border-radius: 15px;
-    margin: 10px 0;
-    width: 100%;
-    font-size: 14px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.highlight-gold { color: #ffcc00; font-weight: bold; }
         :root { --primary: #50e3c2; --white: #ffffff; --dark-blue: #0a192f; --glass: rgba(255, 255, 255, 0.08); }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { 
-            background: #050a14; 
-            color: white; 
+            background: #050a14; color: white; 
             font-family: 'Segoe UI', Roboto, sans-serif; 
             margin: 0; padding: 0;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             min-height: 100vh; width: 100vw; overflow-x: hidden; 
         }
-        
 
-        /* Background Orbs */
+        /* Background Animations */
         .bg-animations { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; }
         .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.4; animation: moveOrb 20s infinite alternate ease-in-out; }
         .orb-1 { width: 300px; height: 300px; background: var(--primary); top: -50px; left: -50px; }
         .orb-2 { width: 400px; height: 400px; background: #007bff; bottom: -100px; right: -50px; }
         @keyframes moveOrb { from { transform: translate(0, 0); } to { transform: translate(30px, 50px); } }
 
-        /* Top Bar & Language */
-        .top-bar { margin-bottom: 20px; z-index: 10; }
-        .lang-switch { display: flex; gap: 10px; background: var(--glass); padding: 5px; border-radius: 50px; }
-        .lang-btn { background: none; border: none; color: #8892b0; padding: 8px 15px; cursor: pointer; border-radius: 50px; font-size: 0.8rem; transition: 0.3s; }
-        .lang-btn.active { background: var(--primary); color: #0a192f; font-weight: bold; }
-
-        /* Card Stylings */
+        /* Card Styles */
         .card { width: 92%; max-width: 380px; background: rgba(255, 255, 255, 0.05); padding: 25px 20px; border-radius: 35px; border: 1px solid rgba(255, 255, 255, 0.15); backdrop-filter: blur(30px); text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
-        .p-img { width: 90px; height: 90px; border-radius: 50%; border: 3px solid var(--gold); padding: 4px; object-fit: cover; }
+        .p-img { width: 90px; height: 90px; border-radius: 50%; border: 3px solid #ffda00; padding: 4px; object-fit: cover; }
         .info-box { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 20px; margin: 15px 0; border-left: 4px solid var(--primary); text-align: left; font-size: 0.85rem; line-height: 1.8; }
         
-        /* Buttons */
         .btn-save, .btn-tt { width: 100%; padding: 14px; border-radius: 18px; font-weight: bold; cursor: pointer; border: none; margin-top: 10px; font-size: 0.9rem; transition: 0.3s; }
         .btn-save { background: #fff; color: #0a192f; }
         .btn-tt { background: linear-gradient(135deg, var(--primary), #3db89e); color: #0a192f; margin-top: 20px; }
 
-        /* Action Grid */
         .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-top: 15px; }
-        .btn-action { width: 100%; padding: 15px 5px; font-size: 0.85rem; border-radius: 18px; border: none; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn-wa { background: #128C7E; } 
-        .btn-call { background: #007bff; }
-        .btn-sms { background: #f39c12; color: #000; }
-        .btn-email { background: #e74c3c; }
+        .btn-action { width: 100%; padding: 15px 5px; font-size: 0.85rem; border-radius: 18px; border: none; color: white; font-weight: bold; cursor: pointer; }
+        .btn-wa { background: #128C7E; } .btn-call { background: #007bff; } .btn-sms { background: #f39c12; color: #000; } .btn-email { background: #e74c3c; }
+
+        /* iOS Instruction Overlay */
+        #ios-profile-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #050a14; z-index: 100000; color: white; padding: 30px;
+            box-sizing: border-box; text-align: center; justify-content: center; flex-direction: column; align-items: center;
+        }
+        .instruction-step { background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 15px; margin: 10px 0; width: 100%; font-size: 14px; border: 1px solid rgba(255, 255, 255, 0.1); }
+        .highlight-gold { color: #ffcc00; font-weight: bold; }
+
+        /* Language */
+        .top-bar { margin-bottom: 20px; z-index: 10; }
+        .lang-switch { display: flex; gap: 10px; background: var(--glass); padding: 5px; border-radius: 50px; }
+        .lang-btn { background: none; border: none; color: #8892b0; padding: 8px 15px; cursor: pointer; border-radius: 50px; font-size: 0.8rem; }
+        .lang-btn.active { background: var(--primary); color: #0a192f; font-weight: bold; }
 
         /* Dropdowns */
         .dropdown { position: relative; width: 100%; }
@@ -107,75 +71,36 @@
         .tt-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 0.8rem; }
         .close-tt { background: var(--primary); color: #000; width: 100%; padding: 12px; border: none; border-radius: 12px; margin-top: 20px; font-weight: bold; cursor: pointer; }
 
-        /* Socials */
         .social-button-container { width: 92%; max-width: 380px; margin-top: 25px; text-align: center; }
         .social-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px; }
-        .grid-btn { display: flex; flex-direction: column; align-items: center; background: var(--glass); padding: 12px 5px; border-radius: 15px; text-decoration: none; color: white; font-size: 0.65rem; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
+        .grid-btn { display: flex; flex-direction: column; align-items: center; background: var(--glass); padding: 12px 5px; border-radius: 15px; text-decoration: none; color: white; font-size: 0.65rem; border: 1px solid rgba(255,255,255,0.1); }
         .grid-btn img { width: 22px; height: 22px; margin-bottom: 8px; }
-        .grid-btn:active { transform: scale(0.9); background: rgba(255,255,255,0.15); }
-        #btn-install-main {
-    animation: pulse 2s infinite;
-    box-shadow: 0 0 15px rgba(255, 204, 0, 0.4);
-}
 
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.02); }
-    100% { transform: scale(1); }
-}
-        body { 
-    margin: 0; padding: 0; 
-    display: flex; flex-direction: column; align-items: center; 
-    justify-content: center; min-height: 100vh; width: 100vw; 
-    overflow-x: hidden; /* පැත්තට scroll වීම වළක්වයි */
-}
-
-.card { 
-    width: 90%; /* ෆෝන් එකේ දෙපැත්තෙන් ඉඩ තබයි */
-    max-width: 380px; /* ලොකු screens වලදී ඕනෑවට වඩා ලොකු වීම වළක්වයි */
-    padding: 20px;
-    border-radius: 30px;
-    box-sizing: border-box;
-}
-
-.action-grid { 
-    display: grid; 
-    grid-template-columns: 1fr 1fr; /* Buttons දෙක බැගින් පේළියට */
-    gap: 10px; 
-    width: 100%; 
-}
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        #btn-install-main { animation: pulse 2s infinite; box-shadow: 0 0 15px rgba(255, 204, 0, 0.4); }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body>
-   <div id="pwa-installer" style="display:none; position:fixed; top:10px; width:90%; max-width:360px; background:rgba(0,0,0,0.9); padding:15px; border-radius:15px; z-index:9999; border:1px solid var(--primary); left:50%; transform:translateX(-50%); text-align:center;">
-    <span id="pwa-text" style="font-size:0.85rem; display:block; margin-bottom:10px;">📲 K-Win App එක Install කරගන්න</span>
-    <button id="btn-install-main" style="background:var(--primary); color:#0a192f; border:none; padding:10px 20px; border-radius:10px; cursor:pointer; font-weight:bold; width:100%;">Install Now</button>
-</div>
-<div id="safari-only-overlay">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/5/52/Safari_browser_logo.svg" class="safari-icon" alt="Safari">
-    
-    <h2 style="color: #ffcc00;">Safari භාවිතා කරන්න</h2>
-    
-    <p style="opacity: 0.8;">ඔබ දැනට සිටින්නේ වෙනත් App එකක බ්‍රවුසරය තුළයි. මෙය Install කිරීමට නම්:</p>
 
-    <div class="instruction-step">
-        1️⃣ ඉහළ දකුණු කෙළවරේ ඇති <span class="highlight-gold">තිත් තුන (•••)</span> හෝ <span class="highlight-gold">Share</span> අයිකනය ඔබන්න.
+    <!-- PWA / Installer Top Bar -->
+    <div id="pwa-installer" style="display:none; position:fixed; top:10px; width:90%; max-width:360px; background:rgba(0,0,0,0.9); padding:15px; border-radius:15px; z-index:9999; border:1px solid var(--primary); text-align:center;">
+        <span id="pwa-text" style="font-size:0.85rem; display:block; margin-bottom:10px;">📲 K-Win App එක Install කරගන්න</span>
+        <button id="btn-install-main" onclick="handleInstallClick()" style="background:var(--primary); color:#0a192f; border:none; padding:10px 20px; border-radius:10px; cursor:pointer; font-weight:bold; width:100%;">Install Now</button>
     </div>
 
-    <div class="instruction-step">
-        2️⃣ ලැයිස්තුවෙන් <span class="highlight-gold">"Open in Safari"</span> හෝ <span class="highlight-gold">"Open in System Browser"</span> තෝරන්න.
+    <!-- Apple Configuration Profile Overlay -->
+    <div id="ios-profile-overlay">
+        <h2 style="color: #ffcc00;">K-Win Installer (Apple)</h2>
+        <p style="opacity: 0.8;">බාගත වූ Profile එක Install කරගන්න:</p>
+        <div class="instruction-step">1️⃣ Settings (සැකසුම්) වෙත යන්න.</div>
+        <div class="instruction-step">2️⃣ <span class="highlight-gold">"Profile Downloaded"</span> මත ක්ලික් කරන්න.</div>
+        <div class="instruction-step">3️⃣ ඉහළ දකුණු කෙළවරේ ඇති <span class="highlight-gold">Install</span> ඔබන්න.</div>
+        <button class="close-tt" onclick="document.getElementById('ios-profile-overlay').style.display='none'">මම කරගත්තා ✅</button>
     </div>
 
-    <p style="font-size: 12px; margin-top: 20px; opacity: 0.6;">Safari හරහා පිවිසි විට පමණක් App එක Install කළ හැක.</p>
-</div>
- <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiSy1XaW4gUHJvZHVjdGlvbiIsInNob3J0X25hbWUiOiJLLVdpbiIsInN0YXJ0X3VybCI6ImluZGV4Lmh0bWwiLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3ciOiIjMGExOTJmIiwidGhlbWVfY29sb3ciOiIjNjRmZmRhIiwib3JpZW50YXRpb24iOiJwb3J0cmFpdCIsImljb25zIjpbeyJzcmMiOiJodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20va3dpbnByb2R1Y3Rpb24vSy1XaW4tRWNhcmQvbWFpbi9sb2dvLmpwZWciLCJzaXplcyI6IjUxMng1MTIiLCJ0eXBlIjoiaW1hZ2UvanBlZyIsInB1cnBvc2UiOiJhbnkgbWFza2FibGUifV19">
-    <link rel="icon" type="image/jpeg" href="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg">
-    <meta name="theme-color" content="#64ffda">
     <div class="bg-animations">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
-         <div class="orb orb-3"></div>
     </div>
     
     <div class="top-bar">
@@ -189,7 +114,7 @@
     <div class="card">
         <div style="color: var(--primary); font-size: 0.7rem; letter-spacing: 3px; font-weight: 800; margin-bottom: 12px; text-transform: uppercase;"><h1>K-Win Team</h1></div>
         <img src="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg" class="p-img" alt="Profile">
-       
+        
         <div class="info-box">
             <span id="lbl-addr">📍 Kurunegala, Sri Lanka</span><br>
             <span id="lbl-phone">📞 071 733 7818</span><br>
@@ -200,7 +125,6 @@
 
         <div id="actionGrid" class="action-grid" style="display: none;">
             <button class="btn-action btn-wa" onclick="window.location.href='https://wa.me/94717337818'">✅ WhatsApp</button>
-            
             <div class="dropdown">
                 <button class="btn-action btn-call" id="btn-call-txt" onclick="toggleMenu('callMenu')"> 📞 Call</button>
                 <div id="callMenu" class="dropdown-content">
@@ -208,7 +132,6 @@
                     <a href="tel:0767902944">📞 076 790 2944</a>
                 </div>
             </div>
-
             <div class="dropdown">
                 <button class="btn-action btn-sms" id="btn-sms-txt" onclick="toggleMenu('smsMenu')">💬 SMS</button>
                 <div id="smsMenu" class="dropdown-content">
@@ -216,14 +139,12 @@
                     <a href="sms:0767902944">💬 076 790 2944</a>
                 </div>
             </div>
-
             <button class="btn-action btn-email" id="btn-email-txt" onclick="window.location.href='mailto:kindwin2026@gmail.com'">📧 Email</button>
         </div>
 
         <button onclick="openTimetable()" class="btn-tt">📅 <span id="btn-tt-txt">⏰ Opening Hours </span></button>
     </div>
 
-    <!-- Timetable Overlay -->
     <div id="ttOverlay" class="tt-overlay">
         <div class="tt-content">
             <h3 id="tt-title" style="color: var(--primary); margin-top: 0; text-align: center;"> ⏰ Weekly Timetable</h3>
@@ -243,37 +164,13 @@
     </div>
 
     <script>
-        let currentLang = 'en';
+        let currentLang = 'si';
+        let deferredPrompt;
 
         const translations = {
-             en: { 
-                save: "👤 SAVE CONTACT", 
-                ttBtn: "⏰ Opening Hours", 
-                ttTitle: "⏰ Opening Hours", 
-                addr: "📍 Kurunegala, Sri Lanka. (60000)", 
-                credit: "Powered by K-Win | Design by Janith Didula",
-                call: "📞 Call", sms: "💬 SMS", email: "📧 Email", close: "❌ CLOSE",
-                days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] 
-            },
-            si: { 
-                save: "👤 CONTACT එක SAVE කරන්න", 
-                ttBtn: "⏰ විවෘතව තබන වේලාවන්", 
-                ttTitle: "⏰ විවෘතව තබන වේලාවන්", 
-                addr: "📍 කුරුණෑගල, ශ්‍රී ලංකා. (60000)", 
-                credit: "K-Win වෙතින් | ජනිත් දිදුලගේ නිර්මාණයකි",
-                call: "📞 ඇමතුම්", sms: "💬 පණිවිඩ", email: "📧 ඊමේල්", close: "❌ වසන්න",
-                days: ["සඳුදා", "අඟහරුවාදා", "බදාදා", "බ්‍රහස්පතින්දා", "සිකුරාදා", "සෙනසුරාදා", "ඉරිදා"] 
-            },
-           
-            ta: { 
-                save: "👤 தொடர்பைச் சேමිக்கவும்", 
-                ttBtn: "⏰ திறந்திருக்கும் நேரங்கள்", 
-                ttTitle: "⏰ திறந்திருக்கும் நேரங்கள்", 
-                addr: "📍 குருநாகல், இலங்கை. (60000)", 
-                credit: "K-Win மூலம் இயக்கப்படுகிறது | வடிவமைப்பு: ஜனித் திதுல ",
-                call: "📞 அழைப்பு", sms: "💬 செய்தி", email: "📧 மின்னஞ்சல்", close: "❌ மூடு",
-                days: ["திங்கள்", "செவ்வாய்", "புதன்", "வியாழன்", "வெள்ளி", "சனி", "ஞாயிறு"] 
-            }
+            en: { save: "👤 SAVE CONTACT", ttBtn: "⏰ Opening Hours", ttTitle: "⏰ Opening Hours", addr: "📍 Kurunegala, Sri Lanka. (60000)", credit: "Powered by K-Win | Design by Janith Didula", call: "📞 Call", sms: "💬 SMS", email: "📧 Email", close: "❌ CLOSE", days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] },
+            si: { save: "👤 CONTACT එක SAVE කරන්න", ttBtn: "⏰ විවෘතව තබන වේලාවන්", ttTitle: "⏰ විවෘතව තබන වේලාවන්", addr: "📍 කුරුණෑගල, ශ්‍රී ලංකා. (60000)", credit: "K-Win වෙතින් | ජනිත් දිදුලගේ නිර්මාණයකි", call: "📞 ඇමතුම්", sms: "💬 පණිවිඩ", email: "📧 ඊමේල්", close: "❌ වසන්න", days: ["සඳුදා", "අඟහරුවාදා", "බදාදා", "බ්‍රහස්පතින්දා", "සිකුරාදා", "සෙනසුරාදා", "ඉරිදා"] },
+            ta: { save: "👤 தொடர்பைச் சேමිக்கவும்", ttBtn: "⏰ திறந்திருக்கும் நேரங்கள்", ttTitle: "⏰ திறந்திருக்கும் நேரங்கள்", addr: "📍 குருநாகல், இலங்கை. (60000)", credit: "K-Win மூலம் இயக்கப்படுகிறது | வடிவமைப்பு: ஜனித் திதுல ", call: "📞 அழைப்பு", sms: "💬 செய்தி", email: "📧 மின்னஞ்சல்", close: "❌ மூடு", days: ["திங்கள்", "செவ்வாய்", "புதன்", "வியாழன்", "வெள்ளி", "சனி", "ஞாயிறு"] }
         };
 
         const timetableData = [
@@ -290,7 +187,6 @@
             currentLang = lang;
             document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById('btn-' + lang).classList.add('active');
-
             document.getElementById('mainSaveBtn').innerText = translations[lang].save;
             document.getElementById('btn-tt-txt').innerText = translations[lang].ttBtn;
             document.getElementById('lbl-addr').innerText = translations[lang].addr;
@@ -317,7 +213,6 @@
             a.href = url;
             a.download = 'K-Win_Contact.vcf';
             a.click();
-            
             localStorage.setItem('contact_saved', 'true');
             showActionGrid();
         }
@@ -339,14 +234,76 @@
             document.getElementById('ttOverlay').style.display = 'flex';
         }
 
-        function closeTimetable() {
-            document.getElementById('ttOverlay').style.display = 'none';
+        function closeTimetable() { document.getElementById('ttOverlay').style.display = 'none'; }
+
+        // --- PWA Logic ---
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('pwa-installer').style.display = 'block';
+        });
+
+        async function handleInstallClick() {
+            const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+
+            if (isIos) {
+                downloadAppleProfile();
+                document.getElementById('ios-profile-overlay').style.display = 'flex';
+            } else if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') document.getElementById('pwa-installer').style.display = 'none';
+                deferredPrompt = null;
+            } else {
+                alert("මෙම පහසුකම දැනට මෙම Browser එකේ සක්‍රීය නැත.");
+            }
+        }
+
+        function downloadAppleProfile() {
+            // Configuration Profile XML Content
+            const profileXml = `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>PayloadContent</key>
+    <array>
+        <dict>
+            <key>FullScreen</key><true/>
+            <key>Icon</key><data></data>
+            <key>IsRemovable</key><true/>
+            <key>Label</key><string>K-Win</string>
+            <key>PayloadDescription</key><string>K-Win Digital E-Card</string>
+            <key>PayloadDisplayName</key><string>K-Win Web Clip</string>
+            <key>PayloadIdentifier</key><string>com.kwin.webclip</string>
+            <key>PayloadType</key><string>com.apple.webClip.managed</string>
+            <key>PayloadUUID</key><string>123e4567-e89b-12d3-a456-426614174000</string>
+            <key>PayloadVersion</key><integer>1</integer>
+            <key>URL</key><string>${window.location.href}</string>
+        </dict>
+    </array>
+    <key>PayloadDisplayName</key><string>K-Win Installer</string>
+    <key>PayloadIdentifier</key><string>com.kwin.installer</string>
+    <key>PayloadRemovalDisallowed</key><false/>
+    <key>PayloadType</key><string>Configuration</string>
+    <key>PayloadUUID</key><string>123e4567-e89b-12d3-a456-426614174001</string>
+    <key>PayloadVersion</key><integer>1</integer>
+</dict>
+</plist>`;
+            const blob = new Blob([profileXml], { type: 'application/x-apple-aspen-config' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'K-Win.mobileconfig';
+            a.click();
         }
 
         window.onload = () => {
             setLanguage('si');
-            if (localStorage.getItem('contact_saved') === 'true') {
-                showActionGrid();
+            if (localStorage.getItem('contact_saved') === 'true') showActionGrid();
+            // Show installer for iOS always if not standalone
+            const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+            if (isIos && !window.navigator.standalone) {
+                document.getElementById('pwa-installer').style.display = 'block';
             }
         };
 
@@ -355,98 +312,6 @@
                 document.querySelectorAll('.dropdown-content').forEach(m => m.classList.remove('show'));
             }
         };
-       // 1. Service Worker එක Register කිරීම (අනිවාර්යයි)
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js') // මෙහි sw.js නම නිවැරදි දැයි බලන්න
-    .then(() => console.log("K-Win Service Worker Registered"));
-}
-
-// 2. ඔබ ලබා දුන් setupPWAInstall Function එක
-function setupPWAInstall() {
-    let deferredPrompt;
-    const pwaContainer = document.getElementById('pwa-installer');
-    const pwaBtn = document.getElementById('btn-install-main');
-
-    // දැනටමත් App එකක් ලෙස වැඩ කරයි නම් පෙන්වන්න එපා
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-        return; 
-    }
-
-    // Install prompt එක සූදානම් වූ විට Container එක පෙන්වන්න
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        if(pwaContainer) pwaContainer.style.display = 'block';
-    });
-
-    if(pwaBtn) {
-        pwaBtn.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
-                    if(pwaContainer) pwaContainer.style.display = 'none';
-                }
-                deferredPrompt = null;
-            }
-        });
-    }
-
-    // Install වූ පසු හංගන්න
-    window.addEventListener('appinstalled', () => {
-        if(pwaContainer) pwaContainer.style.display = 'none';
-        console.log('K-Win App installed successfully!');
-    });
-}
-
-// 3. Window Load එකේදී function එක call කිරීම
-window.onload = () => {
-    setLanguage('si'); // ඔබේ පැරණි function එක
-    setupPWAInstall(); // අලුත් PWA function එක
-    
-    if (localStorage.getItem('contact_saved') === 'true') {
-        showActionGrid();
-    }
-};
-        const pwaBtn = document.getElementById('btn-install-main');
-
-pwaBtn.addEventListener('click', async () => {
-    // 1. iPhone එකක්ද කියලා බලනවා
-    const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
-
-    if (isIos) {
-        // iPhone එකක් නම් කෙලින්ම අපේ ලස්සන Popup එක පෙන්වනවා
-        document.getElementById('ios-overlay').style.display = 'flex';
-    } else {
-        // Android නම් කලින් වගේම Install Prompt එක පෙන්වනවා
-        if (window.deferredPrompt) {
-            window.deferredPrompt.prompt();
-            const { outcome } = await window.deferredPrompt.userChoice;
-            if (outcome === 'accepted') {
-                document.getElementById('pwa-installer').style.display = 'none';
-            }
-            window.deferredPrompt = null;
-        }
-    }
-});
-        function enforceSafariOnIphone() {
-    const ua = window.navigator.userAgent.toLowerCase();
-    const isIphone = /iphone|ipad|ipod/.test(ua);
-    
-    // iPhone එකක්ද සහ Safari ද කියා පරීක්ෂා කිරීම
-    // chrome, crios, fxios (firefox) වැනි වචන නැති නම් එය Safari වේ
-    const isSafari = ua.includes('safari') && !ua.includes('chrome') && !ua.includes('crios') && !ua.includes('fxios') && !ua.includes('android');
-
-    // Standalone mode එකේ (Install කරලා) නම් මේක පෙන්වන්න අවශ්‍ය නැහැ
-    const isStandalone = window.navigator.standalone === true;
-
-    if (isIphone && !isSafari && !isStandalone) {
-        document.getElementById('safari-only-overlay').style.display = 'flex';
-    }
-}
-
-// Page එක load වූ වහාම ක්‍රියාත්මක කරන්න
-window.addEventListener('load', enforceSafariOnIphone);
     </script>
 </body>
 </html>
