@@ -32,7 +32,7 @@
         @keyframes moveOrb { from { transform: translate(0, 0); } to { transform: translate(30px, 50px); } }
 
         /* Card Styles */
-        .card { width: 92%; max-width: 380px; background: rgba(255, 255, 255, 0.05); padding: 25px 20px; border-radius: 35px; border: 1px solid rgba(255, 255, 255, 0.15); backdrop-filter: blur(30px); text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
+        .card { width: 92%; max-width: 380px; background: rgba(255, 255, 255, 0.05); padding: 25px 20px; border-radius: 35px; border: 1px solid rgba(255, 255, 255, 0.15); backdrop-filter: blur(30px); text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.5); position: relative; }
         .p-img { width: 90px; height: 90px; border-radius: 50%; border: 3px solid #ffda00; padding: 4px; object-fit: cover; }
         .info-box { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 20px; margin: 15px 0; border-left: 4px solid var(--primary); text-align: left; font-size: 0.85rem; line-height: 1.8; }
         
@@ -44,22 +44,19 @@
         .btn-action { width: 100%; padding: 15px 5px; font-size: 0.85rem; border-radius: 18px; border: none; color: white; font-weight: bold; cursor: pointer; }
         .btn-wa { background: #128C7E; } .btn-call { background: #007bff; } .btn-sms { background: #f39c12; color: #000; } .btn-email { background: #e74c3c; }
 
-        /* iOS Floating Prompt (Direct Pointer) */
+        /* iOS Floating Prompt */
         #ios-prompt {
             display: none; position: fixed; background: #fff; color: #000; padding: 12px 18px;
             border-radius: 15px; z-index: 100001; text-align: center; font-size: 14px; font-weight: 600;
             box-shadow: 0 0 25px rgba(255,255,255,0.4); width: 80%; max-width: 280px;
         }
-        /* Triangle for the prompt */
         #ios-prompt::after {
             content: ''; position: absolute; border-left: 10px solid transparent; border-right: 10px solid transparent;
         }
 
-        /* Safari Tooltip (Bottom) */
         .safari-tip { bottom: 85px; left: 50%; transform: translateX(-50%); }
         .safari-tip::after { bottom: -10px; left: 50%; transform: translateX(-50%); border-top: 10px solid #fff; }
 
-        /* Chrome iOS Tooltip (Top Right) */
         .chrome-tip { top: 75px; right: 20px; }
         .chrome-tip::after { top: -10px; right: 20px; border-bottom: 10px solid #fff; }
 
@@ -88,19 +85,20 @@
         .grid-btn { display: flex; flex-direction: column; align-items: center; background: var(--glass); padding: 12px 5px; border-radius: 15px; text-decoration: none; color: white; font-size: 0.65rem; border: 1px solid rgba(255,255,255,0.1); }
         .grid-btn img { width: 22px; height: 22px; margin-bottom: 8px; }
 
+        .location-btn { display: flex; align-items: center; justify-content: center; background: #ffda00; color: #000; padding: 12px; border-radius: 15px; text-decoration: none; font-weight: bold; margin-bottom: 15px; font-size: 0.9rem; }
+        .location-btn img { width: 20px; margin-right: 10px; }
+
         #pwa-installer { animation: slideUp 0.5s ease-out; }
         @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
 </head>
 <body>
 
-    <!-- PWA / Installer Top Bar -->
     <div id="pwa-installer" style="display:none; position:fixed; bottom:20px; width:92%; max-width:380px; background:rgba(255,255,255,0.95); padding:15px; border-radius:25px; z-index:9999; box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align:center;">
         <span id="pwa-text" style="font-size:0.9rem; display:block; margin-bottom:10px; color:#000; font-weight:bold;">📲 Add K-Win to Home Screen</span>
         <button id="btn-install-main" onclick="handleInstallClick()" style="background:#000; color:#fff; border:none; padding:12px 20px; border-radius:15px; cursor:pointer; font-weight:900; width:100%;">INSTALL NOW</button>
     </div>
 
-    <!-- iOS Direct Tooltip -->
     <div id="ios-prompt">
         මෙතැනින් <img src="https://cdn-icons-png.flaticon.com/512/54/54720.png" class="ios-icon"> 'Share' කර <br>
         <b>'Add to Home Screen'</b> තෝරන්න.
@@ -118,10 +116,11 @@
             <button id="btn-ta" class="lang-btn" onclick="setLanguage('ta')">தமிழ்</button>
         </div>
     </div>
+
     <div class="card">
         <div style="color: white; font-size: 0.7rem; letter-spacing: 3px; font-weight: 800; margin-bottom: 12px; text-transform: uppercase;">
-    <h1>Kind Win</h1>
-</div>
+            <h1 style="margin:0; font-size: 1.5rem;">Kind Win</h1>
+        </div>
         <img src="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg" class="p-img" alt="Profile">
         
         <div class="info-box">
@@ -137,41 +136,42 @@
             <div class="dropdown">
                 <button class="btn-action btn-call" id="btn-call-txt" onclick="toggleMenu('callMenu')"> 📞 Call</button>
                 <div id="callMenu" class="dropdown-content">
-                    <a href="tel:0717337818">📞 සදීප -  071 733 7818</a>
-                    <a href="tel:0714073730">📞කෙවින් - 071 407 3730 </a>
+                    <a href="tel:0717337818">📞 සදීප - 071 733 7818</a>
+                    <a href="tel:0714073730">📞 කෙවින් - 071 407 3730 </a>
                 </div>
             </div>
             <div class="dropdown">
                 <button class="btn-action btn-sms" id="btn-sms-txt" onclick="toggleMenu('smsMenu')">💬 SMS</button>
                 <div id="smsMenu" class="dropdown-content">
-                    <a href="sms:0717337818">💬 සදීප   - 071 733 7818</a>
+                    <a href="sms:0717337818">💬 සදීප - 071 733 7818</a>
                     <a href="sms:0714073730">💬 කෙවින් - 071 407 3730 </a>
                 </div>
             </div>
             <button class="btn-action btn-email" id="btn-email-txt" onclick="window.location.href='mailto:kindwin2026@gmail.com'">📧 Email</button>
         </div>
 
-        <button onclick="openTimetable()" class="btn-tt">📅 <span id="btn-tt-txt">⏰ Opening Hours </span></button>
+        <button onclick="openTimetable()" class="btn-tt">📅 <span id="btn-tt-txt">Opening Hours</span></button>
     </div>
 
     <div id="ttOverlay" class="tt-overlay">
         <div class="tt-content">
-            <h3 id="tt-title" style="color: var(--primary); margin-top: 0; text-align: center;"> ⏰ Weekly Timetable</h3>
+            <h3 id="tt-title" style="color: var(--primary); margin-top: 0; text-align: center;">⏰ Weekly Timetable</h3>
             <div id="tt-list"></div>
             <button class="close-tt" onclick="closeTimetable()">❌ CLOSE</button>
         </div>
     </div>
+
     <div class="social-button-container">
-             <p id="social-title" class="section-title">CONNECT WITH US</p>
+        <p id="social-title" style="font-size: 0.7rem; letter-spacing: 2px; margin-bottom: 15px; opacity: 0.8;">CONNECT WITH US</p>
         <a id="loc-btn" href="https://maps.app.goo.gl/c3tWuHNQDBGwbK5g8" class="location-btn">
             <img src="https://cdn-icons-png.flaticon.com/512/854/854878.png" alt="Loc">
-            <span id="loc-txt">Go to Kind Win </span>
+            <span id="loc-txt">Go to Kind Win</span>
         </a>
         <div class="social-grid">
-            <a href="https://facebook.com" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png"><span>Facebook</span></a>
-            <a href="https://youtube.com" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"><span>YouTube</span></a>
-            <a href="https://tiktok.com" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png"><span>TikTok</span></a>
-            <a href="https://instagram.com" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"><span>Instagram</span></a>
+            <a id="fb-link" href="#" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png"><span>Facebook</span></a>
+            <a id="yt-link" href="#" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"><span>YouTube</span></a>
+            <a id="tt-link" href="#" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png"><span>TikTok</span></a>
+            <a id="ig-link" href="#" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"><span>Instagram</span></a>
         </div>
         <div id="footer-credit" style="margin-top: 20px; font-size: 0.6rem; opacity: 0.5;">Powered by K-Win | Design by Janith Didula</div>
     </div>
@@ -181,27 +181,30 @@
         let deferredPrompt;
 
         const translations = {
-            en: { install: "📲 Add K-Win to Home Screen", save: "👤 SAVE CONTACT", ttBtn: "⏰ Opening Hours", ttTitle: "⏰ Opening Hours", addr: "📍 Kurunegala, Sri Lanka", credit: "Powered by K-Win | Design by Janith Didula", call: "📞 Call", sms: "💬 SMS", email: "📧 Email", close: "❌ CLOSE", locTxt: "Kind Win ට යන මග "] },
-            si: { install: "📲 K-Win App එක Install කරගන්න", save: "👤 CONTACT එක SAVE කරන්න", ttBtn: "⏰ විවෘතව තබන වේලාවන්", ttTitle: "⏰ විවෘතව තබන වේලාවන්", addr: "📍 කුරුණෑගල, ශ්‍රී ලංකා", credit: "K-Win වෙතින් | ජනිත් දිදුලගේ නිර්මාණයකි", call: "📞 ඇමතුම්", sms: "💬 පණිවිඩ", email: "📧 ඊමේල්", close: "❌ වසන්න",locTxt: "Go to kind Win"] },
-            ta: { install: "📲 முகப்புத் திரையில் சேர்க்கவும்", save: "👤 தொடர்பைச் சேමිக்கவும்", ttBtn: "⏰ திறந்திருக்கும் நேரங்கள்", ttTitle: "⏰ திறந்திருக்கும் நேரங்கள்", addr: "📍 குருநாகல், இலங்கை", credit: "K-Win மூலம் இயக்கப்படுகிறது | வடிவமைப்பு: ஜனித் திதுல ", call: "📞 அழைப்பு", sms: "💬 செய்தி", email: "📧 மின்னஞ்சல்", close: "❌ மூடு", locTxt: "K-Win வழி)" }
+            en: { 
+                install: "📲 Add K-Win to Home Screen", save: "👤 SAVE CONTACT", ttBtn: "⏰ Opening Hours", ttTitle: "⏰ Opening Hours", addr: "📍 Kurunegala, Sri Lanka", credit: "Powered by K-Win | Design by Janith Didula", call: "📞 Call", sms: "💬 SMS", email: "📧 Email", close: "❌ CLOSE", locTxt: "Get Directions",
+                days: ["Sun - Fri", "Saturday"], openStatus: ["Open", "Closed"]
+            },
+            si: { 
+                install: "📲 K-Win App එක Install කරගන්න", save: "👤 CONTACT එක SAVE කරන්න", ttBtn: "⏰ විවෘතව තබන වේලාවන්", ttTitle: "⏰ විවෘතව තබන වේලාවන්", addr: "📍 කුරුණෑගල, ශ්‍රී ලංකා", credit: "K-Win වෙතින් | ජනිත් දිදුලගේ නිර්මාණයකි", call: "📞 ඇමතුම්", sms: "💬 පණිවිඩ", email: "📧 ඊමේල්", close: "❌ වසන්න", locTxt: "Kind Win ට යන මග",
+                days: ["ඉරිදා - සිකුරාදා", "සෙනසුරාදා"], openStatus: ["විවෘතයි", "වසා ඇත"]
+            },
+            ta: { 
+                install: "📲 முகப்புத் திரையில் சேர்க்கவும்", save: "👤 தொடர்பைச் சேமிக்கவும்", ttBtn: "⏰ திறந்திருக்கும் நேரங்கள்", ttTitle: "⏰ திறந்திருக்கும் நேரங்கள்", addr: "📍 குருநாகல், இலங்கை", credit: "K-Win மூலம் இயக்கப்படுகிறது | வடிவமைப்பு: ஜனித் திதுல ", call: "📞 அழைப்பு", sms: "💬 செய்தி", email: "📧 மின்னஞ்சல்", close: "❌ மூடு", locTxt: "K-Win வழி",
+                days: ["ஞாயிறு - வெள்ளி", "සෙනසුරාදා"], openStatus: ["திறந்துள்ளது", "மூடப்பட்டுள்ளது"]
+            }
         };
 
-        
-const timetableOutput = `
-ඉරිදා දින සිට සිකුරාදා දින දක්වා (Sun - Fri | ஞாயிறு - வெள்ளி)
-⏱ 08:30 AM - 04:00 PM
-✅ විවෘතයි / Open / திறந்துள்ளது
-
-සෙනසුරාදා දින (Saturday | சனி)
-🚫 වසා ඇත / Closed / மூடப்பட்டுள்ளது
-`;
-
-console.log(timetableOutput);
+        const timetableData = [
+            { time: "08:30 AM - 04:00 PM", isOpen: true },
+            { time: "Closed", isOpen: false }
+        ];
 
         function setLanguage(lang) {
             currentLang = lang;
             document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById('btn-' + lang).classList.add('active');
+            
             document.getElementById('pwa-text').innerText = translations[lang].install;
             document.getElementById('mainSaveBtn').innerText = translations[lang].save;
             document.getElementById('btn-tt-txt').innerText = translations[lang].ttBtn;
@@ -211,6 +214,7 @@ console.log(timetableOutput);
             document.getElementById('btn-sms-txt').innerText = translations[lang].sms;
             document.getElementById('btn-email-txt').innerText = translations[lang].email;
             document.getElementById('tt-title').innerText = translations[lang].ttTitle;
+            document.getElementById('loc-txt').innerText = translations[lang].locTxt;
             document.querySelector('.close-tt').innerText = translations[lang].close;
         }
 
@@ -237,44 +241,40 @@ console.log(timetableOutput);
             document.getElementById('mainSaveBtn').style.display = 'none';
             document.getElementById('actionGrid').style.display = 'grid';
         }
-function setupAppLinks() {
-    const links = [
-        { 
-            id: 'fb-link', 
-            // Facebook App එකෙන් කෙලින්ම Profile එකට යෑමට:
-            app: 'fb://profile/61569786773421', 
-            web: 'https://www.facebook.com/profile.php?id=61569786773421' 
-        },
-        { id: 'yt-link', app: 'vnd.youtube://' }, // YouTube 
-        { id: 'ig-link', app: 'instagram://app' }, // Instagram 
-        { id: 'tt-link', app: 'snssdk1128://' } // TikTok 
-    ];
 
-    links.forEach(link => {
-        const el = document.getElementById(link.id);
-        if (el) { // Element එක තියෙනවාදැයි පරීක්ෂා කිරීම
-            el.onclick = (e) => {
-                e.preventDefault();
-                const start = Date.now();
-                window.location.href = link.app;
-                
-                // App එක නැතිනම් තත්පර 1කට පසු Browser එකේ Web Link එක Open කරයි
-                setTimeout(() => { 
-                    if (Date.now() - start < 1500) {
-                        window.location.href = link.web;
-                    }
-                }, 1000);
-            };
+        function setupAppLinks() {
+            const links = [
+                { id: 'fb-link', app: 'fb://profile/61569786773421', web: 'https://www.facebook.com/profile.php?id=61569786773421' },
+                { id: 'yt-link', app: 'vnd.youtube://www.youtube.com', web: 'https://youtube.com' },
+                { id: 'ig-link', app: 'instagram://', web: 'https://instagram.com' },
+                { id: 'tt-link', app: 'snssdk1128://', web: 'https://tiktok.com' }
+            ];
+
+            links.forEach(link => {
+                const el = document.getElementById(link.id);
+                if (el) {
+                    el.onclick = (e) => {
+                        e.preventDefault();
+                        const start = Date.now();
+                        window.location.href = link.app;
+                        setTimeout(() => { 
+                            if (Date.now() - start < 1500) {
+                                window.location.href = link.web;
+                            }
+                        }, 1000);
+                    };
+                }
+            });
         }
-    });
-}
+
         function openTimetable() {
             const list = document.getElementById('tt-list');
             list.innerHTML = '';
             timetableData.forEach((item, index) => {
                 const row = document.createElement('div');
                 row.className = 'tt-row';
-                row.innerHTML = `<span>${translations[currentLang].days[index]}</span><span>${item.time === 'Closed' ? item.status[currentLang] : item.time}</span>`;
+                const statusText = item.isOpen ? translations[currentLang].openStatus[0] : translations[currentLang].openStatus[1];
+                row.innerHTML = `<span>${translations[currentLang].days[index]}</span><span>${item.time} (${statusText})</span>`;
                 list.appendChild(row);
             });
             document.getElementById('ttOverlay').style.display = 'flex';
@@ -282,7 +282,6 @@ function setupAppLinks() {
 
         function closeTimetable() { document.getElementById('ttOverlay').style.display = 'none'; }
 
-        // --- PWA & iOS Logic ---
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
@@ -296,14 +295,9 @@ function setupAppLinks() {
 
             if (isIos) {
                 const prompt = document.getElementById('ios-prompt');
-                prompt.className = ''; // reset classes
-                
-                if (isChromeIos) {
-                    prompt.classList.add('chrome-tip');
-                } else {
-                    prompt.classList.add('safari-tip');
-                }
-                
+                prompt.className = '';
+                if (isChromeIos) prompt.classList.add('chrome-tip');
+                else prompt.classList.add('safari-tip');
                 prompt.style.display = 'block';
                 setTimeout(() => { prompt.style.display = 'none'; }, 8000);
             } else if (deferredPrompt) {
@@ -316,10 +310,10 @@ function setupAppLinks() {
         }
 
         window.onload = () => {
-            setLanguage('en');
+            setLanguage('si');
+            setupAppLinks();
             if (localStorage.getItem('contact_saved') === 'true') showActionGrid();
             
-            // Show installer for iOS always if not in standalone mode
             const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
             const isStandalone = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
             if (isIos && !isStandalone) {
