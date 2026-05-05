@@ -133,19 +133,19 @@
         <button id="mainSaveBtn" onclick="saveVCard()" class="btn-save">👤 SAVE CONTACT</button>
 
         <div id="actionGrid" class="action-grid" style="display: none;">
-            <button class="btn-action btn-wa" onclick="window.location.href='https://wa.me/94717337818'">✅ WhatsApp</button>
+            <button class="btn-action btn-wa" onclick="window.location.href='https://wa.me/94707140731'">✅ WhatsApp</button>
             <div class="dropdown">
                 <button class="btn-action btn-call" id="btn-call-txt" onclick="toggleMenu('callMenu')"> 📞 Call</button>
                 <div id="callMenu" class="dropdown-content">
-                    <a href="tel:0717337818">📞 071 733 7818</a>
-                    <a href="tel:0767902944">📞 076 790 2944</a>
+                    <a href="tel:0717337818">📞 සදීප -  071 733 7818</a>
+                    <a href="tel:0714073730">📞කෙවින් - 071 407 3730 </a>
                 </div>
             </div>
             <div class="dropdown">
                 <button class="btn-action btn-sms" id="btn-sms-txt" onclick="toggleMenu('smsMenu')">💬 SMS</button>
                 <div id="smsMenu" class="dropdown-content">
-                    <a href="sms:0717337818">💬 071 733 7818</a>
-                    <a href="sms:0767902944">💬 076 790 2944</a>
+                    <a href="sms:0717337818">💬 සදීප   - 071 733 7818</a>
+                    <a href="sms:0714073730">💬 කෙවින් - 071 407 3730 </a>
                 </div>
             </div>
             <button class="btn-action btn-email" id="btn-email-txt" onclick="window.location.href='mailto:kindwin2026@gmail.com'">📧 Email</button>
@@ -161,8 +161,12 @@
             <button class="close-tt" onclick="closeTimetable()">❌ CLOSE</button>
         </div>
     </div>
-
     <div class="social-button-container">
+             <p id="social-title" class="section-title">CONNECT WITH US</p>
+        <a id="loc-btn" href="https://maps.app.goo.gl/c3tWuHNQDBGwbK5g8" class="location-btn">
+            <img src="https://cdn-icons-png.flaticon.com/512/854/854878.png" alt="Loc">
+            <span id="loc-txt">Go to Kind Win </span>
+        </a>
         <div class="social-grid">
             <a href="https://facebook.com" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png"><span>Facebook</span></a>
             <a href="https://youtube.com" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"><span>YouTube</span></a>
@@ -177,20 +181,22 @@
         let deferredPrompt;
 
         const translations = {
-            en: { install: "📲 Add K-Win to Home Screen", save: "👤 SAVE CONTACT", ttBtn: "⏰ Opening Hours", ttTitle: "⏰ Opening Hours", addr: "📍 Kurunegala, Sri Lanka", credit: "Powered by K-Win | Design by Janith Didula", call: "📞 Call", sms: "💬 SMS", email: "📧 Email", close: "❌ CLOSE", days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] },
-            si: { install: "📲 K-Win App එක Install කරගන්න", save: "👤 CONTACT එක SAVE කරන්න", ttBtn: "⏰ විවෘතව තබන වේලාවන්", ttTitle: "⏰ විවෘතව තබන වේලාවන්", addr: "📍 කුරුණෑගල, ශ්‍රී ලංකා", credit: "K-Win වෙතින් | ජනිත් දිදුලගේ නිර්මාණයකි", call: "📞 ඇමතුම්", sms: "💬 පණිවිඩ", email: "📧 ඊමේල්", close: "❌ වසන්න", days: ["සඳුදා", "අඟහරුවාදා", "බදාදා", "බ්‍රහස්පතින්දා", "සිකුරාදා", "සෙනසුරාදා", "ඉරිදා"] },
-            ta: { install: "📲 முகப்புத் திரையில் சேர்க்கவும்", save: "👤 தொடர்பைச் சேමිக்கவும்", ttBtn: "⏰ திறந்திருக்கும் நேரங்கள்", ttTitle: "⏰ திறந்திருக்கும் நேரங்கள்", addr: "📍 குருநாகல், இலங்கை", credit: "K-Win மூலம் இயக்கப்படுகிறது | வடிவமைப்பு: ஜனித் திதுல ", call: "📞 அழைப்பு", sms: "💬 செய்தி", email: "📧 மின்னஞ்சல்", close: "❌ மூடு", days: ["திங்கள்", "செவ்வாய்", "புதன்", "வியாழன்", "வெள்ளி", "சனி", "ஞாயிறு"] }
+            en: { install: "📲 Add K-Win to Home Screen", save: "👤 SAVE CONTACT", ttBtn: "⏰ Opening Hours", ttTitle: "⏰ Opening Hours", addr: "📍 Kurunegala, Sri Lanka", credit: "Powered by K-Win | Design by Janith Didula", call: "📞 Call", sms: "💬 SMS", email: "📧 Email", close: "❌ CLOSE", locTxt: "Kind Win ට යන මග "] },
+            si: { install: "📲 K-Win App එක Install කරගන්න", save: "👤 CONTACT එක SAVE කරන්න", ttBtn: "⏰ විවෘතව තබන වේලාවන්", ttTitle: "⏰ විවෘතව තබන වේලාවන්", addr: "📍 කුරුණෑගල, ශ්‍රී ලංකා", credit: "K-Win වෙතින් | ජනිත් දිදුලගේ නිර්මාණයකි", call: "📞 ඇමතුම්", sms: "💬 පණිවිඩ", email: "📧 ඊමේල්", close: "❌ වසන්න",locTxt: "Go to kind Win"] },
+            ta: { install: "📲 முகப்புத் திரையில் சேர்க்கவும்", save: "👤 தொடர்பைச் சேමිக்கவும்", ttBtn: "⏰ திறந்திருக்கும் நேரங்கள்", ttTitle: "⏰ திறந்திருக்கும் நேரங்கள்", addr: "📍 குருநாகல், இலங்கை", credit: "K-Win மூலம் இயக்கப்படுகிறது | வடிவமைப்பு: ஜனித் திதுல ", call: "📞 அழைப்பு", sms: "💬 செய்தி", email: "📧 மின்னஞ்சல்", close: "❌ மூடு", locTxt: "K-Win வழி)" }
         };
 
-        const timetableData = [
-            { time: "08:30 AM - 04:00 PM", status: { si: "විවෘතයි", en: "Open", ta: "திறந்துள்ளது" }},
-            { time: "08:30 AM - 04:00 PM", status: { si: "විවෘතයි", en: "Open", ta: "திறந்துள்ளது" }},
-            { time: "08:30 AM - 04:00 PM", status: { si: "විවෘතයි", en: "Open", ta: "திறந்துள்ளது" }},
-            { time: "08:30 AM - 04:00 PM", status: { si: "විවෘතයි", en: "Open", ta: "திறந்துள்ளது" }},
-            { time: "08:30 AM - 04:00 PM", status: { si: "විවෘතයි", en: "Open", ta: "திறந்துள்ளது" }},
-            { time: "Closed", status: { si: "වසා ඇත", en: "Closed", ta: "மூடப்பட்டுள்ளது" }},
-            { time: "08:30 AM - 04:00 PM", status: { si: "විවෘතයි", en: "Open", ta: "திறந்துள்ளது" }}
-        ];
+        
+const timetableOutput = `
+ඉරිදා දින සිට සිකුරාදා දින දක්වා (Sun - Fri | ஞாயிறு - வெள்ளி)
+⏱ 08:30 AM - 04:00 PM
+✅ විවෘතයි / Open / திறந்துள்ளது
+
+සෙනසුරාදා දින (Saturday | சனி)
+🚫 වසා ඇත / Closed / மூடப்பட்டுள்ளது
+`;
+
+console.log(timetableOutput);
 
         function setLanguage(lang) {
             currentLang = lang;
@@ -216,7 +222,7 @@
         }
 
         function saveVCard() {
-            const vcard = "BEGIN:VCARD\nVERSION:3.0\nFN:K-Win Team\nTEL:0717337818\nEMAIL:kindwin2026@gmail.com\nEND:VCARD";
+            const vcard = "BEGIN:VCARD\nVERSION:3.0\nFN:K-Win\nTEL:0717337818\nEMAIL:kindwin2026@gmail.com\nEND:VCARD";
             const blob = new Blob([vcard], { type: 'text/vcard' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -231,7 +237,37 @@
             document.getElementById('mainSaveBtn').style.display = 'none';
             document.getElementById('actionGrid').style.display = 'grid';
         }
+function setupAppLinks() {
+    const links = [
+        { 
+            id: 'fb-link', 
+            // Facebook App එකෙන් කෙලින්ම Profile එකට යෑමට:
+            app: 'fb://profile/61569786773421', 
+            web: 'https://www.facebook.com/profile.php?id=61569786773421' 
+        },
+        { id: 'yt-link', app: 'vnd.youtube://' }, // YouTube 
+        { id: 'ig-link', app: 'instagram://app' }, // Instagram 
+        { id: 'tt-link', app: 'snssdk1128://' } // TikTok 
+    ];
 
+    links.forEach(link => {
+        const el = document.getElementById(link.id);
+        if (el) { // Element එක තියෙනවාදැයි පරීක්ෂා කිරීම
+            el.onclick = (e) => {
+                e.preventDefault();
+                const start = Date.now();
+                window.location.href = link.app;
+                
+                // App එක නැතිනම් තත්පර 1කට පසු Browser එකේ Web Link එක Open කරයි
+                setTimeout(() => { 
+                    if (Date.now() - start < 1500) {
+                        window.location.href = link.web;
+                    }
+                }, 1000);
+            };
+        }
+    });
+}
         function openTimetable() {
             const list = document.getElementById('tt-list');
             list.innerHTML = '';
