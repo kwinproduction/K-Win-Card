@@ -362,6 +362,10 @@ body {
 document.addEventListener('touchmove', function(e) {
     e.preventDefault();
 }, { passive: false });
+        // Page එක Load වූ සැනින් English ක්‍රියාත්මක වීමට
+window.addEventListener('DOMContentLoaded', (event) => {
+    setLanguage('en'); 
+});
     </script>
 </body>
 </html>
