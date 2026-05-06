@@ -6,9 +6,9 @@
     <title>K-Win</title>
 
     <!-- PWA Manifest & Icons -->
-    <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiS1dpbiIsInNob3J0X25hbWUiOiJLLVdpbiIsInN0YXJ0X3VybCI6ImluZGV4Lmh0bWwiLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3ciOiIjMDAwMDAwIiwidGhlbWVfY29sb3ciOiIjZmZkYTAwIiwib3JpZW50YXRpb24iOiJwb3J0cmFpdCIsImljb25zIjpbeyJzcmMiOiJodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20va3dpbnByb2R1Y3Rpb24vSy1XaW4tRWNhcmQvbWFpbi9sb2dvLmpwZWciLCJzaXplcyI6IjUxMng1MTIiLCJ0eXBlIjoiaW1hZ2UvanBlZyIsInB1cnBvc2UiOiJhbnkgbWFza2FibGUifV19">
+    <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiS1dpbiIsInNob3J0X25hbWUiOiJLLVdpbiIsInN0YXJ0X3VybCI6ImluZGV4Lmh0bWwiLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3ciOiIjMDAwMDAwIiwidGhlbWVfY29sb3ciOiIjZmZmZmZmIiwib3JpZW50YXRpb24iOiJwb3J0cmFpdCIsImljb25zIjpbeyJzcmMiOiJodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20va3dpbnByb2R1Y3Rpb24vSy1XaW4tRWNhcmQvbWFpbi9sb2dvLmpwZWciLCJzaXplcyI6IjUxMng1MTIiLCJ0eXBlIjoiaW1hZ2UvanBlZyIsInB1cnBvc2UiOiJhbnkgbWFza2FibGUifV19">
     <link rel="icon" type="image/jpeg" href="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg">
-    <meta name="theme-color" content="#000000">  
+    <meta name="theme-color" content="#000000">    
     <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -16,88 +16,89 @@
     <style>
         :root { 
             --primary: #ffffff; 
-            --accent: #50e3c2;
-            --bg-black: #000000; /* Pure Black Background */
+            --accent: #ffffff;
+            --bg-black: #000000; /* Pure Black Background as requested */
             --glass: rgba(255, 255, 255, 0.08); 
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
-        body { 
-            background: var(--bg-black); color: white; 
+        /* Fixed full-screen layout */
+        body, html { 
+            height: 100dvh; /* Dynamic viewport height for mobile */
+            width: 100%;
+            background: var(--bg-black); 
+            color: white; 
             font-family: 'Segoe UI', Roboto, sans-serif; 
             margin: 0; padding: 0;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            min-height: 100vh; width: 100vw; overflow-x: hidden; 
+            overflow: hidden; /* Prevents unwanted scrolling */
         }
 
-        /* Animated Background Orbs */
-        .bg-animations { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; }
-        .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.2; animation: moveOrb 20s infinite alternate ease-in-out; }
-        .orb-1 { width: 300px; height: 300px; background: var(--accent); top: -50px; left: -50px; }
-        .orb-2 { width: 400px; height: 400px; background: #007bff; bottom: -100px; right: -50px; }
-        @keyframes moveOrb { from { transform: translate(0, 0); } to { transform: translate(30px, 50px); } }
+        body { 
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: env(safe-area-inset-top) 10px env(safe-area-inset-bottom) 10px; 
+        }
 
-        /* Main Card Structure */
-        .card { width: 92%; max-width: 380px; background: rgba(255, 255, 255, 0.03); padding: 25px 20px; border-radius: 35px; border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(30px); text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.9); position: relative; }
-        .p-img { width: 95px; height: 95px; border-radius: 50%; border: 2px solid var(--primary); padding: 3px; object-fit: cover; margin-bottom: 10px; }
+        /* Install Banner */
+        #install-banner {
+            display: none; position: fixed; top: 0; left: 0; width: 100%;
+            background: #fff; color: #000; padding: 12px; z-index: 10002;
+            justify-content: space-between; align-items: center; font-weight: bold;
+            box-shadow: 0 4px 10px rgba(255,255,255,0.1);
+        }
+        #install-banner button { background: #000; color: #fff; border: none; padding: 8px 15px; border-radius: 8px; font-weight: bold; }
+
+        .card { 
+            width: 100%; max-width: 380px; background: rgba(255, 255, 255, 0.03); 
+            padding: 20px; border-radius: 30px; border: 1px solid rgba(255, 255, 255, 0.1); 
+            backdrop-filter: blur(20px); text-align: center; position: relative;
+        }
+
+        .p-img { width: 85px; height: 85px; border-radius: 50%; border: 2px solid var(--primary); padding: 3px; object-fit: cover; margin-bottom: 5px; }
+        .info-box { background: rgba(255,255,255,0.05); padding: 12px; border-radius: 15px; margin: 10px 0; border-left: 3px solid var(--accent); text-align: left; font-size: 0.8rem; line-height: 1.6; }
         
-        .info-box { background: rgba(0,0,0,0.5); padding: 15px; border-radius: 20px; margin: 15px 0; border-left: 4px solid var(--accent); text-align: left; font-size: 0.85rem; line-height: 1.8; }
+        .btn { transition: all 0.1s ease; cursor: pointer; border: none; outline: none; }
+        .btn:active { transform: scale(0.95); }
+
+        .btn-save { width: 100%; padding: 12px; border-radius: 15px; font-weight: bold; background: var(--primary); color: #000; font-size: 0.9rem; }
         
-        /* Unified Button Feelings */
-        .btn { transition: all 0.1s ease; cursor: pointer; position: relative; border: none; outline: none; }
-        .btn:active { transform: scale(0.94); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6); top: 2px; }
+        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin-top: 10px; }
+        .btn-action { padding: 12px 5px; font-size: 0.8rem; border-radius: 15px; color: white; font-weight: bold; }
+        .btn-wa { background: #25D366; } .btn-call { background: #ffffff; color: #000; } .btn-sms { background: #007aff; } .btn-email { background: #444; }
 
-        .btn-save, .btn-tt { width: 100%; padding: 14px; border-radius: 18px; font-weight: bold; margin-top: 10px; font-size: 0.9rem; }
-        .btn-save { background: var(--primary); color: #000; }
-        .btn-tt { background: linear-gradient(135deg, var(--accent), #3db89e); color: #000; margin-top: 20px; }
-
-        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-top: 15px; }
-        .btn-action { padding: 15px 5px; font-size: 0.85rem; border-radius: 18px; color: white; font-weight: bold; }
-        .btn-wa { background: #128C7E; } .btn-call { background: #007bff; } .btn-sms { background: #f39c12; color: #000; } .btn-email { background: #e74c3c; }
-
-        /* Social/Location Layout */
-        .social-button-container { display: flex; gap: 10px; width: 100%; margin: 20px 0 10px 0; }
-        .location-btn { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; border-radius: 15px; text-decoration: none; font-weight: bold; font-size: 0.85rem; transition: 0.2s; border: none; }
+        .social-button-container { display: flex; gap: 8px; width: 100%; margin: 15px 0 5px 0; }
+        .location-btn { display: flex; align-items: center; justify-content: center; gap: 5px; padding: 10px; border-radius: 12px; text-decoration: none; font-weight: bold; font-size: 0.8rem; flex: 1; }
         
-        .social-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 15px; width: 100%; }
-        .grid-btn { display: flex; flex-direction: column; align-items: center; background: var(--glass); padding: 12px 5px; border-radius: 15px; text-decoration: none; color: white; font-size: 0.65rem; border: 1px solid rgba(255,255,255,0.05); transition: 0.1s; }
-        .grid-btn:active { transform: scale(0.9); }
-        .grid-btn img { width: 24px; height: 24px; margin-bottom: 8px; }
+        .social-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 10px; width: 100%; }
+        .grid-btn { display: flex; flex-direction: column; align-items: center; background: var(--glass); padding: 10px 5px; border-radius: 12px; text-decoration: none; color: white; font-size: 0.6rem; border: 1px solid rgba(255,255,255,0.05); }
+        .grid-btn img { width: 20px; height: 20px; margin-bottom: 5px; filter: grayscale(1) invert(1); }
 
-        /* Language Interface */
-        .lang-switch { display: flex; gap: 8px; background: var(--glass); padding: 5px; border-radius: 50px; margin-bottom: 20px; }
-        .lang-btn { background: none; border: none; color: #8892b0; padding: 8px 15px; cursor: pointer; border-radius: 50px; font-size: 0.75rem; }
-        .lang-btn.active { background: var(--accent); color: #000; font-weight: bold; }
+        .lang-switch { display: flex; gap: 5px; background: var(--glass); padding: 4px; border-radius: 50px; margin-bottom: 15px; }
+        .lang-btn { background: none; border: none; color: #888; padding: 6px 12px; cursor: pointer; border-radius: 50px; font-size: 0.7rem; }
+        .lang-btn.active { background: #fff; color: #000; font-weight: bold; }
 
-        /* Dropdowns & Overlays */
-        .dropdown { position: relative; width: 100%; }
-        .dropdown-content { display: none; position: absolute; background: white; width: 100%; border-radius: 15px; z-index: 99; bottom: 110%; box-shadow: 0 10px 25px rgba(0,0,0,0.3); overflow: hidden; }
-        .dropdown-content a { color: #111; padding: 12px; text-decoration: none; display: block; font-size: 0.8rem; border-bottom: 1px solid #eee; }
+        .dropdown-content { display: none; position: absolute; background: white; width: 100%; border-radius: 12px; z-index: 99; bottom: 110%; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .dropdown-content a { color: #000; padding: 10px; text-decoration: none; display: block; font-size: 0.75rem; border-bottom: 1px solid #eee; }
         .show { display: block !important; }
 
-        .tt-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(15px); }
-        .tt-content { background: #111; width: 85%; max-width: 320px; padding: 25px; border-radius: 25px; border: 1px solid var(--accent); }
-        .tt-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 0.8rem; }
-        
-        #ios-prompt { display: none; position: fixed; bottom: 100px; background: #fff; color: #000; padding: 15px; border-radius: 15px; z-index: 10001; text-align: center; font-size: 14px; width: 85%; box-shadow: 0 10px 30px rgba(255,255,255,0.2); font-weight: bold; }
+        #ios-prompt { display: none; position: fixed; bottom: 20px; background: #fff; color: #000; padding: 15px; border-radius: 15px; z-index: 10001; text-align: center; font-size: 13px; width: 90%; font-weight: bold; box-shadow: 0 0 20px rgba(255,255,255,0.2); }
     </style>
 </head>
 <body>
 
-    <div class="bg-animations">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
+    <div id="install-banner">
+        <span>Install K-Win App</span>
+        <button onclick="installPWA()">INSTALL</button>
     </div>
 
     <div class="lang-switch">
-        <button id="btn-en" class="lang-btn" onclick="setLanguage('en')">EN</button>
+        <button id="btn-en" class="lang-btn" onclick="setLanguage('en')">ENGLISH</button>
         <button id="btn-si" class="lang-btn active" onclick="setLanguage('si')">සිංහල</button>
         <button id="btn-ta" class="lang-btn" onclick="setLanguage('ta')">தமிழ்</button>
     </div>
 
     <div class="card">
-        <h1 style="margin:0 0 15px 0; font-size: 1.6rem; letter-spacing: 2px;">KIND WIN</h1>
+        <h1 style="margin:0 0 10px 0; font-size: 1.4rem; letter-spacing: 2px;">KIND WIN</h1>
         <img src="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg" class="p-img" alt="Profile">
         
         <div class="info-box">
@@ -106,114 +107,70 @@
             <span id="lbl-email">📧 kindwin2026@gmail.com</span>
         </div>
 
-        <!-- Initial Save Button -->
         <button id="mainSaveBtn" onclick="saveVCard()" class="btn btn-save">👤 SAVE CONTACT</button>
 
-        <!-- Hidden Action Grid (Shown after Save) -->
         <div id="actionGrid" class="action-grid" style="display: none;">
-            <button class="btn btn-action btn-wa" onclick="window.location.href='https://wa.me/94717337818'">✅ WhatsApp</button>
-            <div class="dropdown">
-                <button class="btn btn-action btn-call" id="btn-call-txt" onclick="toggleMenu('callMenu')">📞 Call</button>
+            <button class="btn btn-action btn-wa" onclick="window.location.href='https://wa.me/94717337818'">WhatsApp</button>
+            <div style="position:relative">
+                <button class="btn btn-action btn-call" id="btn-call-txt" onclick="toggleMenu('callMenu')">Call</button>
                 <div id="callMenu" class="dropdown-content">
-                    <a href="tel:0717337818">Sadeepa - 071 733 7818</a>
-                    <a href="tel:0714073730">Kevin - 071 407 3730</a>
+                    <a href="tel:0717337818">Sadeepa</a>
+                    <a href="tel:0714073730">Kevin</a>
                 </div>
             </div>
-            <div class="dropdown">
-                <button class="btn btn-action btn-sms" id="btn-sms-txt" onclick="toggleMenu('smsMenu')">💬 SMS</button>
+            <div style="position:relative">
+                <button class="btn btn-action btn-sms" id="btn-sms-txt" onclick="toggleMenu('smsMenu')">SMS</button>
                 <div id="smsMenu" class="dropdown-content">
-                    <a href="sms:0717337818">Sadeepa - 071 733 7818</a>
-                    <a href="sms:0714073730">Kevin - 071 407 3730</a>
+                    <a href="sms:0717337818">Sadeepa</a>
+                    <a href="sms:0714073730">Kevin</a>
                 </div>
             </div>
-            <button class="btn btn-action btn-email" id="btn-email-txt" onclick="window.location.href='mailto:kindwin2026@gmail.com'">📧 Email</button>
+            <button class="btn btn-action btn-email" id="btn-email-txt" onclick="window.location.href='mailto:kindwin2026@gmail.com'">Email</button>
         </div>
 
-        <button onclick="openTimetable()" class="btn btn-tt">📅 <span id="btn-tt-txt">Opening Hours</span></button>
-
-        <!-- Location & Share Row -->
         <div class="social-button-container">
-            <a id="loc-btn" href="https://maps.app.goo.gl/c3tWuHNQDBGwbK5g8" class="btn location-btn" style="flex: 1; background: #ffda00; color: #000;">
-                <img src="https://cdn-icons-png.flaticon.com/512/854/854878.png" alt="Loc" style="width: 18px;">
-                <span id="loc-txt">Location</span>
+            <a id="loc-btn" href="https://maps.app.goo.gl/c3tWuHNQDBGwbK5g8" class="btn location-btn" style="background: #fff; color: #000;">
+                <span id="loc-txt">Go to Kind Win </span>
             </a>
-            <button id="share-btn" class="btn location-btn" onclick="shareApp()" style="flex: 0.4; background: #fff; color: #000;">
-                <img src="https://cdn-icons-png.flaticon.com/512/1358/1358023.png" alt="Share" style="width: 18px;">
+            <button id="share-btn" class="btn location-btn" onclick="shareApp()" style="background: #222; color: #fff;">
                 <span id="share-txt">Share</span>
             </button>
         </div>
 
-        <!-- Social Grid -->
         <div class="social-grid">
             <a href="javascript:void(0)" onclick="openSocial('fb')" class="btn grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png"><span>Facebook</span></a>
             <a href="javascript:void(0)" onclick="openSocial('yt')" class="btn grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"><span>YouTube</span></a>
             <a href="javascript:void(0)" onclick="openSocial('tt')" class="btn grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png"><span>TikTok</span></a>
             <a href="javascript:void(0)" onclick="openSocial('ig')" class="btn grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"><span>Instagram</span></a>
         </div>
-
-        <div id="footer-credit" style="margin-top: 25px; font-size: 0.65rem; opacity: 0.4; color: #fff;">Powered by K-Win | Design by Janith Didula</div>
     </div>
 
-    <!-- Timetable Overlay -->
-    <div id="ttOverlay" class="tt-overlay">
-        <div class="tt-content">
-            <h3 id="tt-title" style="color: var(--accent); margin-top: 0; text-align: center;">⏰ Timetable</h3>
-            <div id="tt-list"></div>
-            <button class="btn btn-save" style="background: var(--accent); margin-top: 20px; color: #000;" onclick="closeTimetable()">❌ CLOSE</button>
-        </div>
-    </div>
-
-    <!-- PWA Install Guide for iOS -->
     <div id="ios-prompt">
-        Share <img src="https://cdn-icons-png.flaticon.com/512/54/54720.png" style="width:20px; vertical-align:middle;"> then <b>'Add to Home Screen'</b>
+        Tap <img src="https://cdn-icons-png.flaticon.com/512/54/54720.png" style="width:16px; vertical-align:middle;"> then <b>'Add to Home Screen'</b>
     </div>
 
     <script>
-        let currentLang = 'si';
+        let deferredPrompt;
+        let currentLang = 'en';
 
         const translations = {
-            en: { 
-                save: "👤 SAVE CONTACT", ttBtn: "⏰ Opening Hours", ttTitle: "⏰ Opening Hours", addr: "📍 Kurunegala, Sri Lanka", call: "📞 Call", sms: "💬 SMS", email: "📧 Email", close: "❌ CLOSE", locTxt: "Location", shareTxt: "Share",
-                days: ["Sun - Fri", "Saturday"], openStatus: ["Open", "Closed"]
-            },
-            si: { 
-                save: "👤 CONTACT එක SAVE කරන්න", ttBtn: "⏰ විවෘතව තබන වේලාවන්", ttTitle: "⏰ විවෘතව තබන වේලාවන්", addr: "📍 කුරුණෑගල, ශ්‍රී ලංකා", call: "📞 ඇමතුම්", sms: "💬 පණිවිඩ", email: "📧 ඊමේල්", close: "❌ වසන්න", locTxt: "යන මග", shareTxt: "බෙදාගන්න",
-                days: ["ඉරිදා - සිකුරාදා", "සෙනසුරාදා"], openStatus: ["විවෘතයි", "වසා ඇත"]
-            },
-            ta: { 
-                save: "👤 தொடர்பைச் சேமிக்கவும்", ttBtn: "⏰ திறந்திருக்கும் நேரங்கள்", ttTitle: "⏰ திறந்திருக்கும் நேரங்கள்", addr: "📍 குருநாகல், இலங்கை", call: "📞 அழைப்பு", sms: "💬 செய்தி", email: "📧 மின்னஞ்சல்", close: "❌ மூடு", locTxt: "இருப்பிடம்", shareTxt: "பகிர்",
-                days: ["ஞாயிறு - வெள்ளி", "සෙනසුරාදා"], openStatus: ["திறந்துள்ளது", "மூடப்பட்டுள்ளது"]
-            }
+            en: { save: "👤 SAVE CONTACT", addr: "📍 Kurunegala, Sri Lanka", call: "Call", sms: "SMS", email: "Email", locTxt: "Go to Kind Win", shareTxt: "Share" },
+            si: { save: "👤 CONTACT එක SAVE කරන්න", addr: "📍 කුරුණෑගල, ශ්‍රී ලංකා", call: "ඇමතුම්", sms: "පණිවිඩ", email: "ඊමේල්", locTxt: "Kind Win ට යන මග", shareTxt: "බෙදාගන්න" },
+            ta: { save: "👤 தொடர்பைச் சேமிக்கவும்", addr: "📍 குருநாகல், இலங்கை", call: "அழைப்பு", sms: "செய்தி", email: "Kind Win மின்னஞ்சல்", locTxt: "இருப்பிடம்", shareTxt: "பகிர்" }
         };
-
-        const timetableData = [
-            { time: "08:30 AM - 04:00 PM", isOpen: true },
-            { time: "Closed", isOpen: false }
-        ];
 
         function setLanguage(lang) {
             currentLang = lang;
             document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById('btn-' + lang).classList.add('active');
-            
             document.getElementById('mainSaveBtn').innerText = translations[lang].save;
-            document.getElementById('btn-tt-txt').innerText = translations[lang].ttBtn;
             document.getElementById('lbl-addr').innerText = translations[lang].addr;
             document.getElementById('btn-call-txt').innerText = translations[lang].call;
             document.getElementById('btn-sms-txt').innerText = translations[lang].sms;
             document.getElementById('btn-email-txt').innerText = translations[lang].email;
-            document.getElementById('tt-title').innerText = translations[lang].ttTitle;
             document.getElementById('loc-txt').innerText = translations[lang].locTxt;
             document.getElementById('share-txt').innerText = translations[lang].shareTxt;
-            document.querySelector('.tt-content .btn-save').innerText = translations[lang].close;
         }
-
-        // --- Haptic Feedback Logic ---
-        document.addEventListener('click', function(e) {
-            if (e.target.closest('.btn') || e.target.closest('.grid-btn')) {
-                if (navigator.vibrate) navigator.vibrate(40);
-            }
-        });
 
         function toggleMenu(id) {
             const menu = document.getElementById(id);
@@ -239,69 +196,48 @@
             document.getElementById('actionGrid').style.display = 'grid';
         }
 
+        // PWA Install Logic
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('install-banner').style.display = 'flex';
+        });
+
+        function installPWA() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') document.getElementById('install-banner').style.display = 'none';
+                    deferredPrompt = null;
+                });
+            }
+        }
+
         async function shareApp() {
-            const shareData = {
-                title: 'K-Win Digital Card',
-                text: 'Connect with Kind Win - Business Digital Card',
-                url: window.location.href
-            };
+            const shareData = { title: 'K-Win', text: 'Kind Win Digital Card', url: window.location.href };
             try {
                 if (navigator.share) await navigator.share(shareData);
                 else {
-                    const el = document.createElement('textarea');
-                    el.value = window.location.href;
-                    document.body.appendChild(el);
-                    el.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(el);
+                    navigator.clipboard.writeText(window.location.href);
                     alert("Link Copied!");
                 }
-            } catch (err) { console.log('Share error:', err); }
+            } catch (err) { console.log(err); }
         }
 
-        // --- Smart Deep Link Logic ---
         function openSocial(type) {
-            let appUrl, webUrl;
-            switch(type) {
-                case 'fb': 
-                    appUrl = 'fb://profile/61569786773421'; 
-                    webUrl = 'https://www.facebook.com/profile.php?id=61569786773421';
-                    break;
-                case 'yt': appUrl = 'vnd.youtube://'; webUrl = 'https://youtube.com'; break;
-                case 'tt': appUrl = 'snssdk1128://'; webUrl = 'https://tiktok.com'; break;
-                case 'ig': appUrl = 'instagram://'; webUrl = 'https://instagram.com'; break;
-            }
-            
-            window.location.href = appUrl;
-            setTimeout(() => {
-                if (document.hasFocus()) window.location.href = webUrl;
-            }, 1800);
+            let webUrl = type === 'fb' ? 'https://www.facebook.com/profile.php?id=61569786773421' : 'https://google.com';
+            window.location.href = webUrl;
         }
-
-        function openTimetable() {
-            const list = document.getElementById('tt-list');
-            list.innerHTML = '';
-            timetableData.forEach((item, index) => {
-                const row = document.createElement('div');
-                row.className = 'tt-row';
-                const statusText = item.isOpen ? translations[currentLang].openStatus[0] : translations[currentLang].openStatus[1];
-                row.innerHTML = `<span>${translations[currentLang].days[index]}</span><span>${item.time} (${statusText})</span>`;
-                list.appendChild(row);
-            });
-            document.getElementById('ttOverlay').style.display = 'flex';
-        }
-
-        function closeTimetable() { document.getElementById('ttOverlay').style.display = 'none'; }
 
         window.onload = () => {
             setLanguage('si');
             if (localStorage.getItem('contact_saved') === 'true') showActionGrid();
             
-            // iOS Add to Home Screen Prompt Logic
+            // iOS Prompt
             const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
             const isStandalone = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
             if (isIos && !isStandalone) {
-                setTimeout(() => { document.getElementById('ios-prompt').style.display = 'block'; }, 4000);
+                setTimeout(() => { document.getElementById('ios-prompt').style.display = 'block'; }, 3000);
             }
         };
 
