@@ -10,8 +10,6 @@
     <link rel="icon" type="image/jpeg" href="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg">
     <meta name="theme-color" content="#ffd300">
     <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <style>
         :root {
@@ -32,143 +30,77 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
+            padding: 15px;
             overflow-x: hidden;
-            padding: 20px;
         }
 
-        /* Animated Background Orbs */
-        .orb {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(80px);
-            z-index: -1;
-            opacity: 0.4;
-            animation: move 15s infinite alternate ease-in-out;
-        }
+        .orb { position: fixed; border-radius: 50%; filter: blur(80px); z-index: -1; opacity: 0.3; animation: move 15s infinite alternate ease-in-out; }
         .orb-gold { width: 300px; height: 300px; background: var(--gold); top: -50px; right: -50px; }
-        .orb-blue { width: 400px; height: 400px; background: var(--blue); bottom: -100px; left: -50px; animation-delay: -5s; }
-        @keyframes move { from { transform: translate(0,0); } to { transform: translate(40px, 60px); } }
+        .orb-blue { width: 400px; height: 400px; background: var(--blue); bottom: -100px; left: -50px; }
+        @keyframes move { from { transform: translate(0,0); } to { transform: translate(30px, 40px); } }
 
-        /* Top Bar & Language */
-        .top-bar { margin-bottom: 25px; width: 100%; display: flex; justify-content: center; }
-        .lang-switch { 
-            display: flex; background: var(--glass); padding: 5px; border-radius: 50px; 
-            border: 1px solid var(--border); backdrop-filter: blur(10px);
-        }
-        .lang-btn { 
-            background: none; border: none; color: #888; padding: 8px 18px; 
-            cursor: pointer; border-radius: 50px; font-size: 0.75rem; font-weight: bold; transition: 0.3s;
-        }
+        .top-bar { margin-bottom: 20px; width: 100%; display: flex; justify-content: center; }
+        .lang-switch { display: flex; background: var(--glass); padding: 4px; border-radius: 50px; border: 1px solid var(--border); backdrop-filter: blur(10px); }
+        .lang-btn { background: none; border: none; color: #888; padding: 6px 14px; cursor: pointer; border-radius: 50px; font-size: 0.7rem; font-weight: bold; transition: 0.3s; }
         .lang-btn.active { background: var(--gold); color: #000; }
 
-        /* Main Card */
         .card {
-            width: 100%;
-            max-width: 380px;
-            background: rgba(10, 20, 40, 0.7);
-            backdrop-filter: blur(25px);
-            border-radius: 40px;
-            padding: 30px 20px;
-            border: 1px solid var(--border);
-            text-align: center;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5), inset 0 0 20px rgba(255,211,0,0.05);
+            width: 100%; max-width: 400px; background: rgba(10, 20, 40, 0.7); backdrop-filter: blur(20px);
+            border-radius: 35px; padding: 25px 15px; border: 1px solid var(--border); text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
 
-        h1 { font-size: 1.8rem; color: var(--gold); letter-spacing: 2px; margin-bottom: 5px; text-transform: uppercase; }
-        .subtitle { font-size: 0.7rem; color: #aaa; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 20px; }
+        /* KIND WIN Title Fix - White Color */
+        h1 { font-size: 1.7rem; color: #ffffff; letter-spacing: 1px; margin-bottom: 5px; text-transform: uppercase; font-weight: 800; }
+        .subtitle { font-size: 0.65rem; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 15px; font-weight: 600; }
 
-        .p-img {
-            width: 110px; height: 110px; border-radius: 50%;
-            border: 3px solid var(--gold); padding: 5px;
-            object-fit: cover; margin-bottom: 20px;
-            box-shadow: 0 0 25px rgba(255, 211, 0, 0.2);
-        }
+        .p-img { width: 100px; height: 100px; border-radius: 50%; border: 3px solid var(--gold); padding: 4px; object-fit: cover; margin-bottom: 15px; box-shadow: 0 0 20px rgba(255, 211, 0, 0.2); }
 
-        .info-box {
-            background: rgba(0,0,0,0.4);
-            padding: 20px; border-radius: 25px;
-            margin-bottom: 20px; text-align: left;
-            border-left: 4px solid var(--gold);
-            font-size: 0.85rem; line-height: 1.8;
-        }
+        .info-box { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 20px; margin-bottom: 20px; text-align: left; border-left: 3px solid var(--gold); font-size: 0.8rem; line-height: 1.6; }
 
-        /* Buttons */
-        .btn {
-            width: 100%; padding: 16px; border-radius: 20px;
-            border: none; font-weight: 800; cursor: pointer;
-            transition: 0.3s; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; gap: 10px;
-        }
+        /* Section Headers */
+        .section-title { font-size: 0.9rem; color: var(--gold); margin: 20px 0 12px; font-weight: 700; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .section-title::before, .section-title::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+
+        .btn { width: 100%; padding: 14px; border-radius: 18px; border: none; font-weight: 700; cursor: pointer; transition: 0.2s; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .btn:active { transform: scale(0.97); }
 
-        .btn-save { background: var(--gold); color: #000; box-shadow: 0 10px 20px rgba(255,211,0,0.2); }
-        .btn-tt { background: var(--blue); color: #fff; margin-top: 12px; box-shadow: 0 10px 20px rgba(0,98,255,0.2); }
+        .btn-save { background: var(--gold); color: #000; }
+        .btn-tt { background: var(--blue); color: #fff; margin-bottom: 10px; }
+        .btn-share { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
 
-        /* Action Grid */
-        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
-        .btn-action { padding: 15px 5px; border-radius: 18px; font-size: 0.85rem; border: none; font-weight: bold; color: white; }
-        .btn-wa { background: #25D366; }
-        .btn-call { background: var(--gold); color: #000; }
+        /* Grid for Actions */
+        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        .btn-action { padding: 12px 5px; border-radius: 15px; font-size: 0.8rem; border: none; font-weight: bold; color: white; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .btn-wa { background: #25D366; grid-column: span 2; } /* WhatsApp Full Width */
+        .btn-call { background: #ffffff; color: #000; }
         .btn-sms { background: #007aff; }
-        .btn-email { background: #333; }
+        .btn-map { background: #ea4335; grid-column: span 2; } /* Map Full Width */
 
-        /* Dropdowns */
-        .dropdown { position: relative; }
-        .dropdown-content {
-            display: none; position: absolute; background: white; width: 100%;
-            border-radius: 15px; z-index: 100; bottom: 110%;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); overflow: hidden;
-        }
-        .dropdown-content a { color: #000; padding: 12px; text-decoration: none; display: block; font-size: 0.8rem; border-bottom: 1px solid #eee; }
+        .dropdown { position: relative; width: 100%; }
+        .dropdown-content { display: none; position: absolute; background: white; width: 100%; border-radius: 12px; z-index: 100; bottom: 110%; box-shadow: 0 10px 25px rgba(0,0,0,0.4); overflow: hidden; }
+        .dropdown-content a { color: #000; padding: 12px; text-decoration: none; display: block; font-size: 0.8rem; border-bottom: 1px solid #eee; font-weight: 600; }
         .show { display: block !important; }
 
-        /* Social Icons */
-        .social-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 30px; width: 100%; max-width: 380px; }
-        .grid-btn {
-            background: var(--glass); padding: 15px 5px; border-radius: 20px;
-            text-decoration: none; color: #ccc; font-size: 0.65rem;
-            border: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; transition: 0.3s;
-        }
-        .grid-btn img { width: 24px; height: 24px; margin-bottom: 8px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2)); }
-        .grid-btn:hover { border-color: var(--gold); color: var(--gold); }
+        /* Social Grid */
+        .social-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px; }
+        .grid-btn { background: var(--glass); padding: 12px 5px; border-radius: 15px; text-decoration: none; color: #ccc; font-size: 0.6rem; border: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; transition: 0.3s; }
+        .grid-btn img { width: 22px; height: 22px; margin-bottom: 5px; }
 
-        /* Overlays */
-        .overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); z-index: 2000; align-items: center; justify-content: center; padding: 20px;
-        }
-        .overlay-content {
-            background: #0a1428; width: 100%; max-width: 340px; padding: 30px;
-            border-radius: 30px; border: 1px solid var(--gold); text-align: center;
-        }
-        .tt-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.85rem; }
-        .close-btn { background: var(--gold); color: #000; width: 100%; padding: 12px; border: none; border-radius: 15px; margin-top: 20px; font-weight: bold; }
+        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
+        .overlay-content { background: #0a1428; width: 100%; max-width: 320px; padding: 25px; border-radius: 25px; border: 1px solid var(--gold); text-align: center; }
+        .tt-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.8rem; }
+        .close-btn { background: var(--gold); color: #000; width: 100%; padding: 12px; border: none; border-radius: 12px; margin-top: 15px; font-weight: bold; }
 
-        /* Installer Bar */
-        #pwa-installer {
-            display: none; position: fixed; top: 15px; width: 90%; max-width: 380px;
-            background: var(--gold); color: #000; padding: 12px; border-radius: 20px;
-            z-index: 9999; text-align: center; font-weight: bold; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            animation: slideDown 0.5s ease;
-        }
-        @keyframes slideDown { from { transform: translateY(-100px); } to { transform: translateY(0); } }
+        #pwa-installer { display: none; position: fixed; top: 10px; width: 90%; max-width: 380px; background: var(--gold); color: #000; padding: 10px; border-radius: 15px; z-index: 9999; text-align: center; font-weight: bold; font-size: 0.85rem; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
 
-        .footer { margin-top: 30px; font-size: 0.65rem; opacity: 0.6; text-align: center; color: #fff; }
+        .footer { margin-top: 25px; font-size: 0.6rem; opacity: 0.5; text-align: center; color: #fff; padding-bottom: 10px; }
     </style>
 </head>
 <body>
 
-    <!-- PWA / Installer -->
     <div id="pwa-installer" onclick="handleInstallClick()">
         📲 <span id="pwa-text">K-Win App එක Install කරගන්න</span>
-    </div>
-
-    <!-- Apple Profile Overlay -->
-    <div id="ios-profile-overlay" class="overlay">
-        <div class="overlay-content">
-            <h2 style="color: var(--gold); margin-bottom: 15px;">K-Win Installer</h2>
-            <p style="font-size: 0.9rem; margin-bottom: 15px; line-height: 1.6;">Settings > Profile Downloaded > Install ලෙස මෙය ඔබගේ දුරකථනයට ස්ථාපනය කරගන්න.</p>
-            <button class="close-btn" onclick="document.getElementById('ios-profile-overlay').style.display='none'">මම කරගත්තා ✅</button>
-        </div>
     </div>
 
     <div class="orb orb-gold"></div>
@@ -183,7 +115,7 @@
     </div>
 
     <div class="card">
-        <h1>K-Win Team</h1>
+        <h1>🏆 K-Win Team</h1>
         <div class="subtitle">Digital Business Card</div>
         
         <img src="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg" class="p-img" alt="Logo">
@@ -194,91 +126,119 @@
             <span id="lbl-email">📧 kindwin2026@gmail.com</span>
         </div>
 
-        <!-- Main Save Button -->
         <button id="mainSaveBtn" onclick="saveVCard()" class="btn btn-save">
-            👤 <span id="txt-save">SAVE CONTACT</span>
+            👤 <span id="txt-save">CONTACT එක SAVE කරන්න</span>
         </button>
 
-        <!-- Hidden Action Grid (Shown after save) -->
-        <div id="actionGrid" class="action-grid" style="display: none;">
-            <button class="btn-action btn-wa" onclick="window.location.href='https://wa.me/94717337818'">WhatsApp</button>
+        <!-- CONTACT US SECTION -->
+        <div class="section-title" id="head-contact">අපව සම්බන්ධ කරගන්න</div>
+        
+        <div class="action-grid">
+            <button class="btn-action btn-wa" onclick="window.location.href='https://wa.me/94717337818'">✅ WhatsApp</button>
             
             <div class="dropdown">
-                <button class="btn-action btn-call" id="btn-call-txt" onclick="toggleMenu('callMenu')">Call</button>
+                <button class="btn-action btn-call" id="btn-call-txt" onclick="toggleMenu('callMenu')">📞 ඇමතුම්</button>
                 <div id="callMenu" class="dropdown-content">
-                    <a href="tel:0717337818">Sadeepa</a>
-                    <a href="tel:0767902944">Kevin</a>
+                    <a href="tel:0717337818">📞 Sadeepa</a>
+                    <a href="tel:0767902944">📞 Kevin</a>
                 </div>
             </div>
 
             <div class="dropdown">
-                <button class="btn-action btn-sms" id="btn-sms-txt" onclick="toggleMenu('smsMenu')">SMS</button>
+                <button class="btn-action btn-sms" id="btn-sms-txt" onclick="toggleMenu('smsMenu')">💬 පණිවිඩ</button>
                 <div id="smsMenu" class="dropdown-content">
-                    <a href="sms:0717337818">Sadeepa</a>
-                    <a href="sms:0767902944">Kevin</a>
+                    <a href="sms:0717337818">💬 Sadeepa</a>
+                    <a href="sms:0767902944">💬 Kevin</a>
                 </div>
             </div>
 
-            <button class="btn-action btn-email" id="btn-email-txt" onclick="window.location.href='mailto:kindwin2026@gmail.com'">Email</button>
+            <button class="btn-action btn-map" id="btn-map-txt" onclick="window.open('https://maps.google.com/?q=Kurunegala,+Sri+Lanka')">📍 සිතියම (Map)</button>
         </div>
 
-        <!-- Opening Hours Button -->
+        <!-- SOCIAL MEDIA SECTION -->
+        <div class="section-title" id="head-social">සමාජ මාධ්‍ය</div>
+        <div class="social-grid">
+            <a href="https://facebook.com/profile.php?id=61569786773421" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png"><span>Facebook</span></a>
+            <a href="#" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"><span>YouTube</span></a>
+            <a href="#" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png"><span>TikTok</span></a>
+            <a href="#" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"><span>Instagram</span></a>
+        </div>
+
+        <!-- OTHERS SECTION -->
+        <div class="section-title" id="head-other">වෙනත්</div>
         <button onclick="openTimetable()" class="btn btn-tt">
-            📅 <span id="txt-tt">Opening Hours</span>
+            📅 <span id="txt-tt">විවෘතව තබන වේලාවන්</span>
+        </button>
+
+        <button onclick="shareCard()" class="btn btn-share">
+            🔗 <span id="txt-share">කාඩ්පත Share කරන්න</span>
         </button>
     </div>
 
     <!-- Timetable Overlay -->
     <div id="ttOverlay" class="overlay">
         <div class="overlay-content">
-            <h3 id="tt-title" style="color: var(--gold); margin-bottom: 20px;">Weekly Timetable</h3>
+            <h3 id="tt-title" style="color: var(--gold); margin-bottom: 15px; font-size: 1.1rem;">⏰ Weekly Timetable</h3>
             <div id="tt-list"></div>
-            <button class="close-btn" onclick="closeTimetable()" id="txt-close">CLOSE</button>
+            <button class="close-btn" onclick="closeTimetable()" id="txt-close">❌ වසන්න</button>
         </div>
     </div>
 
-    <!-- Social Grid -->
-    <div class="social-grid">
-        <a href="https://facebook.com" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png"><span>Facebook</span></a>
-        <a href="https://youtube.com" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"><span>YouTube</span></a>
-        <a href="https://tiktok.com" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png"><span>TikTok</span></a>
-        <a href="https://instagram.com" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"><span>Instagram</span></a>
-    </div>
-
     <div class="footer">
-        <p id="txt-footer">Powered by K-Win | Created by Janith Didula</p>
+        <p id="txt-footer">✨ Powered by K-Win | Created by Janith Didula</p>
     </div>
 
     <script>
-        let currentLang = 'si';
+        let currentLang = 'en';
         let deferredPrompt;
 
         const translations = {
-            en: { save: "SAVE CONTACT", tt: "Opening Hours", close: "CLOSE", addr: "📍 Kurunegala, Sri Lanka", call: "Call", sms: "SMS", email: "Email", footer: "Powered by K-Win | Created by Janith Didula", pwa: "Install K-Win App", days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"], status: "Open" },
-            si: { save: "CONTACT එක SAVE කරන්න", tt: "විවෘතව තබන වේලාවන්", close: "වසන්න", addr: "📍 කුරුණෑගල, ශ්‍රී ලංකා", call: "ඇමතුම්", sms: "පණිවිඩ", email: "ඊමේල්", footer: "K-Win වෙතින් | ජනිත් දිදුලගේ නිර්මාණයකි", pwa: "K-Win App එක Install කරගන්න", days: ["සඳුදා", "අඟහරුවාදා", "බදාදා", "බ්‍රහස්පතින්දා", "සිකුරාදා", "සෙනසුරාදා", "ඉරිදා"], status: "විවෘතයි" },
-            ta: { save: "தொடர்பைச் சேமிக்கவும்", tt: "திறந்திருக்கும் நேரங்கள்", close: "மூடு", addr: "📍 குருநாகல், இலங்கை", call: "அழைப்பு", sms: "செய்தி", email: "மின்னஞ்சல்", footer: "K-Win மூலம் இயக்கப்படுகிறது | ஜனித் திதுல", pwa: "K-Win செயலியை நிறுவுங்கள்", days: ["திங்கள்", "செவ்வாய்", "புதன்", "வியாழன்", "வெள்ளி", "சனி", "ஞாயிறு"], status: "திறந்துள்ளது" }
+            en: { 
+                save: "👤 SAVE CONTACT", tt: "📅 Opening Hours", share: "🔗 SHARE CARD", close: "❌ CLOSE", 
+                addr: "📍 Kurunegala, Sri Lanka", call: "📞 Call", map: "📍 Google Map", sms: "💬 SMS", 
+                footer: "✨ Powered by K-Win | Created by Janith Didula", pwa: "📲 Install K-Win App",
+                hContact: "Contact Us", hSocial: "Social Media", hOther: "Other Services",
+                days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] 
+            },
+            si: { 
+                save: "👤 CONTACT එක SAVE කරන්න", tt: "📅 විවෘතව තබන වේලාවන්", share: "🔗 කාඩ්පත Share කරන්න", close: "❌ වසන්න", 
+                addr: "📍 කුරුණෑගල, ශ්‍රී ලංකා", call: "📞 ඇමතුම්", map: "📍 සිතියම (Map)", sms: "💬 පණිවිඩ", 
+                footer: "✨ K-Win වෙතින් | ජනිත් දිදුලගේ නිර්මාණයකි", pwa: "📲 K-Win App එක Install කරගන්න",
+                hContact: "අපව සම්බන්ධ කරගන්න", hSocial: "සමාජ මාධ්‍ය", hOther: "වෙනත්",
+                days: ["සඳුදා", "අඟහරුවාදා", "බදාදා", "බ්‍රහස්පතින්දා", "සිකුරාදා", "සෙනසුරාදා", "ඉරිදා"] 
+            },
+            ta: { 
+                save: "👤 தொடர்பைச் சேமிக்கவும்", tt: "📅 திறந்திருக்கும் நேரங்கள்", share: "🔗 கார்டைப் பகிரவும்", close: "❌ மூடு", 
+                addr: "📍 குருநாகல், இலங்கை", call: "📞 அழைப்பு", map: "📍 வரைபடம்", sms: "💬 செய்தி", 
+                footer: "✨ K-Win மூலம் | ஜனிත් திதுல", pwa: "📲 K-Win செயலியை நிறுவுங்கள்",
+                hContact: "எங்களைத் தொடர்பு கொள்ளுங்கள்", hSocial: "சமூக ஊடகம்", hOther: "மற்றவை",
+                days: ["திங்கள்", "செவ்வாய்", "புதன்", "வியாழன்", "வெள்ளி", "சனி", "ஞாயிறு"] 
+            }
         };
 
-        const timetableData = [
-            "08:30 AM - 04:00 PM", "08:30 AM - 04:00 PM", "08:30 AM - 04:00 PM",
-            "08:30 AM - 04:00 PM", "08:30 AM - 04:00 PM", "Closed", "08:30 AM - 04:00 PM"
-        ];
+        const timetableData = ["08:30 AM - 04:00 PM", "08:30 AM - 04:00 PM", "08:30 AM - 04:00 PM", "08:30 AM - 04:00 PM", "08:30 AM - 04:00 PM", "Closed", "08:30 AM - 04:00 PM"];
 
         function setLanguage(lang) {
             currentLang = lang;
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
             document.getElementById('btn-' + lang).classList.add('active');
             
+            // Update Text
             document.getElementById('txt-save').innerText = translations[lang].save;
             document.getElementById('txt-tt').innerText = translations[lang].tt;
+            document.getElementById('txt-share').innerText = translations[lang].share;
             document.getElementById('txt-close').innerText = translations[lang].close;
             document.getElementById('lbl-addr').innerText = translations[lang].addr;
             document.getElementById('btn-call-txt').innerText = translations[lang].call;
+            document.getElementById('btn-map-txt').innerText = translations[lang].map;
             document.getElementById('btn-sms-txt').innerText = translations[lang].sms;
-            document.getElementById('btn-email-txt').innerText = translations[lang].email;
-            document.getElementById('tt-title').innerText = translations[lang].tt;
             document.getElementById('txt-footer').innerText = translations[lang].footer;
             document.getElementById('pwa-text').innerText = translations[lang].pwa;
+            
+            // Headers
+            document.getElementById('head-contact').innerText = translations[lang].hContact;
+            document.getElementById('head-social').innerText = translations[lang].hSocial;
+            document.getElementById('head-other').innerText = translations[lang].hOther;
         }
 
         function toggleMenu(id) {
@@ -286,6 +246,16 @@
             const isShown = menu.classList.contains('show');
             document.querySelectorAll('.dropdown-content').forEach(m => m.classList.remove('show'));
             if (!isShown) menu.classList.add('show');
+        }
+
+        async function shareCard() {
+            if (navigator.share) {
+                try {
+                    await navigator.share({ title: 'K-Win Digital Card', text: 'Check out K-Win Digital Business Card', url: window.location.href });
+                } catch (err) { console.log("Share failed"); }
+            } else {
+                alert("Sharing not supported on this browser. Copy the URL instead.");
+            }
         }
 
         function saveVCard() {
@@ -296,13 +266,6 @@
             a.href = url;
             a.download = 'K-Win_Contact.vcf';
             a.click();
-            localStorage.setItem('contact_saved', 'true');
-            showActionGrid();
-        }
-
-        function showActionGrid() {
-            document.getElementById('mainSaveBtn').style.display = 'none';
-            document.getElementById('actionGrid').style.display = 'grid';
         }
 
         function openTimetable() {
@@ -311,8 +274,7 @@
             timetableData.forEach((time, i) => {
                 const row = document.createElement('div');
                 row.className = 'tt-row';
-                const statusTxt = (time === 'Closed') ? (currentLang === 'si' ? 'වසා ඇත' : (currentLang === 'ta' ? 'மூடப்பட்டுள்ளது' : 'Closed')) : time;
-                row.innerHTML = `<span>${translations[currentLang].days[i]}</span><span style="color:var(--gold)">${statusTxt}</span>`;
+                row.innerHTML = `<span>${translations[currentLang].days[i]}</span><span style="color:var(--gold)">${time}</span>`;
                 list.appendChild(row);
             });
             document.getElementById('ttOverlay').style.display = 'flex';
@@ -320,7 +282,6 @@
 
         function closeTimetable() { document.getElementById('ttOverlay').style.display = 'none'; }
 
-        // PWA & iOS Logic
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
@@ -328,11 +289,7 @@
         });
 
         async function handleInstallClick() {
-            const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
-            if (isIos) {
-                downloadAppleProfile();
-                document.getElementById('ios-profile-overlay').style.display = 'flex';
-            } else if (deferredPrompt) {
+            if (deferredPrompt) {
                 deferredPrompt.prompt();
                 const { outcome } = await deferredPrompt.userChoice;
                 if (outcome === 'accepted') document.getElementById('pwa-installer').style.display = 'none';
@@ -340,45 +297,8 @@
             }
         }
 
-        function downloadAppleProfile() {
-            const profileXml = `<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-    <key>PayloadContent</key>
-    <array>
-        <dict>
-            <key>FullScreen</key><true/>
-            <key>IsRemovable</key><true/>
-            <key>Label</key><string>K-Win</string>
-            <key>PayloadType</key><string>com.apple.webClip.managed</string>
-            <key>PayloadUUID</key><string>123e4567-e89b-12d3-a456-426614174000</string>
-            <key>PayloadVersion</key><integer>1</integer>
-            <key>URL</key><string>${window.location.href}</string>
-        </dict>
-    </array>
-    <key>PayloadDisplayName</key><string>K-Win Installer</string>
-    <key>PayloadIdentifier</key><string>com.kwin.installer</string>
-    <key>PayloadType</key><string>Configuration</string>
-    <key>PayloadUUID</key><string>123e4567-e89b-12d3-a456-426614174001</string>
-    <key>PayloadVersion</key><integer>1</integer>
-</dict>
-</plist>`;
-            const blob = new Blob([profileXml], { type: 'application/x-apple-aspen-config' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'K-Win.mobileconfig';
-            a.click();
-        }
-
         window.onload = () => {
             setLanguage('si');
-            if (localStorage.getItem('contact_saved') === 'true') showActionGrid();
-            const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
-            if (isIos && !window.navigator.standalone) {
-                document.getElementById('pwa-installer').style.display = 'block';
-            }
         };
 
         window.onclick = (e) => {
