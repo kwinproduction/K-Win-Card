@@ -5,148 +5,99 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>K-Win</title>
 
-    <!-- PWA Manifest -->
+    <!-- PWA Manifest & Icons -->
     <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiS1dpbiIsInNob3J0X25hbWUiOiJLLVdpbiIsInN0YXJ0X3VybCI6ImluZGV4Lmh0bWwiLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3ciOiIjMDAwMDAwIiwidGhlbWVfY29sb3ciOiIjZmZkYTAwIiwib3JpZW50YXRpb24iOiJwb3J0cmFpdCIsImljb25zIjpbeyJzcmMiOiJodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20va3dpbnByb2R1Y3Rpb24vSy1XaW4tRWNhcmQvbWFpbi9sb2dvLmpwZWciLCJzaXplcyI6IjUxMng1MTIiLCJ0eXBlIjoiaW1hZ2UvanBlZyIsInB1cnBvc2UiOiJhbnkgbWFza2FibGUifV19">
     <link rel="icon" type="image/jpeg" href="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg">
-    <meta name="theme-color" content="#ffda00">  
+    <meta name="theme-color" content="#000000">  
     <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <style>
-        :root { --primary: #50e3c2; --white: #ffffff; --dark-blue: #0a192f; --glass: rgba(255, 255, 255, 0.08); }
+        :root { 
+            --primary: #ffffff; 
+            --accent: #50e3c2;
+            --bg-black: #000000; /* Pure Black Background */
+            --glass: rgba(255, 255, 255, 0.08); 
+        }
+
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
         body { 
-            background: #050a14; color: white; 
+            background: var(--bg-black); color: white; 
             font-family: 'Segoe UI', Roboto, sans-serif; 
             margin: 0; padding: 0;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             min-height: 100vh; width: 100vw; overflow-x: hidden; 
         }
 
-        /* Background Animations */
+        /* Animated Background Orbs */
         .bg-animations { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; }
-        .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.4; animation: moveOrb 20s infinite alternate ease-in-out; }
-        .orb-1 { width: 300px; height: 300px; background: var(--primary); top: -50px; left: -50px; }
+        .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.2; animation: moveOrb 20s infinite alternate ease-in-out; }
+        .orb-1 { width: 300px; height: 300px; background: var(--accent); top: -50px; left: -50px; }
         .orb-2 { width: 400px; height: 400px; background: #007bff; bottom: -100px; right: -50px; }
         @keyframes moveOrb { from { transform: translate(0, 0); } to { transform: translate(30px, 50px); } }
 
-        /* Card Styles */
-        .card { width: 92%; max-width: 380px; background: rgba(255, 255, 255, 0.05); padding: 25px 20px; border-radius: 35px; border: 1px solid rgba(255, 255, 255, 0.15); backdrop-filter: blur(30px); text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.5); position: relative; }
-        .p-img { width: 90px; height: 90px; border-radius: 50%; border: 3px solid #ffda00; padding: 4px; object-fit: cover; }
-        .info-box { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 20px; margin: 15px 0; border-left: 4px solid var(--primary); text-align: left; font-size: 0.85rem; line-height: 1.8; }
+        /* Main Card Structure */
+        .card { width: 92%; max-width: 380px; background: rgba(255, 255, 255, 0.03); padding: 25px 20px; border-radius: 35px; border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(30px); text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.9); position: relative; }
+        .p-img { width: 95px; height: 95px; border-radius: 50%; border: 2px solid var(--primary); padding: 3px; object-fit: cover; margin-bottom: 10px; }
         
-        .btn-save, .btn-tt { width: 100%; padding: 14px; border-radius: 18px; font-weight: bold; cursor: pointer; border: none; margin-top: 10px; font-size: 0.9rem; transition: 0.3s; }
-        .btn-save { background: #fff; color: #0a192f; }
-        .btn-tt { background: linear-gradient(135deg, var(--primary), #3db89e); color: #0a192f; margin-top: 20px; }
+        .info-box { background: rgba(0,0,0,0.5); padding: 15px; border-radius: 20px; margin: 15px 0; border-left: 4px solid var(--accent); text-align: left; font-size: 0.85rem; line-height: 1.8; }
+        
+        /* Unified Button Feelings */
+        .btn { transition: all 0.1s ease; cursor: pointer; position: relative; border: none; outline: none; }
+        .btn:active { transform: scale(0.94); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6); top: 2px; }
+
+        .btn-save, .btn-tt { width: 100%; padding: 14px; border-radius: 18px; font-weight: bold; margin-top: 10px; font-size: 0.9rem; }
+        .btn-save { background: var(--primary); color: #000; }
+        .btn-tt { background: linear-gradient(135deg, var(--accent), #3db89e); color: #000; margin-top: 20px; }
 
         .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-top: 15px; }
-        .btn-action { width: 100%; padding: 15px 5px; font-size: 0.85rem; border-radius: 18px; border: none; color: white; font-weight: bold; cursor: pointer; }
+        .btn-action { padding: 15px 5px; font-size: 0.85rem; border-radius: 18px; color: white; font-weight: bold; }
         .btn-wa { background: #128C7E; } .btn-call { background: #007bff; } .btn-sms { background: #f39c12; color: #000; } .btn-email { background: #e74c3c; }
 
-        /* iOS Floating Prompt */
-        #ios-prompt {
-            display: none; position: fixed; background: #fff; color: #000; padding: 12px 18px;
-            border-radius: 15px; z-index: 100001; text-align: center; font-size: 14px; font-weight: 600;
-            box-shadow: 0 0 25px rgba(255,255,255,0.4); width: 80%; max-width: 280px;
-        }
-        #ios-prompt::after {
-            content: ''; position: absolute; border-left: 10px solid transparent; border-right: 10px solid transparent;
-        }
+        /* Social/Location Layout */
+        .social-button-container { display: flex; gap: 10px; width: 100%; margin: 20px 0 10px 0; }
+        .location-btn { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; border-radius: 15px; text-decoration: none; font-weight: bold; font-size: 0.85rem; transition: 0.2s; border: none; }
+        
+        .social-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 15px; width: 100%; }
+        .grid-btn { display: flex; flex-direction: column; align-items: center; background: var(--glass); padding: 12px 5px; border-radius: 15px; text-decoration: none; color: white; font-size: 0.65rem; border: 1px solid rgba(255,255,255,0.05); transition: 0.1s; }
+        .grid-btn:active { transform: scale(0.9); }
+        .grid-btn img { width: 24px; height: 24px; margin-bottom: 8px; }
 
-        .safari-tip { bottom: 85px; left: 50%; transform: translateX(-50%); }
-        .safari-tip::after { bottom: -10px; left: 50%; transform: translateX(-50%); border-top: 10px solid #fff; }
+        /* Language Interface */
+        .lang-switch { display: flex; gap: 8px; background: var(--glass); padding: 5px; border-radius: 50px; margin-bottom: 20px; }
+        .lang-btn { background: none; border: none; color: #8892b0; padding: 8px 15px; cursor: pointer; border-radius: 50px; font-size: 0.75rem; }
+        .lang-btn.active { background: var(--accent); color: #000; font-weight: bold; }
 
-        .chrome-tip { top: 75px; right: 20px; }
-        .chrome-tip::after { top: -10px; right: 20px; border-bottom: 10px solid #fff; }
-
-        .ios-icon { width: 22px; vertical-align: middle; margin: 0 5px; }
-
-        /* Language Switch */
-        .top-bar { margin-bottom: 20px; z-index: 10; }
-        .lang-switch { display: flex; gap: 10px; background: var(--glass); padding: 5px; border-radius: 50px; }
-        .lang-btn { background: none; border: none; color: #8892b0; padding: 8px 15px; cursor: pointer; border-radius: 50px; font-size: 0.8rem; }
-        .lang-btn.active { background: var(--primary); color: #0a192f; font-weight: bold; }
-
-        /* Dropdowns */
+        /* Dropdowns & Overlays */
         .dropdown { position: relative; width: 100%; }
         .dropdown-content { display: none; position: absolute; background: white; width: 100%; border-radius: 15px; z-index: 99; bottom: 110%; box-shadow: 0 10px 25px rgba(0,0,0,0.3); overflow: hidden; }
         .dropdown-content a { color: #111; padding: 12px; text-decoration: none; display: block; font-size: 0.8rem; border-bottom: 1px solid #eee; }
         .show { display: block !important; }
 
-        /* Timetable Overlay */
-        .tt-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; align-items: center; justify-content: center; }
-        .tt-content { background: #111; width: 85%; max-width: 320px; padding: 25px; border-radius: 25px; border: 1px solid var(--primary); }
-        .tt-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 0.8rem; }
-        .close-tt { background: var(--primary); color: #000; width: 100%; padding: 12px; border: none; border-radius: 12px; margin-top: 20px; font-weight: bold; cursor: pointer; }
-
-        .social-button-container { width: 92%; max-width: 380px; margin-top: 25px; text-align: center; }
-        .social-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px; }
-        .grid-btn { display: flex; flex-direction: column; align-items: center; background: var(--glass); padding: 12px 5px; border-radius: 15px; text-decoration: none; color: white; font-size: 0.65rem; border: 1px solid rgba(255,255,255,0.1); }
-        .grid-btn img { width: 22px; height: 22px; margin-bottom: 8px; }
-
-        .location-btn { display: flex; align-items: center; justify-content: center; background: #ffda00; color: #000; padding: 12px; border-radius: 15px; text-decoration: none; font-weight: bold; margin-bottom: 15px; font-size: 0.9rem; }
-        .location-btn img { width: 20px; margin-right: 10px; }
-.btn:active {
-    transform: scale(0.95); /* Button එක මදක් කුඩා වේ */
-    transition: transform 0.1s ease; /* ඉතා වේගයෙන් සිදුවීමට */
-}
-        .social-button-container {
-    width: 100%;
-    max-width: 350px;
-    margin: 0 auto;
-}
-
-.location-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 12px;
-    border-radius: 12px;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 0.9rem;
-    border: none;
-    transition: 0.2s;
-}
-
-.location-btn:active {
-    transform: scale(0.95);
-}
-        #pwa-installer { animation: slideUp 0.5s ease-out; }
-        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .tt-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.92); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(15px); }
+        .tt-content { background: #111; width: 85%; max-width: 320px; padding: 25px; border-radius: 25px; border: 1px solid var(--accent); }
+        .tt-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 0.8rem; }
+        
+        #ios-prompt { display: none; position: fixed; bottom: 100px; background: #fff; color: #000; padding: 15px; border-radius: 15px; z-index: 10001; text-align: center; font-size: 14px; width: 85%; box-shadow: 0 10px 30px rgba(255,255,255,0.2); font-weight: bold; }
     </style>
 </head>
 <body>
-
-    <div id="pwa-installer" style="display:none; position:fixed; bottom:20px; width:92%; max-width:380px; background:rgba(255,255,255,0.95); padding:15px; border-radius:25px; z-index:9999; box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align:center;">
-        <span id="pwa-text" style="font-size:0.9rem; display:block; margin-bottom:10px; color:#000; font-weight:bold;">📲 Add K-Win to Home Screen</span>
-        <button id="btn-install-main" onclick="handleInstallClick()" style="background:#000; color:#fff; border:none; padding:12px 20px; border-radius:15px; cursor:pointer; font-weight:900; width:100%;">INSTALL NOW</button>
-    </div>
-
-    <div id="ios-prompt">
-        මෙතැනින් <img src="https://cdn-icons-png.flaticon.com/512/54/54720.png" class="ios-icon"> 'Share' කර <br>
-        <b>'Add to Home Screen'</b> තෝරන්න.
-    </div>
 
     <div class="bg-animations">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
     </div>
-    
-    <div class="top-bar">
-        <div class="lang-switch">
-            <button id="btn-en" class="lang-btn" onclick="setLanguage('en')">English</button>
-            <button id="btn-si" class="lang-btn active" onclick="setLanguage('si')">සිංහල</button>
-            <button id="btn-ta" class="lang-btn" onclick="setLanguage('ta')">தமிழ்</button>
-        </div>
+
+    <div class="lang-switch">
+        <button id="btn-en" class="lang-btn" onclick="setLanguage('en')">EN</button>
+        <button id="btn-si" class="lang-btn active" onclick="setLanguage('si')">සිංහල</button>
+        <button id="btn-ta" class="lang-btn" onclick="setLanguage('ta')">தமிழ்</button>
     </div>
 
     <div class="card">
-        <div style="color: white; font-size: 0.7rem; letter-spacing: 3px; font-weight: 800; margin-bottom: 12px; text-transform: uppercase;">
-            <h1 style="margin:0; font-size: 1.5rem;">Kind Win</h1>
-        </div>
+        <h1 style="margin:0 0 15px 0; font-size: 1.6rem; letter-spacing: 2px;">KIND WIN</h1>
         <img src="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg" class="p-img" alt="Profile">
         
         <div class="info-box">
@@ -155,75 +106,82 @@
             <span id="lbl-email">📧 kindwin2026@gmail.com</span>
         </div>
 
-        <button id="mainSaveBtn" onclick="saveVCard()" class="btn-save">👤 SAVE CONTACT</button>
+        <!-- Initial Save Button -->
+        <button id="mainSaveBtn" onclick="saveVCard()" class="btn btn-save">👤 SAVE CONTACT</button>
 
+        <!-- Hidden Action Grid (Shown after Save) -->
         <div id="actionGrid" class="action-grid" style="display: none;">
-            <button class="btn-action btn-wa" onclick="window.location.href='https://wa.me/94707140731'">✅ WhatsApp</button>
+            <button class="btn btn-action btn-wa" onclick="window.location.href='https://wa.me/94717337818'">✅ WhatsApp</button>
             <div class="dropdown">
-                <button class="btn-action btn-call" id="btn-call-txt" onclick="toggleMenu('callMenu')"> 📞 Call</button>
+                <button class="btn btn-action btn-call" id="btn-call-txt" onclick="toggleMenu('callMenu')">📞 Call</button>
                 <div id="callMenu" class="dropdown-content">
                     <a href="tel:0717337818">Sadeepa - 071 733 7818</a>
-                    <a href="tel:0714073730">  Kevin - 071 407 3730 </a>
+                    <a href="tel:0714073730">Kevin - 071 407 3730</a>
                 </div>
             </div>
             <div class="dropdown">
-                <button class="btn-action btn-sms" id="btn-sms-txt" onclick="toggleMenu('smsMenu')">💬 SMS</button>
+                <button class="btn btn-action btn-sms" id="btn-sms-txt" onclick="toggleMenu('smsMenu')">💬 SMS</button>
                 <div id="smsMenu" class="dropdown-content">
                     <a href="sms:0717337818">Sadeepa - 071 733 7818</a>
-                    <a href="sms:0714073730">  Kevin - 071 407 3730 </a>
+                    <a href="sms:0714073730">Kevin - 071 407 3730</a>
                 </div>
             </div>
-            <button class="btn-action btn-email" id="btn-email-txt" onclick="window.location.href='mailto:kindwin2026@gmail.com'">📧 Email</button>
+            <button class="btn btn-action btn-email" id="btn-email-txt" onclick="window.location.href='mailto:kindwin2026@gmail.com'">📧 Email</button>
         </div>
 
-        <button onclick="openTimetable()" class="btn-tt">📅 <span id="btn-tt-txt">Opening Hours</span></button>
+        <button onclick="openTimetable()" class="btn btn-tt">📅 <span id="btn-tt-txt">Opening Hours</span></button>
+
+        <!-- Location & Share Row -->
+        <div class="social-button-container">
+            <a id="loc-btn" href="https://maps.app.goo.gl/c3tWuHNQDBGwbK5g8" class="btn location-btn" style="flex: 1; background: #ffda00; color: #000;">
+                <img src="https://cdn-icons-png.flaticon.com/512/854/854878.png" alt="Loc" style="width: 18px;">
+                <span id="loc-txt">Location</span>
+            </a>
+            <button id="share-btn" class="btn location-btn" onclick="shareApp()" style="flex: 0.4; background: #fff; color: #000;">
+                <img src="https://cdn-icons-png.flaticon.com/512/1358/1358023.png" alt="Share" style="width: 18px;">
+                <span id="share-txt">Share</span>
+            </button>
+        </div>
+
+        <!-- Social Grid -->
+        <div class="social-grid">
+            <a href="javascript:void(0)" onclick="openSocial('fb')" class="btn grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png"><span>Facebook</span></a>
+            <a href="javascript:void(0)" onclick="openSocial('yt')" class="btn grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"><span>YouTube</span></a>
+            <a href="javascript:void(0)" onclick="openSocial('tt')" class="btn grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png"><span>TikTok</span></a>
+            <a href="javascript:void(0)" onclick="openSocial('ig')" class="btn grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"><span>Instagram</span></a>
+        </div>
+
+        <div id="footer-credit" style="margin-top: 25px; font-size: 0.65rem; opacity: 0.4; color: #fff;">Powered by K-Win | Design by Janith Didula</div>
     </div>
 
+    <!-- Timetable Overlay -->
     <div id="ttOverlay" class="tt-overlay">
         <div class="tt-content">
-            <h3 id="tt-title" style="color: var(--primary); margin-top: 0; text-align: center;">⏰ Weekly Timetable</h3>
+            <h3 id="tt-title" style="color: var(--accent); margin-top: 0; text-align: center;">⏰ Timetable</h3>
             <div id="tt-list"></div>
-            <button class="close-tt" onclick="closeTimetable()">❌ CLOSE</button>
+            <button class="btn btn-save" style="background: var(--accent); margin-top: 20px; color: #000;" onclick="closeTimetable()">❌ CLOSE</button>
         </div>
     </div>
 
-    <div class="social-button-container" style="display: flex; gap: 10px; align-items: center; justify-content: center;">
-    <!-- Location Button -->
-    <a id="loc-btn" href="https://maps.app.goo.gl/c3tWuHNQDBGwbK5g8" class="location-btn" style="flex: 1;">
-        <img src="https://cdn-icons-png.flaticon.com/512/854/854878.png" alt="Loc" style="width: 20px;">
-        <span id="loc-txt">Go to Kind Win</span>
-    </a>
-
-    <!-- Share Button -->
-    <button id="share-btn" class="location-btn" onclick="shareApp()" style="flex: 0.4; background: #fff; color: #000;">
-        <img src="https://cdn-icons-png.flaticon.com/512/1358/1358023.png" alt="Share" style="width: 20px;">
-        <span id="share-txt">Share</span>
-    </button>
-</div>
-        <div class="social-grid">
-            <a id="fb-link" href="#" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png"><span>Facebook</span></a>
-            <a id="yt-link" href="#" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"><span>YouTube</span></a>
-            <a id="tt-link" href="#" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png"><span>TikTok</span></a>
-            <a id="ig-link" href="#" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"><span>Instagram</span></a>
-        </div>
-        <div id="footer-credit" style="margin-top: 20px; font-size: 0.6rem; opacity: 0.5;">Powered by K-Win | Design by Janith Didula</div>
+    <!-- PWA Install Guide for iOS -->
+    <div id="ios-prompt">
+        Share <img src="https://cdn-icons-png.flaticon.com/512/54/54720.png" style="width:20px; vertical-align:middle;"> then <b>'Add to Home Screen'</b>
     </div>
 
     <script>
         let currentLang = 'si';
-        let deferredPrompt;
 
         const translations = {
             en: { 
-                install: "📲 Add K-Win to Home Screen", save: "👤 SAVE CONTACT", ttBtn: "⏰ Opening Hours", ttTitle: "⏰ Opening Hours", addr: "📍 Kurunegala, Sri Lanka", credit: "Powered by K-Win | Design by Janith Didula", call: "📞 Call", sms: "💬 SMS", email: "📧 Email", close: "❌ CLOSE", locTxt: "Go to Kind Win",
+                save: "👤 SAVE CONTACT", ttBtn: "⏰ Opening Hours", ttTitle: "⏰ Opening Hours", addr: "📍 Kurunegala, Sri Lanka", call: "📞 Call", sms: "💬 SMS", email: "📧 Email", close: "❌ CLOSE", locTxt: "Location", shareTxt: "Share",
                 days: ["Sun - Fri", "Saturday"], openStatus: ["Open", "Closed"]
             },
             si: { 
-                install: "📲 K-Win App එක Install කරගන්න", save: "👤 CONTACT එක SAVE කරන්න", ttBtn: "⏰ විවෘතව තබන වේලාවන්", ttTitle: "⏰ විවෘතව තබන වේලාවන්", addr: "📍 කුරුණෑගල, ශ්‍රී ලංකා", credit: "K-Win වෙතින් | ජනිත් දිදුලගේ නිර්මාණයකි", call: "📞 ඇමතුම්", sms: "💬 පණිවිඩ", email: "📧 ඊමේල්", close: "❌ වසන්න", locTxt: "Kind Win ට යන මග",
+                save: "👤 CONTACT එක SAVE කරන්න", ttBtn: "⏰ විවෘතව තබන වේලාවන්", ttTitle: "⏰ විවෘතව තබන වේලාවන්", addr: "📍 කුරුණෑගල, ශ්‍රී ලංකා", call: "📞 ඇමතුම්", sms: "💬 පණිවිඩ", email: "📧 ඊමේල්", close: "❌ වසන්න", locTxt: "යන මග", shareTxt: "බෙදාගන්න",
                 days: ["ඉරිදා - සිකුරාදා", "සෙනසුරාදා"], openStatus: ["විවෘතයි", "වසා ඇත"]
             },
             ta: { 
-                install: "📲 முகப்புத் திரையில் சேர்க்கவும்", save: "👤 தொடர்பைச் சேமிக்கவும்", ttBtn: "⏰ திறந்திருக்கும் நேரங்கள்", ttTitle: "⏰ திறந்திருக்கும் நேரங்கள்", addr: "📍 குருநாகல், இலங்கை", credit: "K-Win மூலம் இயக்கப்படுகிறது | வடிவமைப்பு: ஜனித் திதுல ", call: "📞 அழைப்பு", sms: "💬 செய்தி", email: "📧 மின்னஞ்சல்", close: "❌ மூடு", locTxt: "K-Win வழி",
+                save: "👤 தொடர்பைச் சேமிக்கவும்", ttBtn: "⏰ திறந்திருக்கும் நேரங்கள்", ttTitle: "⏰ திறந்திருக்கும் நேரங்கள்", addr: "📍 குருநாகல், இலங்கை", call: "📞 அழைப்பு", sms: "💬 செய்தி", email: "📧 மின்னஞ்சல்", close: "❌ மூடு", locTxt: "இருப்பிடம்", shareTxt: "பகிர்",
                 days: ["ஞாயிறு - வெள்ளி", "සෙනසුරාදා"], openStatus: ["திறந்துள்ளது", "மூடப்பட்டுள்ளது"]
             }
         };
@@ -238,18 +196,24 @@
             document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById('btn-' + lang).classList.add('active');
             
-            document.getElementById('pwa-text').innerText = translations[lang].install;
             document.getElementById('mainSaveBtn').innerText = translations[lang].save;
             document.getElementById('btn-tt-txt').innerText = translations[lang].ttBtn;
             document.getElementById('lbl-addr').innerText = translations[lang].addr;
-            document.getElementById('footer-credit').innerText = translations[lang].credit;
             document.getElementById('btn-call-txt').innerText = translations[lang].call;
             document.getElementById('btn-sms-txt').innerText = translations[lang].sms;
             document.getElementById('btn-email-txt').innerText = translations[lang].email;
             document.getElementById('tt-title').innerText = translations[lang].ttTitle;
             document.getElementById('loc-txt').innerText = translations[lang].locTxt;
-            document.querySelector('.close-tt').innerText = translations[lang].close;
+            document.getElementById('share-txt').innerText = translations[lang].shareTxt;
+            document.querySelector('.tt-content .btn-save').innerText = translations[lang].close;
         }
+
+        // --- Haptic Feedback Logic ---
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.btn') || e.target.closest('.grid-btn')) {
+                if (navigator.vibrate) navigator.vibrate(40);
+            }
+        });
 
         function toggleMenu(id) {
             const menu = document.getElementById(id);
@@ -269,46 +233,49 @@
             localStorage.setItem('contact_saved', 'true');
             showActionGrid();
         }
-/* සියලුම Button සඳහා පොදුවේ */
-.btn {
-    transition: all 0.1s ease; /* ඉතා වේගයෙන් වෙනස් වීමට */
-    cursor: pointer;
-    position: relative;
-    top: 0;
-}
 
-/* Button එක උඩට ඇඟිල්ල ගෙනියන විට (Hover) */
-.btn:hover {
-    filter: brightness(1.1); /* මදක් පැහැපත් වේ */
-}
-
-/* Button එක Click කරන මොහොතේ (Active State) */
-.btn:active {
-    transform: scale(0.92); /* මදක් කුඩා වේ (එබෙන හැඟීම) */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); /* සෙවනැල්ල අඩු වේ */
-    top: 3px; /* මදක් පහළට යයි */
-}
-        // සියලුම Button වලට Touch Vibrations එක් කිරීම
-document.addEventListener('click', function(e) {
-    // ඔබා ඇත්තේ Button එකක් හෝ Button එකක් ඇතුළේ ඇති Span එකක් නම්
-    if (e.target.closest('.btn') || e.target.tagName === 'BUTTON') {
-        if (navigator.vibrate) {
-            navigator.vibrate(40); // මිලි තත්පර 40ක සුළු වෙව්ලීමක්
-        }
-    }
-});
         function showActionGrid() {
             document.getElementById('mainSaveBtn').style.display = 'none';
             document.getElementById('actionGrid').style.display = 'grid';
         }
 
-        function setupAppLinks() {
-            const links = [
-                { id: 'fb-link', app: 'fb://profile/61569786773421'},
-                { id: 'yt-link', app: 'vnd.youtube://www.youtube.com', web: 'https://youtube.com' },
-                { id: 'ig-link', app: 'instagram://', web: 'https://instagram.com' },
-                { id: 'tt-link', app: 'snssdk1128://', web: 'https://tiktok.com' }
-            ];
+        async function shareApp() {
+            const shareData = {
+                title: 'K-Win Digital Card',
+                text: 'Connect with Kind Win - Business Digital Card',
+                url: window.location.href
+            };
+            try {
+                if (navigator.share) await navigator.share(shareData);
+                else {
+                    const el = document.createElement('textarea');
+                    el.value = window.location.href;
+                    document.body.appendChild(el);
+                    el.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(el);
+                    alert("Link Copied!");
+                }
+            } catch (err) { console.log('Share error:', err); }
+        }
+
+        // --- Smart Deep Link Logic ---
+        function openSocial(type) {
+            let appUrl, webUrl;
+            switch(type) {
+                case 'fb': 
+                    appUrl = 'fb://profile/61569786773421'; 
+                    webUrl = 'https://www.facebook.com/profile.php?id=61569786773421';
+                    break;
+                case 'yt': appUrl = 'vnd.youtube://'; webUrl = 'https://youtube.com'; break;
+                case 'tt': appUrl = 'snssdk1128://'; webUrl = 'https://tiktok.com'; break;
+                case 'ig': appUrl = 'instagram://'; webUrl = 'https://instagram.com'; break;
+            }
+            
+            window.location.href = appUrl;
+            setTimeout(() => {
+                if (document.hasFocus()) window.location.href = webUrl;
+            }, 1800);
         }
 
         function openTimetable() {
@@ -326,72 +293,18 @@ document.addEventListener('click', function(e) {
 
         function closeTimetable() { document.getElementById('ttOverlay').style.display = 'none'; }
 
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            document.getElementById('pwa-installer').style.display = 'block';
-        });
-
-        function handleInstallClick() {
-            const ua = window.navigator.userAgent.toLowerCase();
-            const isIos = /iphone|ipad|ipod/.test(ua);
-            const isChromeIos = /crios/.test(ua);
-
-            if (isIos) {
-                const prompt = document.getElementById('ios-prompt');
-                prompt.className = '';
-                if (isChromeIos) prompt.classList.add('chrome-tip');
-                else prompt.classList.add('safari-tip');
-                prompt.style.display = 'block';
-                setTimeout(() => { prompt.style.display = 'none'; }, 8000);
-            } else if (deferredPrompt) {
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choice) => {
-                    if (choice.outcome === 'accepted') document.getElementById('pwa-installer').style.display = 'none';
-                    deferredPrompt = null;
-                });
-            }
-        }
-
         window.onload = () => {
-            setLanguage('en');
-            setupAppLinks();
+            setLanguage('si');
             if (localStorage.getItem('contact_saved') === 'true') showActionGrid();
             
+            // iOS Add to Home Screen Prompt Logic
             const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
             const isStandalone = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
             if (isIos && !isStandalone) {
-                document.getElementById('pwa-installer').style.display = 'block';
+                setTimeout(() => { document.getElementById('ios-prompt').style.display = 'block'; }, 4000);
             }
         };
-async function shareApp() {
-    // Vibrate Effect
-    if (navigator.vibrate) navigator.vibrate(40);
 
-    const shareData = {
-        title: 'K-Win Digital Card',
-        text: 'Check out K-Win Digital E-Card. Get yours now!',
-        url: 'https://kwinproduction.github.io/K-Win-Ecard/' // ඔබ Share කිරීමට බලාපොරොත්තු වන ලින්ක් එක
-    };
-
-    try {
-        // Browser එකේ Native Share එක වැඩ කරනවා නම් (Mobile Chrome/Safari)
-        if (navigator.share) {
-            await navigator.share(shareData);
-        } else {
-            // PC එකකදී හෝ Share වැඩ නැති අවස්ථාවකදී Copy Link option එකක් දීම
-            const dummy = document.createElement('input');
-            document.body.appendChild(dummy);
-            dummy.value = shareData.url;
-            dummy.select();
-            document.execCommand('copy');
-            document.body.removeChild(dummy);
-            alert("Link Copied to Clipboard!");
-        }
-    } catch (err) {
-        console.log('Error sharing:', err);
-    }
-}
         window.onclick = (e) => {
             if (!e.target.matches('.btn-action')) {
                 document.querySelectorAll('.dropdown-content').forEach(m => m.classList.remove('show'));
