@@ -87,7 +87,33 @@
 
         .location-btn { display: flex; align-items: center; justify-content: center; background: #ffda00; color: #000; padding: 12px; border-radius: 15px; text-decoration: none; font-weight: bold; margin-bottom: 15px; font-size: 0.9rem; }
         .location-btn img { width: 20px; margin-right: 10px; }
+.btn:active {
+    transform: scale(0.95); /* Button එක මදක් කුඩා වේ */
+    transition: transform 0.1s ease; /* ඉතා වේගයෙන් සිදුවීමට */
+}
+        .social-button-container {
+    width: 100%;
+    max-width: 350px;
+    margin: 0 auto;
+}
 
+.location-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.9rem;
+    border: none;
+    transition: 0.2s;
+}
+
+.location-btn:active {
+    transform: scale(0.95);
+}
         #pwa-installer { animation: slideUp 0.5s ease-out; }
         @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
@@ -161,12 +187,19 @@
         </div>
     </div>
 
-    <div class="social-button-container">
-        <p id="social-title" style="font-size: 0.7rem; letter-spacing: 2px; margin-bottom: 15px; opacity: 0.8;">CONNECT WITH US</p>
-        <a id="loc-btn" href="https://maps.app.goo.gl/c3tWuHNQDBGwbK5g8" class="location-btn">
-            <img src="https://cdn-icons-png.flaticon.com/512/854/854878.png" alt="Loc">
-            <span id="loc-txt">Go to Kind Win</span>
-        </a>
+    <div class="social-button-container" style="display: flex; gap: 10px; align-items: center; justify-content: center;">
+    <!-- Location Button -->
+    <a id="loc-btn" href="https://maps.app.goo.gl/c3tWuHNQDBGwbK5g8" class="location-btn" style="flex: 1;">
+        <img src="https://cdn-icons-png.flaticon.com/512/854/854878.png" alt="Loc" style="width: 20px;">
+        <span id="loc-txt">Go to Kind Win</span>
+    </a>
+
+    <!-- Share Button -->
+    <button id="share-btn" class="location-btn" onclick="shareApp()" style="flex: 0.4; background: #fff; color: #000;">
+        <img src="https://cdn-icons-png.flaticon.com/512/1358/1358023.png" alt="Share" style="width: 20px;">
+        <span id="share-txt">Share</span>
+    </button>
+</div>
         <div class="social-grid">
             <a id="fb-link" href="#" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png"><span>Facebook</span></a>
             <a id="yt-link" href="#" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"><span>YouTube</span></a>
@@ -236,7 +269,34 @@
             localStorage.setItem('contact_saved', 'true');
             showActionGrid();
         }
+/* සියලුම Button සඳහා පොදුවේ */
+.btn {
+    transition: all 0.1s ease; /* ඉතා වේගයෙන් වෙනස් වීමට */
+    cursor: pointer;
+    position: relative;
+    top: 0;
+}
 
+/* Button එක උඩට ඇඟිල්ල ගෙනියන විට (Hover) */
+.btn:hover {
+    filter: brightness(1.1); /* මදක් පැහැපත් වේ */
+}
+
+/* Button එක Click කරන මොහොතේ (Active State) */
+.btn:active {
+    transform: scale(0.92); /* මදක් කුඩා වේ (එබෙන හැඟීම) */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); /* සෙවනැල්ල අඩු වේ */
+    top: 3px; /* මදක් පහළට යයි */
+}
+        // සියලුම Button වලට Touch Vibrations එක් කිරීම
+document.addEventListener('click', function(e) {
+    // ඔබා ඇත්තේ Button එකක් හෝ Button එකක් ඇතුළේ ඇති Span එකක් නම්
+    if (e.target.closest('.btn') || e.target.tagName === 'BUTTON') {
+        if (navigator.vibrate) {
+            navigator.vibrate(40); // මිලි තත්පර 40ක සුළු වෙව්ලීමක්
+        }
+    }
+});
         function showActionGrid() {
             document.getElementById('mainSaveBtn').style.display = 'none';
             document.getElementById('actionGrid').style.display = 'grid';
@@ -304,7 +364,34 @@
                 document.getElementById('pwa-installer').style.display = 'block';
             }
         };
+async function shareApp() {
+    // Vibrate Effect
+    if (navigator.vibrate) navigator.vibrate(40);
 
+    const shareData = {
+        title: 'K-Win Digital Card',
+        text: 'Check out K-Win Digital E-Card. Get yours now!',
+        url: 'https://kwinproduction.github.io/K-Win-Ecard/' // ඔබ Share කිරීමට බලාපොරොත්තු වන ලින්ක් එක
+    };
+
+    try {
+        // Browser එකේ Native Share එක වැඩ කරනවා නම් (Mobile Chrome/Safari)
+        if (navigator.share) {
+            await navigator.share(shareData);
+        } else {
+            // PC එකකදී හෝ Share වැඩ නැති අවස්ථාවකදී Copy Link option එකක් දීම
+            const dummy = document.createElement('input');
+            document.body.appendChild(dummy);
+            dummy.value = shareData.url;
+            dummy.select();
+            document.execCommand('copy');
+            document.body.removeChild(dummy);
+            alert("Link Copied to Clipboard!");
+        }
+    } catch (err) {
+        console.log('Error sharing:', err);
+    }
+}
         window.onclick = (e) => {
             if (!e.target.matches('.btn-action')) {
                 document.querySelectorAll('.dropdown-content').forEach(m => m.classList.remove('show'));
