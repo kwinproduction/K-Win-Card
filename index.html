@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>K-Win Digital Card</title>
+    <title>K-Win</title>
 
     <!-- PWA Manifest -->
     <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiS1dpbiIsInNob3J0X25hbWUiOiJLLVdpbiIsInN0YXJ0X3VybCI6ImluZGV4Lmh0bWwiLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3ciOiIjMDAwMDAwIiwidGhlbWVfY29sb3ciOiIjRkZEMzAwIiwib3JpZW50YXRpb24iOiJwb3J0cmFpdCIsImljb25zIjpbeyJzcmMiOiJodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20va3dpbnByb2R1Y3Rpb24vSy1XaW4tRWNhcmQvbWFpbi9sb2dvLmpwZWciLCJzaXplcyI6IjUxMng1MTIiLCJ0eXBlIjoiaW1hZ2UvanBlZyIsInB1cnBvc2UiOiJhbnkgbWFza2FibGUifV19">
@@ -76,7 +76,11 @@
         .btn-email { background: #e74c3c; color: white; }
         .btn-call { background: #007bff; color: white; }
         .btn-sms { background: #f39c12; color: #000; }
-        .btn-map { background: #ea4335; color: white; }
+     .btn-map { 
+    background: #34a853 !important; /* Google Map Green Color */
+    color: white !important; 
+    box-shadow: 0 4px 15px rgba(52, 168, 83, 0.3);
+}
 
         /* Dropdowns */
         .dropdown { position: relative; width: 100%; }
@@ -207,8 +211,9 @@ body {
         
         <!-- MAP AND SHARE ON SAME ROW -->
         <div class="grid-2">
-            <button class="btn-main btn-map" id="btn-map-txt" onclick="window.open('https://maps.google.com/?q=Kurunegala,+Sri+Lanka')">
-                📍 Go to Kind Win
+           <button class="btn-main btn-map" id="btn-map-txt" onclick="window.open('https://maps.google.com/?q=Kurunegala,+Sri+Lanka')">
+    🗺️ Go to Kind Win
+</button>
             </button>
             <button onclick="shareCard()" class="btn-main btn-glass">
                 🔗 <span id="txt-share">බෙදාගන්න</span>
@@ -259,7 +264,7 @@ body {
             },
             ta: { 
                 save: "👤 தொடர்பைச் சேமிக்கவும்", tt: "📅 திறந்திருக்கும் நேரங்கள்", share: "பகிரவும்", close: "❌ மூடு", 
-                addr: "📍 குருநாகல், இலங்கை", call: "📞 அழைப்பு", map: "📍 இற்குச் செல்லுங்கள்", sms: "💬 செய்தி", 
+                addr: "📍 குருநாகல், இலங்கை", call: "📞 அழைப்பு", map: "📍 செல்லுங்கள்", sms: "💬 செய்தி", 
                 footer: "✨ K-Win மூலம் | ஜனித் திதுல", pwa: "📲 K-Win செயலியை நிறுவுங்கள்",
                 hContact: "எங்களைத் தொடர்பு கொள்ளுங்கள்", hSocial: "சமூக ஊடகங்கள்", hOther: "மற்றவை",
                 days: ["திங்கள்", "செவ்வாய்", "புதன்", "வியාழன்", "வெள்ளி", "சனி", "ஞாயிறு"] 
@@ -336,7 +341,7 @@ body {
 
         function closeTimetable() { document.getElementById('ttOverlay').style.display = 'none'; }
 
-        window.onload = () => { setLanguage('si'); checkContactStatus(); };
+        window.onload = () => { setLanguage('en'); checkContactStatus(); };
 
         window.onclick = (e) => {
             if (!e.target.matches('.btn-main')) {
@@ -362,10 +367,7 @@ body {
 document.addEventListener('touchmove', function(e) {
     e.preventDefault();
 }, { passive: false });
-        // Page එක Load වූ සැනින් English ක්‍රියාත්මක වීමට
-window.addEventListener('DOMContentLoaded', (event) => {
-    setLanguage('en'); 
-});
+
     </script>
 </body>
 </html>
