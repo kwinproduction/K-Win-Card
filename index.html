@@ -132,6 +132,10 @@ body {
 .card::-webkit-scrollbar {
     display: none; /* Chrome/Safari වල scrollbar එක අයින් කිරීමට */
 }
+        @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
     </style>
 </head>
 <body>
@@ -253,25 +257,38 @@ body {
                 addr: "📍 Kurunegala, Sri Lanka", call: "📞 Call", map: "🗺️ Go to Kind Win", sms: "💬 SMS", 
                 footer: "✨ Powered by K-Win | Created by Janith Didula", pwa: "📲 Install K-Win App",
                 hContact: "Contact Us", hSocial: "Social Media", hOther: "Other Services",
-                days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] 
+    
             },
             si: { 
                 save: "👤 CONTACT එක SAVE කරන්න", tt: "📅 විවෘතව තබන වේලාවන්", share: "SHARE කරන්න", close: "❌ වසන්න", 
                 addr: "📍 කුරුණෑගල, ශ්‍රී ලංකා", call: "📞 ඇමතුම්", map: "🗺️ ගමන් මාර්ගය  ", sms: "💬 පණිවිඩ", 
                 footer: "✨ K-Win වෙතින් | ජනිත් දිදුලගේ නිර්මාණයකි", pwa: "📲 K-Win App එක Install කරගන්න",
                 hContact: "අපව සම්බන්ධ කරගන්න", hSocial: "සමාජ මාධ්‍ය", hOther: "අමතර සේවා",
-                days: ["සඳුදා", "අඟහරුවාදා", "බදාදා", "බ්‍රහස්පතින්දා", "සිකුරාදා", "සෙනසුරාදා", "ඉරිදා"] 
             },
             ta: { 
                 save: "👤 தொடர்பைச் சேமிக்கவும்", tt: "📅 திறந்திருக்கும் நேரங்கள்", share: "பகிரவும்", close: "❌ மூடு", 
                 addr: "📍 குருநாகல், இலங்கை", call: "📞 அழைப்பு", map: "🗺️ செல்லுங்கள்", sms: "💬 செய்தி", 
                 footer: "✨ K-Win மூலம் | ஜனித் திதுல", pwa: "📲 K-Win செயலியை நிறுவுங்கள்",
                 hContact: "எங்களைத் தொடர்பு கொள்ளுங்கள்", hSocial: "சமூக ஊடகங்கள்", hOther: "மற்றவை",
-                days: ["திங்கள்", "செவ்வாய்", "புதன்", "வியාழன்", "வெள்ளி", "சனி", "ஞாயிறு"] 
             }
         };
 
-        const timetableData = ["08:30 AM - 04:00 PM", "08:30 AM - 04:00 PM", "08:30 AM - 04:00 PM", "08:30 AM - 04:00 PM", "08:30 AM - 04:00 PM", "Closed", "08:30 AM - 04:00 PM"];
+       const translations = {
+    en: {
+        ttWeek: "Sunday to Friday: 08:30 AM - 04:00 PM",
+        ttSat: "Saturday: Closed",
+
+    },
+    si: {
+        ttWeek: "ඉරිදා සිට සිකුරාදා දක්වා: පෙ.ව. 08:30 සිට ප.ව. 04:00 දක්වා",
+        ttSat: "සෙනසුරාදා දින: ආයතනය වසා ඇත",
+
+    },
+    ta: {
+        ttWeek: "ஞாயிறு முதல் வெள்ளி வரை: மு.ப. 08:30 - பி.ப. 04:00",
+        ttSat: "சனிக்கிழமை: மூடப்பட்டுள்ளது",
+    }
+};
 
         function setLanguage(lang) {
             currentLang = lang;
@@ -292,7 +309,35 @@ body {
             document.getElementById('head-social').innerText = translations[lang].hSocial;
             document.getElementById('head-other').innerText = translations[lang].hOther;
         }
+function openTimetable() {
+    const lang = currentLang; // දැනට තෝරාගෙන ඇති භාෂාව
+    const t = translations[lang];
 
+    const ttHtml = `
+        <div id="tt-overlay" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); backdrop-filter:blur(10px); z-index:10000; display:flex; align-items:center; justify-content:center; animation:fadeIn 0.3s;">
+            <div style="background:var(--dark-bg); border:1px solid var(--primary-accent); padding:30px; border-radius:25px; width:90%; max-width:350px; text-align:center; box-shadow:0 0 30px rgba(0,242,255,0.2);">
+                <div style="color:var(--primary-accent); font-weight:bold; margin-bottom:20px; font-size:1.1rem;">${t.ttTitle}</div>
+                
+                <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:15px; margin-bottom:10px; border-left:4px solid var(--primary-accent);">
+                    <p style="margin:0; font-size:0.9rem; line-height:1.6;">${t.ttWeek}</p>
+                </div>
+
+                <div style="background:rgba(255,0,0,0.1); padding:15px; border-radius:15px; margin-bottom:20px; border-left:4px solid #ff4d4d;">
+                    <p style="margin:0; font-size:0.9rem; color:#ff4d4d;">${t.ttSat}</p>
+                </div>
+
+                <button onclick="closeTimetable()" style="background:var(--primary-accent); color:#000; border:none; padding:10px 30px; border-radius:12px; font-weight:bold; cursor:pointer; width:100%;">${t.close}</button>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', ttHtml);
+}
+
+function closeTimetable() {
+    const overlay = document.getElementById('tt-overlay');
+    if (overlay) overlay.remove();
+}
         function toggleMenu(id) {
             const menu = document.getElementById(id);
             const isShown = menu.classList.contains('show');
