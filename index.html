@@ -150,7 +150,7 @@
         
         <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 8px;">
             <button class="btn-main btn-map" onclick="window.open('https://maps.google.com/?q=Kurunegala,+Sri+Lanka')">🗺️ <span id="txt-map">Go to K-Win</span></button>
-            <button onclick="shareCard()" class="btn-main btn-glass">🔗 <span id="txt-share">Share</span></button>
+            <button onclick="shareCard()" class="btn-main btn-glass"> ➡️ <span id="txt-share">Share</span></button>
         </div>
 
         <div class="section-title" id="head-social">Social Media</div>
@@ -250,7 +250,7 @@
         }
 
         function saveVCard() {
-            const vcard = "BEGIN:VCARD\nVERSION:3.0\nFN:Kind Win Team\nTEL:0707140731\nEMAIL:kindwin2026@gmail.com\nEND:VCARD";
+            const vcard = "BEGIN:VCARD\nVERSION:3.0\nFN:Kind Win\nTEL:0707140731\nEMAIL:kindwin2026@gmail.com\nEND:VCARD";
             const blob = new Blob([vcard], { type: 'text/vcard' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
