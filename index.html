@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>K-Win</title>
 
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <!-- PWA Manifest -->
     <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiS1dpbiIsInNob3J0X25hbWUiOiJLLVdpbiIsInN0YXJ0X3VybCI6ImluZGV4Lmh0bWwiLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3ciOiIjMDAwMDAwIiwidGhlbWVfY29sb3ciOiIjMDBmMmZmIiwib3JpZW50YXRpb24iOiJwb3J0cmFpdCIsImljb25zIjpbeyJzcmMiOiJodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20va3dpbnByb2R1Y3Rpb24vSy1XaW4tRWNhcmQvbWFpbi9sb2dvLmpwZWciLCJzaXplcyI6IjUxMng1MTIiLCJ0eXBlIjoiaW1hZ2UvanBlZyIsInB1cnBvc2UiOiJhbnkgbWFza2FibGUifV19">
     <link rel="icon" type="image/jpeg" href="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg">
@@ -13,7 +16,7 @@
 
     <style>
         :root {
-            --primary-accent: #00f2ff; /* Electric Cyan */
+            --primary-accent: #00f2ff;
             --blue: #0062ff;
             --dark-bg: #050a14;
             --glass: rgba(255, 255, 255, 0.08);
@@ -21,7 +24,7 @@
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
-        
+
         html, body {
             margin: 0; padding: 0; width: 100%; height: 100%;
             overflow: hidden; position: fixed;
@@ -37,34 +40,124 @@
             justify-content: center;
         }
 
-        /* Background Orbs */
-        .orb { position: fixed; border-radius: 50%; filter: blur(80px); z-index: -1; opacity: 0.15; animation: move 15s infinite alternate ease-in-out; }
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.15;
+            animation: move 15s infinite alternate ease-in-out;
+        }
         .orb-1 { width: 300px; height: 300px; background: var(--primary-accent); top: -50px; right: -50px; }
         .orb-2 { width: 400px; height: 400px; background: var(--blue); bottom: -100px; left: -50px; }
-        @keyframes move { from { transform: translate(0,0); } to { transform: translate(30px, 40px); } }
+
+        @keyframes move {
+            from { transform: translate(0,0); }
+            to { transform: translate(30px, 40px); }
+        }
 
         .top-bar { margin-bottom: 10px; width: 100%; display: flex; justify-content: center; z-index: 10; }
-        .lang-switch { display: flex; background: var(--glass); padding: 4px; border-radius: 50px; border: 1px solid var(--border); backdrop-filter: blur(10px); }
-        .lang-btn { background: none; border: none; color: #888; padding: 6px 14px; cursor: pointer; border-radius: 50px; font-size: 0.7rem; font-weight: bold; transition: 0.3s; }
+        .lang-switch {
+            display: flex;
+            background: var(--glass);
+            padding: 4px;
+            border-radius: 50px;
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+        }
+        .lang-btn {
+            background: none;
+            border: none;
+            color: #888;
+            padding: 6px 14px;
+            cursor: pointer;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            transition: 0.3s;
+        }
         .lang-btn.active { background: var(--primary-accent); color: #000; }
 
         .card {
-            width: 90%; max-width: 380px; background: rgba(10, 20, 40, 0.7); backdrop-filter: blur(25px);
-            border-radius: 30px; padding: 20px 18px; border: 1px solid var(--border); text-align: center;
+            width: 90%;
+            max-width: 380px;
+            background: rgba(10, 20, 40, 0.7);
+            backdrop-filter: blur(25px);
+            border-radius: 30px;
+            padding: 20px 18px;
+            border: 1px solid var(--border);
+            text-align: center;
             box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            max-height: 90vh; overflow-y: auto; scrollbar-width: none;
+            max-height: 90vh;
+            overflow-y: auto;
+            scrollbar-width: none;
         }
         .card::-webkit-scrollbar { display: none; }
 
-        h1 { font-size: 1.6rem; color: #ffffff; letter-spacing: 1px; margin-bottom: 15px; text-transform: uppercase; font-weight: 800; }
-        .p-img { width: 90px; height: 90px; border-radius: 50%; border: 3px solid var(--primary-accent); padding: 4px; object-fit: cover; margin-bottom: 15px; }
+        h1 {
+            font-size: 1.6rem;
+            color: #ffffff;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            font-weight: 800;
+        }
+        .p-img {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 3px solid var(--primary-accent);
+            padding: 4px;
+            object-fit: cover;
+            margin-bottom: 15px;
+        }
 
-        .info-box { background: rgba(0,0,0,0.4); padding: 15px; border-radius: 18px; margin-bottom: 15px; text-align: left; border-left: 4px solid var(--primary-accent); font-size: 0.8rem; line-height: 1.6; }
+        .info-box {
+            background: rgba(0,0,0,0.4);
+            padding: 15px;
+            border-radius: 18px;
+            margin-bottom: 15px;
+            text-align: left;
+            border-left: 4px solid var(--primary-accent);
+            font-size: 0.8rem;
+            line-height: 1.6;
+        }
 
-        .section-title { font-size: 0.75rem; color: var(--primary-accent); margin: 15px 0 10px; font-weight: 700; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 10px; letter-spacing: 1.5px; opacity: 0.7; }
-        .section-title::before, .section-title::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+        .section-title {
+            font-size: 0.75rem;
+            color: var(--primary-accent);
+            margin: 15px 0 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            letter-spacing: 1.5px;
+            opacity: 0.7;
+        }
+        .section-title::before, .section-title::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
 
-        .btn-main { width: 100%; padding: 12px; border-radius: 15px; border: none; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 8px; }
+        .btn-main {
+            width: 100%;
+            padding: 12px;
+            border-radius: 15px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
         .btn-main:active { transform: scale(0.96); }
 
         .btn-accent { background: var(--primary-accent); color: #000; }
@@ -73,21 +166,88 @@
         .btn-wa { background: #128C7E; color: white; }
         .btn-map { background: #34a853; color: white; }
 
-        /* Dropdowns */
         .dropdown { position: relative; width: 100%; }
-        .dropdown-content { display: none; position: absolute; background: white; width: 100%; border-radius: 12px; z-index: 1000; bottom: 110%; box-shadow: 0 10px 30px rgba(0,0,0,0.5); overflow: hidden; }
-        .dropdown-content a { color: #000; padding: 12px; text-decoration: none; display: block; font-size: 0.85rem; border-bottom: 1px solid #eee; font-weight: 600; }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background: white;
+            width: 100%;
+            border-radius: 12px;
+            z-index: 1000;
+            bottom: 110%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            overflow: hidden;
+        }
+        .dropdown-content a {
+            color: #000;
+            padding: 12px;
+            text-decoration: none;
+            display: block;
+            font-size: 0.85rem;
+            border-bottom: 1px solid #eee;
+            font-weight: 600;
+        }
         .show { display: block !important; animation: slideUp 0.3s ease; }
-        @keyframes slideUp { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-        .social-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px; }
-        .grid-btn { background: var(--glass); padding: 10px 5px; border-radius: 15px; text-decoration: none; color: #ccc; font-size: 0.6rem; border: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; }
+        @keyframes slideUp {
+            from { transform: translateY(10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .grid-btn {
+            background: var(--glass);
+            padding: 10px 5px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: #ccc;
+            font-size: 0.6rem;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
         .grid-btn img { width: 22px; height: 22px; margin-bottom: 5px; }
 
-        #pwa-installer { display: none; position: fixed; top: 10px; width: 90%; max-width: 380px; background: var(--primary-accent); color: #000; padding: 12px; border-radius: 50px; z-index: 9999; text-align: center; font-weight: 800; font-size: 0.8rem; box-shadow: 0 10px 20px rgba(0,0,0,0.3); cursor: pointer; }
-        .footer { margin-top: 20px; font-size: 0.6rem; opacity: 0.4; color: #fff; }
+        #pwa-installer {
+            display: none;
+            position: fixed;
+            top: 10px;
+            width: 90%;
+            max-width: 380px;
+            background: var(--primary-accent);
+            color: #000;
+            padding: 12px;
+            border-radius: 50px;
+            z-index: 9999;
+            text-align: center;
+            font-weight: 800;
+            font-size: 0.8rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            cursor: pointer;
+        }
 
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        .footer {
+            margin-top: 20px;
+            font-size: 0.6rem;
+            opacity: 0.4;
+            color: #fff;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes slideDown {
+            from { transform: translate(-50%, -30px); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
+        }
     </style>
 </head>
 <body>
@@ -110,7 +270,7 @@
     <div class="card">
         <h1>Kind Win</h1>
         <img src="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg" class="p-img" alt="Logo">
-        
+
         <div class="info-box">
             <span id="lbl-addr">📍 Kurunegala, Sri Lanka</span><br>
             <span>📞 071 733 7818</span><br>
@@ -147,7 +307,7 @@
 
         <div class="section-title" id="head-other">Other Services</div>
         <button onclick="openTimetable()" class="btn-main btn-blue">📅 <span id="txt-tt">Opening Hours</span></button>
-        
+
         <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 8px;">
             <button class="btn-main btn-map" onclick="window.open('https://maps.app.goo.gl/Ps6yVU6ytJjZexY98')">🗺️ <span id="txt-map">Go to K-Win</span></button>
             <button onclick="shareCard()" class="btn-main btn-glass"> ➡️ <span id="txt-share">Share</span></button>
@@ -160,13 +320,14 @@
             <a href="https://kwinproduction.github.io/K-Win/" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/1006/1006771.png" alt="Internet"><span>Kind Win Web</span></a>
             <a href="#" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"><span>Instagram</span></a>
         </div>
-        
+
         <div class="footer" id="txt-footer">✨ Powered by K-Win | Created by Janith Didula</div>
     </div>
 
     <script>
         let currentLang = 'en';
-        let deferredPrompt;
+        let deferredPrompt = null;
+        let notificationReady = false;
 
         const translations = {
             en: {
@@ -202,7 +363,7 @@
             currentLang = lang;
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
             document.getElementById('btn-' + lang).classList.add('active');
-            
+
             const t = translations[lang];
             document.getElementById('txt-save').innerText = t.save;
             document.getElementById('txt-tt').innerText = t.tt;
@@ -273,16 +434,15 @@
                 try {
                     await navigator.share({ title: 'K-Win', text: 'K-Win Digital Card', url: window.location.href });
                 } catch (err) {}
-            } else { alert("Sharing not supported"); }
+            } else {
+                alert("Sharing not supported");
+            }
         }
 
-        window.onload = () => { 
-            setLanguage('en'); 
-            checkStatus(); 
-        };
-
-        // Scroll protection
-        document.addEventListener('touchmove', (e) => { if(e.target.closest('.card')) return; e.preventDefault(); }, { passive: false });
+        document.addEventListener('touchmove', (e) => {
+            if (e.target.closest('.card')) return;
+            e.preventDefault();
+        }, { passive: false });
 
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
@@ -294,98 +454,133 @@
             if (deferredPrompt) {
                 deferredPrompt.prompt();
                 const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') document.getElementById('pwa-installer').style.display = 'none';
+                if (outcome === 'accepted') {
+                    document.getElementById('pwa-installer').style.display = 'none';
+                }
                 deferredPrompt = null;
             }
         }
+
         // ===============================
-// 🔥 SUPABASE NOTIFICATION SYSTEM
-// ===============================
+        // SUPABASE NOTIFICATION SYSTEM
+        // ===============================
+        const SUPABASE_URL = "https://qfwqfcwakstwovccogtx.supabase.co";
+        const SUPABASE_ANON_KEY = "PASTE_YOUR_REAL_ANON_KEY_HERE";
 
-// ⚠️ මෙය Supabase dashboard එකෙන් ගන්න ANON KEY එක දාන්න
-const SUPABASE_URL = "https://qfwqfcwakstwovccogtx.supabase.co";
-const SUPABASE_KEY ="sb_publishable_-_GXUDxjyzXvjLYqE4hfAA_FDgdNIxm";
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-const supabaseClient = supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
+        async function initNotificationPermission() {
+            if (!("Notification" in window)) return;
 
-// ===============================
-// 🔔 CREATE WHATSAPP STYLE POPUP
-// ===============================
-function showWhatsAppPopup(message) {
-  let box = document.getElementById("waPopup");
+            if (Notification.permission === "granted") {
+                notificationReady = true;
+                return;
+            }
 
-  if (!box) {
-    box = document.createElement("div");
-    box.id = "waPopup";
-    box.style = `
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #25D366;
-      color: white;
-      padding: 14px 18px;
-      border-radius: 20px;
-      font-weight: bold;
-      font-size: 14px;
-      z-index: 99999;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      animation: slideDown 0.3s ease;
-    `;
-    document.body.appendChild(box);
-  }
+            if (Notification.permission === "default") {
+                const perm = await Notification.requestPermission();
+                notificationReady = perm === "granted";
+            }
+        }
 
-  box.innerText = "🔔 " + message;
+        function showBrowserNotification(message) {
+            if (!("Notification" in window)) return;
+            if (Notification.permission !== "granted") return;
 
-  // auto hide
-  setTimeout(() => {
-    box.remove();
-  }, 4000);
+            const n = new Notification("K-Win Notification", {
+                body: message,
+                icon: "https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg",
+                badge: "https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg"
+            });
 
-  // 🔊 sound
-  const audio = new Audio("https://actions.google.com/sounds/v1/alarms/beep_short.ogg");
-  audio.play();
-}
+            n.onclick = () => {
+                window.focus();
+                n.close();
+            };
+        }
 
-// ===============================
-// 📡 REALTIME LISTENER (Supabase)
-// ===============================
-supabaseClient
-  .channel("realtime-notifications")
-  .on(
-    "postgres_changes",
-    {
-      event: "INSERT",
-      schema: "public",
-      table: "notifications",
-    },
-    (payload) => {
-      showWhatsAppPopup(payload.new.message);
-    }
-  )
-  .subscribe();
+        function showWhatsAppPopup(message) {
+            let box = document.getElementById("waPopup");
 
-// ===============================
-// 🔐 PERMISSION (optional)
-// ===============================
-if ("Notification" in window) {
-  Notification.requestPermission();
-}
+            if (!box) {
+                box = document.createElement("div");
+                box.id = "waPopup";
+                box.style = `
+                    position: fixed;
+                    top: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: #25D366;
+                    color: white;
+                    padding: 14px 18px;
+                    border-radius: 20px;
+                    font-weight: bold;
+                    font-size: 14px;
+                    z-index: 99999;
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                    animation: slideDown 0.3s ease;
+                    max-width: 92vw;
+                    text-align: center;
+                `;
+                document.body.appendChild(box);
+            }
 
-// ===============================
-// 🎬 ANIMATION CSS (AUTO ADD)
-// ===============================
-const style = document.createElement("style");
-style.innerHTML = `
-@keyframes slideDown {
-  from { transform: translate(-50%, -30px); opacity: 0; }
-  to { transform: translate(-50%, 0); opacity: 1; }
-}
-`;
-document.head.appendChild(style);
+            box.innerText = "🔔 " + message;
+
+            setTimeout(() => {
+                if (box) box.remove();
+            }, 4000);
+
+            const audio = new Audio("https://actions.google.com/sounds/v1/alarms/beep_short.ogg");
+            audio.play().catch(() => {});
+        }
+
+        function handleIncomingMessage(message) {
+            showWhatsAppPopup(message);
+            showBrowserNotification(message);
+        }
+
+        async function startSupabaseListener() {
+            try {
+                const channel = supabaseClient
+                    .channel("realtime-notifications")
+                    .on(
+                        "postgres_changes",
+                        {
+                            event: "INSERT",
+                            schema: "public",
+                            table: "notifications",
+                        },
+                        (payload) => {
+                            const msg = payload?.new?.message;
+                            if (msg) handleIncomingMessage(msg);
+                        }
+                    )
+                    .subscribe((status) => {
+                        console.log("Supabase status:", status);
+                    });
+
+                window.__supabaseChannel = channel;
+            } catch (err) {
+                console.error("Supabase listener error:", err);
+            }
+        }
+
+        const style = document.createElement("style");
+        style.innerHTML = `
+            @keyframes slideDown {
+                from { transform: translate(-50%, -30px); opacity: 0; }
+                to { transform: translate(-50%, 0); opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        window.addEventListener("DOMContentLoaded", async () => {
+            setLanguage("en");
+            checkStatus();
+            await initNotificationPermission();
+            await startSupabaseListener();
+        });
     </script>
 </body>
 </html>
