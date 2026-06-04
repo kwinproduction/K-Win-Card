@@ -298,6 +298,94 @@
                 deferredPrompt = null;
             }
         }
+        // ===============================
+// 🔥 SUPABASE NOTIFICATION SYSTEM
+// ===============================
+
+// ⚠️ මෙය Supabase dashboard එකෙන් ගන්න ANON KEY එක දාන්න
+const SUPABASE_URL = "https://qfwqfcwakstwovccogtx.supabase.co";
+const SUPABASE_KEY ="sb_publishable_-_GXUDxjyzXvjLYqE4hfAA_FDgdNIxm";
+
+const supabaseClient = supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+// ===============================
+// 🔔 CREATE WHATSAPP STYLE POPUP
+// ===============================
+function showWhatsAppPopup(message) {
+  let box = document.getElementById("waPopup");
+
+  if (!box) {
+    box = document.createElement("div");
+    box.id = "waPopup";
+    box.style = `
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #25D366;
+      color: white;
+      padding: 14px 18px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 14px;
+      z-index: 99999;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      animation: slideDown 0.3s ease;
+    `;
+    document.body.appendChild(box);
+  }
+
+  box.innerText = "🔔 " + message;
+
+  // auto hide
+  setTimeout(() => {
+    box.remove();
+  }, 4000);
+
+  // 🔊 sound
+  const audio = new Audio("https://actions.google.com/sounds/v1/alarms/beep_short.ogg");
+  audio.play();
+}
+
+// ===============================
+// 📡 REALTIME LISTENER (Supabase)
+// ===============================
+supabaseClient
+  .channel("realtime-notifications")
+  .on(
+    "postgres_changes",
+    {
+      event: "INSERT",
+      schema: "public",
+      table: "notifications",
+    },
+    (payload) => {
+      showWhatsAppPopup(payload.new.message);
+    }
+  )
+  .subscribe();
+
+// ===============================
+// 🔐 PERMISSION (optional)
+// ===============================
+if ("Notification" in window) {
+  Notification.requestPermission();
+}
+
+// ===============================
+// 🎬 ANIMATION CSS (AUTO ADD)
+// ===============================
+const style = document.createElement("style");
+style.innerHTML = `
+@keyframes slideDown {
+  from { transform: translate(-50%, -30px); opacity: 0; }
+  to { transform: translate(-50%, 0); opacity: 1; }
+}
+`;
+document.head.appendChild(style);
     </script>
 </body>
 </html>
