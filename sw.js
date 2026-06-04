@@ -38,3 +38,17 @@ self.addEventListener('fetch', (e) => {
         })
     );
 });
+// 6. Notification එකක් ක්ලික් කළ විට App එක Open කිරීම
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close(); // Notification එක අයින් කරන්න
+
+  // App එක දැනටමත් open නම් ඒ tab එකට යන්න, නැත්නම් අලුතින් open කරන්න
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+      if (clientList.length > 0) {
+        return clientList[0].focus();
+      }
+      return clients.openWindow('./');
+    })
+  );
+});
