@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>K-Win</title>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 
   <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiS1dpbiIsInNob3J0X25hbWUiOiJLLVdpbiIsInN0YXJ0X3VybCI6ImluZGV4Lmh0bWwiLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjMDAwMDAwIiwidGhlbWVfY29sb3IiOiIjMDBmMmZmIiwib3JpZW50YXRpb24iOiJwb3J0cmFpdCIsImljb25zIjpbeyJzcmMiOiJodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20va3dpbnByb2R1Y3Rpb24vSy1XaW4tRWNhcmQvbWFpbi9sb2dvLmpwZWciLCJzaXplcyI6IjUxMng1MTIiLCJ0eXBlIjoiaW1hZ2UvanBlZyIsInB1cnBvc2UiOiJhbnkgbWFza2FibGUifV19" />
   <link rel="icon" type="image/jpeg" href="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg" />
@@ -249,7 +249,6 @@
       to { transform: translate(-50%, 0); opacity: 1; }
     }
 
-    /* Live notification toast */
     .live-toast {
       position: fixed;
       top: 18px;
@@ -286,6 +285,10 @@
       font-size: 0.72rem;
       margin-top: 6px;
     }
+
+    .push-btn-wrap {
+      margin: 8px 0 2px;
+    }
   </style>
 </head>
 <body>
@@ -314,6 +317,12 @@
     <button id="mainSaveBtn" onclick="saveVCard()" class="btn-main btn-accent">
       👤 <span id="txt-save">SAVE CONTACT</span>
     </button>
+
+    <div class="push-btn-wrap">
+      <button id="enablePushBtn" class="btn-main btn-blue" onclick="enablePushNotifications()">
+        🔔 <span id="txt-push">Enable Notifications</span>
+      </button>
+    </div>
 
     <div id="contactSection" style="display: none;">
       <div class="section-title" id="head-contact">Contact Us</div>
@@ -357,27 +366,28 @@
 
     <div class="footer" id="txt-footer">✨ Powered by K-Win | Created by Janith Didula</div>
   </div>
-
-  <div id="liveToast" class="live-toast" aria-live="polite">
-    <div class="title" id="toastTitle">K-Win Notification</div>
-    <div class="message" id="toastMessage"></div>
-    <div class="small" id="toastSmall">New message received</div>
-  </div>
-
   <script>
     let currentLang = 'en';
     let deferredPrompt = null;
-    let notificationReady = false;
     let toastTimer = null;
-    let supabaseClient = null;
-    let realtimeChannel = null;
+    let oneSignalInstance = null;
 
     const translations = {
       en: {
-        save: "SAVE CONTACT", tt: "Opening Hours", share: "Share", close: "Close",
-        addr: "📍 Kurunegala, Sri Lanka", call: "Call", map: "Go to K-Win", sms: "SMS",
-        footer: "✨ Powered by K-Win | Created by Janith Didula", pwa: "Install K-Win App",
-        hContact: "Contact Us", hSocial: "Social Media", hOther: "Other Services",
+        save: "SAVE CONTACT",
+        tt: "Opening Hours",
+        share: "Share",
+        close: "Close",
+        addr: "📍 Kurunegala, Sri Lanka",
+        call: "Call",
+        map: "Go to K-Win",
+        sms: "SMS",
+        footer: "✨ Powered by K-Win | Created by Janith Didula",
+        pwa: "Install K-Win App",
+        push: "Enable Notifications",
+        hContact: "Contact Us",
+        hSocial: "Social Media",
+        hOther: "Other Services",
         ttTitle: "K-Win Opening Hours",
         ttWeek: "Sunday to Friday: 08:30 AM - 04:00 PM",
         ttSat: "Saturday: Closed",
@@ -385,10 +395,20 @@
         toastSmall: "New message received"
       },
       si: {
-        save: "CONTACT එක SAVE කරන්න", tt: "විවෘතව තබන වේලාවන්", share: "බෙදාගන්න", close: "වසා දමන්න",
-        addr: "📍 කුරුණෑගල, ශ්‍රී ලංකා", call: "ඇමතුම්", map: "ගමන් මාර්ගය", sms: "පණිවිඩ",
-        footer: "✨ K-Win වෙතින් | ජනිත් දිදුලගේ නිර්මාණයකි", pwa: "K-Win App එක Install කරගන්න",
-        hContact: "අපව සම්බන්ධ කරගන්න", hSocial: "සමාජ මාධ්‍ය", hOther: "අමතර සේවා",
+        save: "CONTACT එක SAVE කරන්න",
+        tt: "විවෘතව තබන වේලාවන්",
+        share: "බෙදාගන්න",
+        close: "වසා දමන්න",
+        addr: "📍 කුරුණෑගල, ශ්‍රී ලංකා",
+        call: "ඇමතුම්",
+        map: "ගමන් මාර්ගය",
+        sms: "පණිවිඩ",
+        footer: "✨ K-Win වෙතින් | ජනිත් දිදුලගේ නිර්මාණයකි",
+        pwa: "K-Win App එක Install කරගන්න",
+        push: "Notifications දාන්න",
+        hContact: "අපව සම්බන්ධ කරගන්න",
+        hSocial: "සමාජ මාධ්‍ය",
+        hOther: "අමතර සේවා",
         ttTitle: "විවෘතව තබන වේලාවන්",
         ttWeek: "ඉරිදා සිට සිකුරාදා: පෙ.ව. 08:30 සිට ප.ව. 04:00 දක්වා",
         ttSat: "සෙනසුරාදා දින: ආයතනය වසා ඇත",
@@ -396,10 +416,20 @@
         toastSmall: "නව පණිවිඩයක් ලැබුණා"
       },
       ta: {
-        save: "தொடர்பைச் சேமிக்கவும்", tt: "திறந்திருக்கும் நேரங்கள்", share: "பகிரவும்", close: "மூடு",
-        addr: "📍 குருநாகல், இலங்கை", call: "அழைப்பு", map: "செல்லுங்கள்", sms: "செய்தி",
-        footer: "✨ K-Win மூலம் | ஜனித் திதுல", pwa: "K-Win செயலியை நிறுவுங்கள்",
-        hContact: "தொடர்பு கொள்ள", hSocial: "சமூக ஊடகங்கள்", hOther: "மற்றவை",
+        save: "தொடர்பைச் சேமிக்கவும்",
+        tt: "திறந்திருக்கும் நேரங்கள்",
+        share: "பகிரவும்",
+        close: "மூடு",
+        addr: "📍 குருநாகல், இலங்கை",
+        call: "அழைப்பு",
+        map: "செல்லுங்கள்",
+        sms: "செய்தி",
+        footer: "✨ K-Win மூலம் | ஜனித் திதுல",
+        pwa: "K-Win செயலியை நிறுவுங்கள்",
+        push: "அறிவிப்புகளை இயக்கவும்",
+        hContact: "தொடர்பு கொள்ள",
+        hSocial: "சமூக ஊடகங்கள்",
+        hOther: "மற்றவை",
         ttTitle: "திறந்திருக்கும் நேரங்கள்",
         ttWeek: "ஞாயிறு முதல் வெள்ளி: 08:30 AM - 04:00 PM",
         ttSat: "சனிக்கிழமை: மூடப்பட்டுள்ளது",
@@ -424,6 +454,7 @@
       document.getElementById('txt-sms').innerText = t.sms;
       document.getElementById('txt-footer').innerText = t.footer;
       document.getElementById('pwa-text').innerText = t.pwa;
+      document.getElementById('txt-push').innerText = t.push;
       document.getElementById('head-contact').innerText = t.hContact;
       document.getElementById('head-social').innerText = t.hSocial;
       document.getElementById('head-other').innerText = t.hOther;
@@ -460,12 +491,6 @@
     function closeTimetable() {
       const overlay = document.getElementById('tt-overlay');
       if (overlay) overlay.remove();
-    }
-
-    function normalizePhone(raw) {
-      let phone = (raw || '').trim().replace(/\s+/g, '');
-      if (phone.startsWith('0')) phone = '94' + phone.substring(1);
-      return phone;
     }
 
     function saveVCard() {
@@ -574,91 +599,17 @@
       };
     }
 
-    async function requestNotificationPermissionOnce() {
-      if (!('Notification' in window)) return;
-      if (Notification.permission === 'default') {
-        try {
-          await Notification.requestPermission();
-        } catch (e) {}
+    async function enablePushNotifications() {
+      if (!oneSignalInstance) {
+        alert('OneSignal is not ready yet');
+        return;
       }
-      notificationReady = Notification.permission === 'granted';
-    }
 
-    function handleIncomingMessage(message) {
-      const text = String(message || '').trim();
-      if (!text) return;
-      showToast(text);
-      playTone();
-      showBrowserNotification(text);
-    }
-
-    async function startSupabaseListener() {
-      if (!supabaseClient) return;
       try {
-        realtimeChannel = supabaseClient
-          .channel('realtime-notifications')
-          .on('postgres_changes', {
-            event: 'INSERT',
-            schema: 'public',
-            table: 'notifications'
-          }, (payload) => {
-            const msg = payload?.new?.message || '';
-            handleIncomingMessage(msg);
-          })
-          .subscribe((status) => {
-            console.log('Supabase status:', status);
-          });
+        await oneSignalInstance.Notifications.requestPermission();
       } catch (err) {
-        console.error('Supabase listener error:', err);
+        console.error('Push permission error:', err);
       }
-    }
-
-    async function sendNotification() {
-      const phoneRaw = document.getElementById('phone').value.trim();
-      const name = document.getElementById('u-name').value.trim();
-      const message = document.getElementById('notify-message').value.trim();
-
-      if (message === '') {
-        alert('Enter message');
-        return;
-      }
-
-      const phone = phoneRaw ? normalizePhone(phoneRaw) : '';
-
-      if (!supabaseClient) {
-        alert('Supabase is not ready');
-        return;
-      }
-
-      const { error } = await supabaseClient
-        .from('notifications')
-        .insert([
-          {
-            phone,
-            name,
-            message,
-            created_at: new Date().toISOString()
-          }
-        ]);
-
-      if (error) {
-        console.error(error);
-        alert(error.message || 'Failed');
-        return;
-      }
-
-      alert('Notification Sent');
-      document.getElementById('notify-message').value = '';
-      closeNotificationPopup();
-    }
-
-    function openNotificationPopup() {
-      document.getElementById('notification-popup').style.display = 'flex';
-      document.getElementById('notify-message').focus();
-    }
-
-    function closeNotificationPopup() {
-      document.getElementById('notification-popup').style.display = 'none';
     }
 
     document.addEventListener('DOMContentLoaded', async () => {
@@ -671,24 +622,40 @@
         document.getElementById('pwa-installer').style.display = 'block';
       }
 
-      const nameInput = document.getElementById('u-name');
-      nameInput.addEventListener('blur', function () {
-        const currentName = this.value.trim();
-        if (currentName !== '' && !currentName.includes('K-Win client')) {
-          this.value = currentName + ' K-Win client';
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      window.OneSignalDeferred.push(async function (OneSignal) {
+        try {
+          oneSignalInstance = OneSignal;
+
+          await OneSignal.init({
+            appId: 'ebdc2cd4-a21d-434f-ab63-d60f21ad3295',
+            notifyButton: {
+              enable: false
+            }
+          });
+
+          OneSignal.Notifications.addEventListener('foregroundWillDisplay', (event) => {
+            const notification = event?.notification;
+            const title = notification?.title || 'K-Win Notification';
+            const message = notification?.body || '';
+
+            if (message) {
+              document.getElementById('toastTitle').innerText = title;
+              showToast(message);
+              playTone();
+            }
+          });
+
+          OneSignal.Notifications.addEventListener('click', () => {
+            window.focus();
+          });
+
+          const permission = OneSignal.Notifications.permission;
+          document.getElementById('enablePushBtn').style.display = permission === 'granted' ? 'none' : 'block';
+        } catch (err) {
+          console.error('OneSignal init error:', err);
         }
       });
-
-      const SUPABASE_URL = 'https://qfwqfcwakstwovccogtx.supabase.co';
-      const SUPABASE_KEY = 'sb_publishable_-_GXUDxjyzXvjLYqE4hfAA_FDgdNIxm';
-
-      if (window.supabase && typeof window.supabase.createClient === 'function') {
-        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        await requestNotificationPermissionOnce();
-        await startSupabaseListener();
-      } else {
-        console.warn('Supabase library not loaded');
-      }
 
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW Fail', err));
