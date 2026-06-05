@@ -366,6 +366,13 @@
 
     <div class="footer" id="txt-footer">✨ Powered by K-Win | Created by Janith Didula</div>
   </div>
+
+  <div id="liveToast" class="live-toast" aria-live="polite">
+    <div class="title" id="toastTitle">K-Win Notification</div>
+    <div class="message" id="toastMessage"></div>
+    <div class="small" id="toastSmall">New message received</div>
+  </div>
+
   <script>
     let currentLang = 'en';
     let deferredPrompt = null;
@@ -374,67 +381,28 @@
 
     const translations = {
       en: {
-        save: "SAVE CONTACT",
-        tt: "Opening Hours",
-        share: "Share",
-        close: "Close",
-        addr: "📍 Kurunegala, Sri Lanka",
-        call: "Call",
-        map: "Go to K-Win",
-        sms: "SMS",
-        footer: "✨ Powered by K-Win | Created by Janith Didula",
-        pwa: "Install K-Win App",
-        push: "Enable Notifications",
-        hContact: "Contact Us",
-        hSocial: "Social Media",
-        hOther: "Other Services",
-        ttTitle: "K-Win Opening Hours",
-        ttWeek: "Sunday to Friday: 08:30 AM - 04:00 PM",
-        ttSat: "Saturday: Closed",
-        toastTitle: "K-Win Notification",
-        toastSmall: "New message received"
+        save: 'SAVE CONTACT', tt: 'Opening Hours', share: 'Share', close: 'Close',
+        addr: '📍 Kurunegala, Sri Lanka', call: 'Call', map: 'Go to K-Win', sms: 'SMS',
+        footer: '✨ Powered by K-Win | Created by Janith Didula', pwa: 'Install K-Win App',
+        push: 'Enable Notifications', hContact: 'Contact Us', hSocial: 'Social Media', hOther: 'Other Services',
+        ttTitle: 'K-Win Opening Hours', ttWeek: 'Sunday to Friday: 08:30 AM - 04:00 PM', ttSat: 'Saturday: Closed',
+        toastTitle: 'K-Win Notification', toastSmall: 'New message received'
       },
       si: {
-        save: "CONTACT එක SAVE කරන්න",
-        tt: "විවෘතව තබන වේලාවන්",
-        share: "බෙදාගන්න",
-        close: "වසා දමන්න",
-        addr: "📍 කුරුණෑගල, ශ්‍රී ලංකා",
-        call: "ඇමතුම්",
-        map: "ගමන් මාර්ගය",
-        sms: "පණිවිඩ",
-        footer: "✨ K-Win වෙතින් | ජනිත් දිදුලගේ නිර්මාණයකි",
-        pwa: "K-Win App එක Install කරගන්න",
-        push: "Notifications දාන්න",
-        hContact: "අපව සම්බන්ධ කරගන්න",
-        hSocial: "සමාජ මාධ්‍ය",
-        hOther: "අමතර සේවා",
-        ttTitle: "විවෘතව තබන වේලාවන්",
-        ttWeek: "ඉරිදා සිට සිකුරාදා: පෙ.ව. 08:30 සිට ප.ව. 04:00 දක්වා",
-        ttSat: "සෙනසුරාදා දින: ආයතනය වසා ඇත",
-        toastTitle: "K-Win දැනුම්දීම",
-        toastSmall: "නව පණිවිඩයක් ලැබුණා"
+        save: 'CONTACT එක SAVE කරන්න', tt: 'විවෘතව තබන වේලාවන්', share: 'බෙදාගන්න', close: 'වසා දමන්න',
+        addr: '📍 කුරුණෑගල, ශ්‍රී ලංකා', call: 'ඇමතුම්', map: 'ගමන් මාර්ගය', sms: 'පණිවිඩ',
+        footer: '✨ K-Win වෙතින් | ජනිත් දිදුලගේ නිර්මාණයකි', pwa: 'K-Win App එක Install කරගන්න',
+        push: 'Notifications දාන්න', hContact: 'අපව සම්බන්ධ කරගන්න', hSocial: 'සමාජ මාධ්‍ය', hOther: 'අමතර සේවා',
+        ttTitle: 'විවෘතව තබන වේලාවන්', ttWeek: 'ඉරිදා සිට සිකුරාදා: පෙ.ව. 08:30 සිට ප.ව. 04:00 දක්වා', ttSat: 'සෙනසුරාදා දින: ආයතනය වසා ඇත',
+        toastTitle: 'K-Win දැනුම්දීම', toastSmall: 'නව පණිවිඩයක් ලැබුණා'
       },
       ta: {
-        save: "தொடர்பைச் சேமிக்கவும்",
-        tt: "திறந்திருக்கும் நேரங்கள்",
-        share: "பகிரவும்",
-        close: "மூடு",
-        addr: "📍 குருநாகல், இலங்கை",
-        call: "அழைப்பு",
-        map: "செல்லுங்கள்",
-        sms: "செய்தி",
-        footer: "✨ K-Win மூலம் | ஜனித் திதுல",
-        pwa: "K-Win செயலியை நிறுவுங்கள்",
-        push: "அறிவிப்புகளை இயக்கவும்",
-        hContact: "தொடர்பு கொள்ள",
-        hSocial: "சமூக ஊடகங்கள்",
-        hOther: "மற்றவை",
-        ttTitle: "திறந்திருக்கும் நேரங்கள்",
-        ttWeek: "ஞாயிறு முதல் வெள்ளி: 08:30 AM - 04:00 PM",
-        ttSat: "சனிக்கிழமை: மூடப்பட்டுள்ளது",
-        toastTitle: "K-Win அறிவிப்பு",
-        toastSmall: "புதிய செய்தி வந்தது"
+        save: 'தொடர்பைச் சேமிக்கவும்', tt: 'திறந்திருக்கும் நேரங்கள்', share: 'பகிரவும்', close: 'மூடு',
+        addr: '📍 குருநாகல், இலங்கை', call: 'அழைப்பு', map: 'செல்லுங்கள்', sms: 'செய்தி',
+        footer: '✨ K-Win மூலம் | ஜனித் திதுல', pwa: 'K-Win செயலியை நிறுவுங்கள்',
+        push: 'அறிவிப்புகளை இயக்கவும்', hContact: 'தொடர்பு கொள்ள', hSocial: 'சமூக ஊடகங்கள்', hOther: 'மற்றவை',
+        ttTitle: 'திறந்திருக்கும் நேரங்கள்', ttWeek: 'ஞாயிறு முதல் வெள்ளி: 08:30 AM - 04:00 PM', ttSat: 'சனிக்கிழமை: மூடப்பட்டுள்ளது',
+        toastTitle: 'K-Win அறிவிப்பு', toastSmall: 'புதிய செய்தி வந்தது'
       }
     };
 
@@ -494,7 +462,7 @@
     }
 
     function saveVCard() {
-      const vcard = "BEGIN:VCARD\nVERSION:3.0\nFN:Kind Win\nTEL:0707140731\nEMAIL:kindwin2026@gmail.com\nEND:VCARD";
+      const vcard = 'BEGIN:VCARD\nVERSION:3.0\nFN:Kind Win\nTEL:0707140731\nEMAIL:kindwin2026@gmail.com\nEND:VCARD';
       const blob = new Blob([vcard], { type: 'text/vcard' });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -557,7 +525,6 @@
       const toast = document.getElementById('liveToast');
       document.getElementById('toastMessage').innerText = message;
       toast.style.display = 'block';
-
       clearTimeout(toastTimer);
       toastTimer = setTimeout(() => {
         toast.style.display = 'none';
@@ -583,30 +550,15 @@
       } catch (e) {}
     }
 
-    function showBrowserNotification(message) {
-      if (!('Notification' in window)) return;
-      if (Notification.permission !== 'granted') return;
-
-      const n = new Notification('K-Win Notification', {
-        body: message,
-        icon: 'https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg',
-        badge: 'https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg'
-      });
-
-      n.onclick = () => {
-        window.focus();
-        n.close();
-      };
-    }
-
     async function enablePushNotifications() {
       if (!oneSignalInstance) {
-        alert('OneSignal is not ready yet');
+        alert('OneSignal loading... please try again');
         return;
       }
 
       try {
         await oneSignalInstance.Notifications.requestPermission();
+        alert('Notifications enabled');
       } catch (err) {
         console.error('Push permission error:', err);
       }
@@ -629,16 +581,13 @@
 
           await OneSignal.init({
             appId: 'ebdc2cd4-a21d-434f-ab63-d60f21ad3295',
-            notifyButton: {
-              enable: false
-            }
+            notifyButton: { enable: false }
           });
 
           OneSignal.Notifications.addEventListener('foregroundWillDisplay', (event) => {
             const notification = event?.notification;
             const title = notification?.title || 'K-Win Notification';
             const message = notification?.body || '';
-
             if (message) {
               document.getElementById('toastTitle').innerText = title;
               showToast(message);
