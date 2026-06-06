@@ -367,287 +367,182 @@
     <div class="small" id="toastSmall">New message received</div>
   </div>
 
-  <script>
-    let currentLang = 'en';
-    let deferredPrompt = null;
-    let toastTimer = null;
-    let oneSignalInstance = null;
+<script>
+  let currentLang = 'en';
+  let deferredPrompt = null;
+  let toastTimer = null;
+  let oneSignalInstance = null;
 
-    const translations = {
-      en: {
-        save: 'SAVE CONTACT', tt: 'Opening Hours', share: 'Share', close: 'Close',
-        addr: '📍 Kurunegala, Sri Lanka', call: 'Call', map: 'Go to K-Win', sms: 'SMS',
-        footer: '✨ Powered by K-Win | Created by Janith Didula', pwa: 'Install K-Win App',
-        push: 'Enable Notifications', hContact: 'Contact Us', hSocial: 'Social Media', hOther: 'Other Services',
-        ttTitle: 'K-Win Opening Hours', ttWeek: 'Sunday to Friday: 08:30 AM - 04:00 PM', ttSat: 'Saturday: Closed',
-        toastTitle: 'K-Win Notification', toastSmall: 'New message received'
-      },
-      si: {
-        save: 'CONTACT එක SAVE කරන්න', tt: 'විවෘතව තබන වේලාවන්', share: 'බෙදාගන්න', close: 'වසා දමන්න',
-        addr: '📍 කුරුණෑගල, ශ්‍රී ලංකා', call: 'ඇමතුම්', map: 'ගමන් මාර්ගය', sms: 'පණිවිඩ',
-        footer: '✨ K-Win වෙතින් | ජනිත් දිදුලගේ නිර්මාණයකි', pwa: 'K-Win App එක Install කරගන්න',
-        push: 'Notifications දාන්න', hContact: 'අපව සම්බන්ධ කරගන්න', hSocial: 'සමාජ මාධ්‍ය', hOther: 'අමතර සේවා',
-        ttTitle: 'විවෘතව තබන වේලාවන්', ttWeek: 'ඉරිදා සිට සිකුරාදා: පෙ.ව. 08:30 සිට ප.ව. 04:00 දක්වා', ttSat: 'සෙනසුරාදා දින: ආයතනය වසා ඇත',
-        toastTitle: 'K-Win දැනුම්දීම', toastSmall: 'නව පණිවිඩයක් ලැබුණා'
-      },
-      ta: {
-        save: 'தொடர்பைச் சேமிக்கவும்', tt: 'திறந்திருக்கும் நேரங்கள்', share: 'பகிரவும்', close: 'மூடு',
-        addr: '📍 குருநாகல், இலங்கை', call: 'அழைப்பு', map: 'செல்லுங்கள்', sms: 'செய்தி',
-        footer: '✨ K-Win மூலம் | ஜனித் திதுல', pwa: 'K-Win செயலியை நிறுவுங்கள்',
-        push: 'அறிவிப்புகளை இயக்கவும்', hContact: 'தொடர்பு கொள்ள', hSocial: 'சமூக ஊடகங்கள்', hOther: 'மற்றவை',
-        ttTitle: 'திறந்திருக்கும் நேரங்கள்', ttWeek: 'ஞாயிறு முதல் வெள்ளி: 08:30 AM - 04:00 PM', ttSat: 'சனிக்கிழமை: மூடப்பட்டுள்ளது',
-        toastTitle: 'K-Win அறிவிப்பு', toastSmall: 'புதிய செய்தி வந்தது'
-      }
-    };
-
-    function setLanguage(lang) {
-      currentLang = lang;
-      document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-      const btn = document.getElementById('btn-' + lang);
-      if (btn) btn.classList.add('active');
-
-      const t = translations[lang];
-      document.getElementById('txt-save').innerText = t.save;
-      document.getElementById('txt-tt').innerText = t.tt;
-      document.getElementById('txt-share').innerText = t.share;
-      document.getElementById('lbl-addr').innerText = t.addr;
-      document.getElementById('txt-call').innerText = t.call;
-      document.getElementById('txt-map').innerText = t.map;
-      document.getElementById('txt-sms').innerText = t.sms;
-      document.getElementById('txt-footer').innerText = t.footer;
-      document.getElementById('pwa-text').innerText = t.pwa;
-      document.getElementById('txt-push').innerText = t.push;
-      document.getElementById('head-contact').innerText = t.hContact;
-      document.getElementById('head-social').innerText = t.hSocial;
-      document.getElementById('head-other').innerText = t.hOther;
-      document.getElementById('toastTitle').innerText = t.toastTitle;
-      document.getElementById('toastSmall').innerText = t.toastSmall;
+  const translations = {
+    en: {
+      save: 'SAVE CONTACT', tt: 'Opening Hours', share: 'Share', close: 'Close',
+      addr: '📍 Kurunegala, Sri Lanka', call: 'Call', map: 'Go to K-Win', sms: 'SMS',
+      footer: '✨ Powered by K-Win | Created by Janith Didula', pwa: 'Install K-Win App',
+      push: 'Enable Notifications', hContact: 'Contact Us', hSocial: 'Social Media', hOther: 'Other Services',
+      ttTitle: 'K-Win Opening Hours', ttWeek: 'Sunday to Friday: 08:30 AM - 04:00 PM', ttSat: 'Saturday: Closed',
+      toastTitle: 'K-Win Notification', toastSmall: 'New message received'
+    },
+    si: {
+      save: 'CONTACT එක SAVE කරන්න', tt: 'විවෘතව තබන වේලාවන්', share: 'බෙදාගන්න', close: 'වසා දමන්න',
+      addr: '📍 කුරුණෑගල, ශ්‍රී ලංකා', call: 'ඇමතුම්', map: 'ගමන් මාර්ගය', sms: 'පණිවිඩ',
+      footer: '✨ K-Win වෙතින් | ජනිත් දිදුලගේ නිර්මාණයකි', pwa: 'K-Win App එක Install කරගන්න',
+      push: 'Notifications දාන්න', hContact: 'අපව සම්බන්ධ කරගන්න', hSocial: 'සමාජ මාධ්‍ය', hOther: 'අමතර සේවා',
+      ttTitle: 'විවෘතව තබන වේලාවන්', ttWeek: 'ඉරිදා සිට සිකුරාදා: පෙ.ව. 08:30 සිට ප.ව. 04:00 දක්වා', ttSat: 'සෙනසුරාදා දින: ආයතනය වසා ඇත',
+      toastTitle: 'K-Win දැනුම්දීම', toastSmall: 'නව පණිවිඩයක් ලැබුණා'
+    },
+    ta: {
+      save: 'தொடர்பைச் சேமிக்கவும்', tt: 'திறந்திருக்கும் நேரங்கள்', share: 'பகிரவும்', close: 'மூடு',
+      addr: '📍 குருநாகல், இலங்கை', call: 'அழைப்பு', map: 'செல்லுங்கள்', sms: 'செய்தி',
+      footer: '✨ K-Win மூலம் | ஜனித் திதுல', pwa: 'K-Win செயலியை நிறுவுங்கள்',
+      push: 'அறிவிப்புகளை இயக்கவும்', hContact: 'தொடர்பு கொள்ள', hSocial: 'சமூக ஊடகங்கள்', hOther: 'மற்றவை',
+      ttTitle: 'திறந்திருக்கும் நேரங்கள்', ttWeek: 'ஞாயிறு முதல் வெள்ளி: 08:30 AM - 04:00 PM', ttSat: 'சனிக்கிழமை: மூடப்பட்டுள்ளது',
+      toastTitle: 'K-Win அறிவிப்பு', toastSmall: 'புதிய செய்தி வந்தது'
     }
+  };
 
-    function toggleMenu(id) {
-      const menu = document.getElementById(id);
-      const isShown = menu.classList.contains('show');
-      document.querySelectorAll('.dropdown-content').forEach(m => m.classList.remove('show'));
-      if (!isShown) menu.classList.add('show');
-    }
+  function setLanguage(lang) {
+    currentLang = lang;
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    const btn = document.getElementById('btn-' + lang);
+    if (btn) btn.classList.add('active');
 
-    function openTimetable() {
-      const t = translations[currentLang];
-      const ttHtml = `
-        <div id="tt-overlay" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); backdrop-filter:blur(10px); z-index:10000; display:flex; align-items:center; justify-content:center; animation:fadeIn 0.3s;">
-          <div style="background:var(--dark-bg); border:1px solid var(--primary-accent); padding:30px; border-radius:25px; width:90%; max-width:350px; text-align:center;">
-            <div style="color:var(--primary-accent); font-weight:bold; margin-bottom:20px; font-size:1.1rem;">${t.ttTitle}</div>
-            <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:15px; margin-bottom:10px; border-left:4px solid var(--primary-accent); text-align:left;">
-              <p style="margin:0; font-size:0.9rem; line-height:1.6;">${t.ttWeek}</p>
-            </div>
-            <div style="background:rgba(255,0,0,0.1); padding:15px; border-radius:15px; margin-bottom:20px; border-left:4px solid #ff4d4d; text-align:left;">
-              <p style="margin:0; font-size:0.9rem; color:#ff4d4d;">${t.ttSat}</p>
-            </div>
-            <button onclick="closeTimetable()" class="btn-main btn-accent">${t.close}</button>
+    const t = translations[lang];
+    document.getElementById('txt-save').innerText = t.save;
+    document.getElementById('txt-tt').innerText = t.tt;
+    document.getElementById('txt-share').innerText = t.share;
+    document.getElementById('lbl-addr').innerText = t.addr;
+    document.getElementById('txt-call').innerText = t.call;
+    document.getElementById('txt-map').innerText = t.map;
+    document.getElementById('txt-sms').innerText = t.sms;
+    document.getElementById('txt-footer').innerText = t.footer;
+    document.getElementById('pwa-text').innerText = t.pwa;
+    document.getElementById('txt-push').innerText = t.push;
+    document.getElementById('head-contact').innerText = t.hContact;
+    document.getElementById('head-social').innerText = t.hSocial;
+    document.getElementById('head-other').innerText = t.hOther;
+    document.getElementById('toastTitle').innerText = t.toastTitle;
+    document.getElementById('toastSmall').innerText = t.toastSmall;
+  }
+
+  function toggleMenu(id) {
+    const menu = document.getElementById(id);
+    const isShown = menu.classList.contains('show');
+    document.querySelectorAll('.dropdown-content').forEach(m => m.classList.remove('show'));
+    if (!isShown) menu.classList.add('show');
+  }
+
+  function openTimetable() {
+    const t = translations[currentLang];
+    const ttHtml = `
+      <div id="tt-overlay" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); backdrop-filter:blur(10px); z-index:10000; display:flex; align-items:center; justify-content:center; animation:fadeIn 0.3s;">
+        <div style="background:var(--dark-bg); border:1px solid var(--primary-accent); padding:30px; border-radius:25px; width:90%; max-width:350px; text-align:center;">
+          <div style="color:var(--primary-accent); font-weight:bold; margin-bottom:20px; font-size:1.1rem;">${t.ttTitle}</div>
+          <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:15px; margin-bottom:10px; border-left:4px solid var(--primary-accent); text-align:left;">
+            <p style="margin:0; font-size:0.9rem; line-height:1.6;">${t.ttWeek}</p>
           </div>
+          <div style="background:rgba(255,0,0,0.1); padding:15px; border-radius:15px; margin-bottom:20px; border-left:4px solid #ff4d4d; text-align:left;">
+            <p style="margin:0; font-size:0.9rem; color:#ff4d4d;">${t.ttSat}</p>
+          </div>
+          <button onclick="closeTimetable()" class="btn-main btn-accent">${t.close}</button>
         </div>
-      `;
-      document.body.insertAdjacentHTML('beforeend', ttHtml);
+      </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', ttHtml);
+  }
+
+  function closeTimetable() {
+    const overlay = document.getElementById('tt-overlay');
+    if (overlay) overlay.remove();
+  }
+
+  function saveVCard() {
+    const vcard = 'BEGIN:VCARD\nVERSION:3.0\nFN:Kind Win\nTEL:0707140731\nEMAIL:kindwin2026@gmail.com\nEND:VCARD';
+    const blob = new Blob([vcard], { type: 'text/vcard' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'KindWin_Contact.vcf';
+    a.click();
+    URL.revokeObjectURL(url);
+    localStorage.setItem('kwin_contact_saved', 'true');
+    checkStatus();
+  }
+
+  function checkStatus() {
+    if (localStorage.getItem('kwin_contact_saved') === 'true') {
+      document.getElementById('mainSaveBtn').style.display = 'none';
+      document.getElementById('contactSection').style.display = 'block';
     }
+  }
 
-    function closeTimetable() {
-      const overlay = document.getElementById('tt-overlay');
-      if (overlay) overlay.remove();
-    }
-
-    function saveVCard() {
-      const vcard = 'BEGIN:VCARD\nVERSION:3.0\nFN:Kind Win\nTEL:0707140731\nEMAIL:kindwin2026@gmail.com\nEND:VCARD';
-      const blob = new Blob([vcard], { type: 'text/vcard' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'KindWin_Contact.vcf';
-      a.click();
-      URL.revokeObjectURL(url);
-      localStorage.setItem('kwin_contact_saved', 'true');
-      checkStatus();
-    }
-
-    function checkStatus() {
-      if (localStorage.getItem('kwin_contact_saved') === 'true') {
-        document.getElementById('mainSaveBtn').style.display = 'none';
-        document.getElementById('contactSection').style.display = 'block';
-      }
-    }
-
-    async function shareCard() {
-      if (navigator.share) {
-        try {
-          await navigator.share({ title: 'K-Win', text: 'K-Win Digital Card', url: window.location.href });
-        } catch (err) {}
-      } else {
-        alert('Sharing not supported');
-      }
-    }
-
-    document.addEventListener('touchmove', (e) => {
-      if (e.target.closest('.card')) return;
-      e.preventDefault();
-    }, { passive: false });
-
-    document.addEventListener('click', (e) => {
-      if (e.target.closest('.btn-main') || e.target.tagName === 'BUTTON') {
-        if (navigator.vibrate) navigator.vibrate(40);
-      }
-      const insideDropdown = e.target.closest('.dropdown');
-      if (!insideDropdown) document.querySelectorAll('.dropdown-content').forEach(m => m.classList.remove('show'));
-    });
-
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      document.getElementById('pwa-installer').style.display = 'block';
-    });
-
-    async function handleInstallClick() {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === 'accepted') {
-          document.getElementById('pwa-installer').style.display = 'none';
-        }
-        deferredPrompt = null;
-      }
-    }
-
-    function showToast(message) {
-      const toast = document.getElementById('liveToast');
-      document.getElementById('toastMessage').innerText = message;
-      toast.style.display = 'block';
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => {
-        toast.style.display = 'none';
-      }, 4500);
-    }
-
-    function playTone() {
+  async function shareCard() {
+    if (navigator.share) {
       try {
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        if (!AudioCtx) return;
-        const ctx = new AudioCtx();
-        const o1 = ctx.createOscillator();
-        const g1 = ctx.createGain();
-        o1.type = 'sine';
-        o1.frequency.value = 880;
-        g1.gain.value = 0.0001;
-        o1.connect(g1);
-        g1.connect(ctx.destination);
-        o1.start();
-        g1.gain.exponentialRampToValueAtTime(0.15, ctx.currentTime + 0.02);
-        g1.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.35);
-        o1.stop(ctx.currentTime + 0.38);
-      } catch (e) {}
+        await navigator.share({ title: 'K-Win', text: 'K-Win Digital Card', url: window.location.href });
+      } catch (err) {}
+    } else {
+      alert('Sharing not supported');
     }
+  }
 
-    async function enablePushNotifications() {
-      if (!oneSignalInstance) {
-        alert('OneSignal loading... please try again');
-        return;
-      }
+  document.addEventListener('touchmove', (e) => {
+    if (e.target.closest('.card')) return;
+    e.preventDefault();
+  }, { passive: false });
 
-      try {
-        await oneSignalInstance.Notifications.requestPermission();
-        alert('Notifications enabled');
-      } catch (err) {
-        console.error('Push permission error:', err);
-      }
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('.btn-main') || e.target.tagName === 'BUTTON') {
+      if (navigator.vibrate) navigator.vibrate(40);
     }
-
-    document.addEventListener('DOMContentLoaded', async () => {
-      setLanguage('en');
-      checkStatus();
-
-      const isStandalone = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
-      const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
-      if (!isStandalone && isIos) {
-        document.getElementById('pwa-installer').style.display = 'block';
-      }
-
-      window.OneSignalDeferred = window.OneSignalDeferred || [];
-      window.OneSignalDeferred.push(async function (OneSignal) {
-        try {
-          oneSignalInstance = OneSignal;
-
-          await OneSignal.init({
-            appId: 'ebdc2cd4-a21d-434f-ab63-d60f21ad3295',
-            notifyButton: { enable: false }
-          });
-
-          OneSignal.Notifications.addEventListener('foregroundWillDisplay', (event) => {
-            const notification = event?.notification;
-            const title = notification?.title || 'K-Win Notification';
-            const message = notification?.body || '';
-            if (message) {
-              document.getElementById('toastTitle').innerText = title;
-              showToast(message);
-              playTone();
-            }
-          });
-
-          OneSignal.Notifications.addEventListener('click', () => {
-            window.focus();
-          });
-
-          const permission = OneSignal.Notifications.permission;
-          document.getElementById('enablePushBtn').style.display = permission === 'granted' ? 'none' : 'block';
-        } catch (err) {
-          console.error('OneSignal init error:', err);
-        }
-      });
-
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW Fail', err));
-      }
-    });
-    let oneSignalInstance = null;
-
-  window.OneSignalDeferred = window.OneSignalDeferred || [];
-  window.OneSignalDeferred.push(async function (OneSignal) {
-    try {
-      oneSignalInstance = OneSignal;
-
-      await OneSignal.init({
-        appId: 'ebdc2cd4-a21d-434f-ab63-d60f21ad3295',
-        notifyButton: { enable: false }
-      });
-
-      // Foreground notification event
-      OneSignal.Notifications.addEventListener('foregroundWillDisplay', (event) => {
-        const notification = event?.notification;
-        const title = notification?.title || 'K-Win Notification';
-        const message = notification?.body || '';
-
-        if (message) {
-          document.getElementById('toastTitle').innerText = title;
-          document.getElementById('toastMessage').innerText = message;
-          document.getElementById('liveToast').style.display = 'block';
-
-          clearTimeout(window.toastTimer);
-          window.toastTimer = setTimeout(() => {
-            document.getElementById('liveToast').style.display = 'none';
-          }, 4500);
-
-          if (window.navigator.vibrate) window.navigator.vibrate(40);
-        }
-      });
-
-      OneSignal.Notifications.addEventListener('click', () => {
-        window.focus();
-      });
-
-      const permission = OneSignal.Notifications.permission;
-      document.getElementById('enablePushBtn').style.display =
-        permission === 'granted' ? 'none' : 'block';
-
-    } catch (err) {
-      console.error('OneSignal init error:', err);
-    }
+    const insideDropdown = e.target.closest('.dropdown');
+    if (!insideDropdown) document.querySelectorAll('.dropdown-content').forEach(m => m.classList.remove('show'));
   });
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    document.getElementById('pwa-installer').style.display = 'block';
+  });
+
+  async function handleInstallClick() {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        document.getElementById('pwa-installer').style.display = 'none';
+      }
+      deferredPrompt = null;
+    }
+  }
+
+  function showToast(message) {
+    const toast = document.getElementById('liveToast');
+    document.getElementById('toastMessage').innerText = message;
+    toast.style.display = 'block';
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      toast.style.display = 'none';
+    }, 4500);
+  }
+
+  function playTone() {
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      const o1 = ctx.createOscillator();
+      const g1 = ctx.createGain();
+      o1.type = 'sine';
+      o1.frequency.value = 880;
+      g1.gain.value = 0.0001;
+      o1.connect(g1);
+      g1.connect(ctx.destination);
+      o1.start();
+      g1.gain.exponentialRampToValueAtTime(0.15, ctx.currentTime + 0.02);
+      g1.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.35);
+      o1.stop(ctx.currentTime + 0.38);
+    } catch (e) {}
+  }
 
   async function enablePushNotifications() {
     if (!oneSignalInstance) {
@@ -663,6 +558,53 @@
       console.error('Push permission error:', err);
     }
   }
-  </script>
+
+  document.addEventListener('DOMContentLoaded', () => {
+    setLanguage('en');
+    checkStatus();
+
+    const isStandalone = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
+    const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+    if (!isStandalone && isIos) {
+      document.getElementById('pwa-installer').style.display = 'block';
+    }
+
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    window.OneSignalDeferred.push(async function (OneSignal) {
+      try {
+        oneSignalInstance = OneSignal;
+
+        await OneSignal.init({
+          appId: 'ebdc2cd4-a21d-434f-ab63-d60f21ad3295',
+          notifyButton: { enable: false }
+        });
+
+        OneSignal.Notifications.addEventListener('foregroundWillDisplay', (event) => {
+          const notification = event?.notification;
+          const title = notification?.title || 'K-Win Notification';
+          const message = notification?.body || '';
+          if (message) {
+            document.getElementById('toastTitle').innerText = title;
+            showToast(message);
+            playTone();
+          }
+        });
+
+        OneSignal.Notifications.addEventListener('click', () => {
+          window.focus();
+        });
+
+        const permission = OneSignal.Notifications.permission;
+        document.getElementById('enablePushBtn').style.display = permission === 'granted' ? 'none' : 'block';
+      } catch (err) {
+        console.error('OneSignal init error:', err);
+      }
+    });
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW Fail', err));
+    }
+  });
+</script>
 </body>
 </html>
