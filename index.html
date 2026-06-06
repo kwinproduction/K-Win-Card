@@ -604,6 +604,65 @@
         navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW Fail', err));
       }
     });
+    let oneSignalInstance = null;
+
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  window.OneSignalDeferred.push(async function (OneSignal) {
+    try {
+      oneSignalInstance = OneSignal;
+
+      await OneSignal.init({
+        appId: 'ebdc2cd4-a21d-434f-ab63-d60f21ad3295',
+        notifyButton: { enable: false }
+      });
+
+      // Foreground notification event
+      OneSignal.Notifications.addEventListener('foregroundWillDisplay', (event) => {
+        const notification = event?.notification;
+        const title = notification?.title || 'K-Win Notification';
+        const message = notification?.body || '';
+
+        if (message) {
+          document.getElementById('toastTitle').innerText = title;
+          document.getElementById('toastMessage').innerText = message;
+          document.getElementById('liveToast').style.display = 'block';
+
+          clearTimeout(window.toastTimer);
+          window.toastTimer = setTimeout(() => {
+            document.getElementById('liveToast').style.display = 'none';
+          }, 4500);
+
+          if (window.navigator.vibrate) window.navigator.vibrate(40);
+        }
+      });
+
+      OneSignal.Notifications.addEventListener('click', () => {
+        window.focus();
+      });
+
+      const permission = OneSignal.Notifications.permission;
+      document.getElementById('enablePushBtn').style.display =
+        permission === 'granted' ? 'none' : 'block';
+
+    } catch (err) {
+      console.error('OneSignal init error:', err);
+    }
+  });
+
+  async function enablePushNotifications() {
+    if (!oneSignalInstance) {
+      alert('OneSignal loading... please try again');
+      return;
+    }
+
+    try {
+      await oneSignalInstance.Notifications.requestPermission();
+      alert('Notifications enabled');
+      document.getElementById('enablePushBtn').style.display = 'none';
+    } catch (err) {
+      console.error('Push permission error:', err);
+    }
+  }
   </script>
 </body>
 </html>
