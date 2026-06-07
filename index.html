@@ -624,15 +624,13 @@
         navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW Fail', err));
       }
     });
-    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-<script>
+ 
   window.OneSignalDeferred = window.OneSignalDeferred || [];
   OneSignalDeferred.push(async function(OneSignal) {
     await OneSignal.init({
       appId: "ebdc2cd4-a21d-434f-ab63-d60f21ad3295",
     });
   });
-</script>
   </script>
 </body>
 </html>
