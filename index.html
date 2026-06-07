@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>K-Win</title>
 
+  <!-- OneSignal Web SDK -->
   <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 
   <!-- PWA Manifest -->
@@ -284,6 +285,24 @@
       bottom: 16px;
       z-index: 9998;
     }
+
+    .status-chip {
+      position: fixed;
+      left: 16px;
+      bottom: 18px;
+      z-index: 9998;
+      background: rgba(0,0,0,.55);
+      border: 1px solid var(--border);
+      color: #fff;
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      backdrop-filter: blur(10px);
+      max-width: calc(100vw - 90px);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
   </style>
 </head>
 <body>
@@ -303,7 +322,8 @@
     </div>
   </div>
 
-  <button id="enableNotifications" class="bell-btn">🔔</button>
+  <button id="enableNotifications" class="bell-btn" aria-label="Enable Notifications">🔔</button>
+  <div id="notifyStatus" class="status-chip">Notifications: not checked</div>
 
   <div class="card">
     <h1>Kind Win</h1>
@@ -375,7 +395,8 @@
 
   <script>
     let currentLang = 'en';
-    let deferredPrompt;
+    let deferredPrompt = null;
+    let oneSignalInstance = null;
 
     const translations = {
       en: {
@@ -394,7 +415,12 @@
         hOther: "Other Services",
         ttTitle: "K-Win Opening Hours",
         ttWeek: "Sunday to Friday: 08:30 AM - 04:00 PM",
-        ttSat: "Saturday: Closed"
+        ttSat: "Saturday: Closed",
+        notifyReady: "Notifications: ready",
+        notifyEnabled: "Notifications: enabled",
+        notifyBlocked: "Notifications: blocked / not allowed",
+        notifyUnsupported: "Notifications: unsupported browser",
+        notifyRequested: "Permission prompt opened"
       },
       si: {
         save: "CONTACT එක SAVE කරන්න",
@@ -412,7 +438,12 @@
         hOther: "අමතර සේවා",
         ttTitle: "විවෘතව තබන වේලාවන්",
         ttWeek: "ඉරිදා සිට සිකුරාදා: පෙ.ව. 08:30 සිට ප.ව. 04:00 දක්වා",
-        ttSat: "සෙනසුරාදා දින: ආයතනය වසා ඇත"
+        ttSat: "සෙනසුරාදා දින: ආයතනය වසා ඇත",
+        notifyReady: "Notifications: සූදානම්",
+        notifyEnabled: "Notifications: enable වී ඇත",
+        notifyBlocked: "Notifications: block / අවසර නැත",
+        notifyUnsupported: "Notifications: browser එක support නැහැ",
+        notifyRequested: "Permission prompt එක විවෘත වුණා"
       },
       ta: {
         save: "தொடர்பைச் சேமிக்கவும்",
@@ -430,9 +461,18 @@
         hOther: "மற்றவை",
         ttTitle: "திறந்திருக்கும் நேரங்கள்",
         ttWeek: "ஞாயிறு முதல் வெள்ளி: 08:30 AM - 04:00 PM",
-        ttSat: "சனிக்கிழமை: மூடப்பட்டுள்ளது"
+        ttSat: "சனிக்கிழமை: மூடப்பட்டுள்ளது",
+        notifyReady: "Notifications: தயார்",
+        notifyEnabled: "Notifications: செயல்படுத்தப்பட்டது",
+        notifyBlocked: "Notifications: தடுக்கப்பட்டது / அனுமதி இல்லை",
+        notifyUnsupported: "Notifications: browser ஆதரவு இல்லை",
+        notifyRequested: "Permission prompt திறக்கப்பட்டது"
       }
     };
+
+    function updateNotifyStatus(text) {
+      document.getElementById('notifyStatus').innerText = text;
+    }
 
     function setLanguage(lang) {
       currentLang = lang;
@@ -521,25 +561,63 @@
       }
     }
 
+    function setNotifyStatusFromPermission(OneSignal) {
+      try {
+        const t = translations[currentLang];
+
+        if (!OneSignal.Notifications.isPushSupported()) {
+          updateNotifyStatus(t.notifyUnsupported);
+          return;
+        }
+
+        const perm = OneSignal.Notifications.permission;
+        if (perm === true) {
+          updateNotifyStatus(t.notifyEnabled);
+        } else if (perm === false) {
+          updateNotifyStatus(t.notifyBlocked);
+        } else {
+          updateNotifyStatus(t.notifyReady);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
     function initOneSignal() {
       window.OneSignalDeferred = window.OneSignalDeferred || [];
+
       OneSignalDeferred.push(async function(OneSignal) {
+        oneSignalInstance = OneSignal;
+
         await OneSignal.init({
           appId: "ebdc2cd4-a21d-434f-ab63-d60f21ad3295"
         });
 
+        setNotifyStatusFromPermission(OneSignal);
+
+        OneSignal.Notifications.addEventListener("permissionChange", function() {
+          setNotifyStatusFromPermission(OneSignal);
+        });
+
         const bellBtn = document.getElementById("enableNotifications");
-        if (bellBtn) {
-          bellBtn.addEventListener("click", async () => {
-            try {
-              await OneSignal.Notifications.requestPermission();
-              alert("Notifications enabled");
-            } catch (e) {
-              console.error(e);
-              alert("Notification permission failed");
+        bellBtn.addEventListener("click", async () => {
+          try {
+            if (!OneSignal.Notifications.isPushSupported()) {
+              updateNotifyStatus(translations[currentLang].notifyUnsupported);
+              alert(translations[currentLang].notifyUnsupported);
+              return;
             }
-          });
-        }
+
+            updateNotifyStatus(translations[currentLang].notifyRequested);
+
+            await OneSignal.Notifications.requestPermission();
+            setNotifyStatusFromPermission(OneSignal);
+
+          } catch (e) {
+            console.error(e);
+            alert("Notification permission failed");
+          }
+        });
       });
     }
 
