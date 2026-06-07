@@ -303,6 +303,39 @@
       text-overflow: ellipsis;
       white-space: nowrap;
     }
+    .bell-btn {
+  width: 55px;
+  height: 55px;
+  border: none;
+  border-radius: 50%;
+  font-size: 26px;
+  cursor: pointer;
+  background: #ff9800;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,.25);
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 9998;
+}
+
+.status-chip {
+  position: fixed;
+  right: 16px;
+  bottom: 18px;
+  z-index: 9998;
+  background: rgba(0,0,0,.55);
+  border: 1px solid var(--border);
+  color: #fff;
+  padding: 8px 10px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  backdrop-filter: blur(10px);
+  max-width: calc(100vw - 90px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
   </style>
 </head>
 <body>
