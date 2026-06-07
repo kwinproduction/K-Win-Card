@@ -1,5 +1,5 @@
 // ඔබ දුන් code එක මෙතැනට ගැලපෙන ලෙස:
-const CACHE_NAME = 'kwin-ecard-v42' + Date.now();
+const CACHE_NAME = 'kwin-ecard-v43' + Date.now();
 const ASSETS = [
     './',
     './index.html',
