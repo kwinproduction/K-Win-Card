@@ -5,11 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>K-Win</title>
 
-  <!-- OneSignal Web SDK -->
   <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 
-  <!-- PWA Manifest -->
-  <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiS1dpbiIsInNob3J0X25hbWUiOiJLLVdpbiIsInN0YXJ0X3VybCI6ImluZGV4Lmh0bWwiLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjMDAwMDAwIiwidGhlbWVfY29sb3IiOiIjMDBmMmZmIiwib3JpZW50YXRpb24iOiJwb3J0cmFpdCIsImljb25zIjpbeyJzcmMiOiJodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20va3dpbnByb2R1Y3Rpb24vSy1XaW4tRWNhcmQvbWFpbi9sb2dvLmpwZWciLCJzaXplcyI6IjUxMng1MTIiLCJ0eXBlIjoiaW1hZ2UvanBlZyIsInB1cnBvc2UiOiJhbnkgbWFza2FibGUifV19">
+  <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiS1dpbiIsInNob3J0X25hbWUiOiJLLVdpbiIsInN0YXJ0X3VybCI6ImluZGV4Lmh0bWwiLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjMDAwMDAwIiwidGhlbWVfY29sb3IiOiIjMDBmMmZmIiwib3JpZW50YXRpb24iOiJwb3J0cmFpdCIsImljb25zIjpbeyJzcmMiOiJodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20va3dpbnByb2R1Y3Rpb24vSy1XaW4tRWNhcmQvbWFpbi9sb2dvLmpwZWciLCJzaXplcyI6IjUxMng1MTIiLCJ0eXBlIjoiaW1hZ2UvanBlZyIsInB1cnBvc2UiOiJhbnkgbWFza推介bleifV19">
   <link rel="icon" type="image/jpeg" href="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg">
   <meta name="theme-color" content="#00f2ff">
   <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg">
@@ -465,7 +463,7 @@
       ta: {
         save: "தொடர்பைச் சேமிக்கவும்",
         tt: "திறந்திருக்கும் நேரங்கள்",
-        share: "பகிரவும்",
+        share: "பகிருங்கள்",
         close: "மூடு",
         addr: "📍 குருநாகல், இலங்கை",
         call: "அழைப்பு",
@@ -544,7 +542,6 @@
       a.click();
       window.URL.revokeObjectURL(url);
 
-      // Save permanently — button will never show again
       localStorage.setItem('kwin_contact_saved', 'true');
       checkStatus();
     }
@@ -614,7 +611,7 @@
             <div class="in-app-toast-title">${title || 'Kind Win'}</div>
             <div class="in-app-toast-body">${message || ''}</div>
           </div>
-          <button class="in-app-toast-close" onclick="closeInAppNotification()">&times;</button>
+          <button class="in-app-toast-close" onclick="closeInAppNotification()">×</button>
         </div>
       `;
       document.body.insertAdjacentHTML('beforeend', toastHtml);
@@ -633,18 +630,26 @@
       }
     }
 
-    // --- OneSignal Init (no bell button, auto prompt) ---
+    // --- 🔔 OneSignal Init & Permission Prompt ---
     function initOneSignal() {
       window.OneSignalDeferred = window.OneSignalDeferred || [];
       OneSignalDeferred.push(async function(OneSignal) {
         await OneSignal.init({
           appId: "ebdc2cd4-a21d-434f-ab63-d60f21ad3295",
+          allowLocalhostAsSecureOrigin: true, // Localhost වල ටෙස්ට් කිරීමට පහසු කරයි
           notifyButton: { enable: false }
         });
 
-        // Listen for foreground push notifications — show in-app toast
+        // 1. User ඇප් එකට ආපු ගමන් Notification Permission ඉල්ලන Popup එක Trigger කිරීම
+        if (OneSignal.Notifications.permissionNative !== "granted") {
+          setTimeout(async () => {
+            await OneSignal.Notifications.requestPermission();
+          }, 2000); // තත්පර 2කින් Popup එක පෙන්වයි
+        }
+
+        // Foreground (ඇප් එක ඇරලා තියෙද්දී) Notification හැසිරවීම
         OneSignal.Notifications.addEventListener("foregroundWillDisplay", function(event) {
-          event.preventDefault();
+          event.preventDefault(); // Default OS banner එක නවතා In-app toast එක පෙන්වයි
           const title = event.notification.title;
           const body = event.notification.body;
           showInAppNotification(title, body);
@@ -652,11 +657,18 @@
       });
     }
 
-    // --- Init ---
+    // --- ⚙️ Init & Service Worker Registration ---
     window.onload = () => {
       setLanguage('en');
       checkStatus();
       initOneSignal();
+
+      // 2. සර්විස් වර්කර් එක (sw.js) බ්‍රවුසර් එකට Register කිරීම (Background Notifications සඳහා අනිවාර්යයි)
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./sw.js')
+          .then((reg) => console.log('K-Win Service Worker Registered Successfully!', reg))
+          .catch((err) => console.error('Service Worker Registration Failed:', err));
+      }
     };
 
     document.addEventListener('touchmove', (e) => {
