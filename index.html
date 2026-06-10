@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>K-Win</title>
-
+       <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <!-- PWA Manifest -->
     <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiS1dpbiIsInNob3J0X25hbWUiOiJLLVdpbiIsInN0YXJ0X3VybCI6ImluZGV4Lmh0bWwiLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3ciOiIjMDAwMDAwIiwidGhlbWVfY29sb3ciOiIjMDBmMmZmIiwib3JpZW50YXRpb24iOiJwb3J0cmFpdCIsImljb25zIjpbeyJzcmMiOiJodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20va3dpbnByb2R1Y3Rpb24vSy1XaW4tRWNhcmQvbWFpbi9sb2dvLmpwZWciLCJzaXplcyI6IjUxMng1MTIiLCJ0eXBlIjoiaW1hZ2UvanBlZyIsInB1cnBvc2UiOiJhbnkgbWFza2FibGUifV19">
     <link rel="icon" type="image/jpeg" href="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg">
@@ -37,6 +37,54 @@
             justify-content: center;
         }
 
+        body {
+    font-family: Arial;
+    background: #0f172a;
+    color: white;
+    text-align: center;
+    padding: 40px;
+}
+
+.card {
+    background: #1e293b;
+    padding: 20px;
+    border-radius: 12px;
+    max-width: 400px;
+    margin: auto;
+}
+
+button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    background: #22c55e;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.popup {
+    position: fixed;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #25D366;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    transition: all 0.4s ease;
+    z-index: 9999;
+    min-width: 250px;
+}
+
+.popup.show {
+    top: 20px;
+}
+
+.popup-content {
+    font-family: Arial;
+}
         /* Background Orbs */
         .orb { position: fixed; border-radius: 50%; filter: blur(80px); z-index: -1; opacity: 0.15; animation: move 15s infinite alternate ease-in-out; }
         .orb-1 { width: 300px; height: 300px; background: var(--primary-accent); top: -50px; right: -50px; }
@@ -104,8 +152,18 @@
             <button id="btn-si" class="lang-btn" onclick="setLanguage('si')">සිංහල</button>
             <button id="btn-en" class="lang-btn" onclick="setLanguage('en')">English</button>
             <button id="btn-ta" class="lang-btn" onclick="setLanguage('ta')">தமிழ்</button>
-        </div>
+        </div
+            <p id="status">Checking notifications...</p>
+
+<button id="enableBtn" onclick="enableNotifications()" style="display:none;"> 🔔
+</button>
     </div>
+    <div id="notifPopup" class="popup">
+    <div class="popup-content">
+        <strong id="pTitle">New Message</strong>
+        <p id="pBody">You got a notification</p>
+    </div>
+</div>
 
     <div class="card">
         <h1>Kind Win</h1>
@@ -298,6 +356,86 @@
                 deferredPrompt = null;
             }
         }
+        window.OneSignalDeferred = window.OneSignalDeferred || [];
+
+let OneSignalInstance;
+
+/* 🔊 BUILT-IN BEEP SOUND */
+function playBeep() {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    const oscillator = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+
+    oscillator.type = "sine";
+    oscillator.frequency.value = 900; // tone
+
+    gainNode.gain.value = 0.1;
+
+    oscillator.start();
+
+    setTimeout(() => {
+        oscillator.stop();
+    }, 300);
+}
+
+OneSignalDeferred.push(async function(OneSignal) {
+
+    OneSignalInstance = OneSignal;
+
+    await OneSignal.init({
+        appId:"ebdc2cd4-a21d-434f-ab63-d60f21ad3295"
+    });
+
+    checkPermission();
+
+    // Foreground notification
+    OneSignal.Notifications.addEventListener(
+        "foregroundWillDisplay",
+        (event) => {
+
+            event.notification.display();
+
+            // 🔥 CUSTOM BEEP SOUND
+            playBeep();
+
+        }
+    );
+
+});
+
+function checkPermission() {
+
+    if (Notification.permission === "granted") {
+        document.getElementById("status").innerText =
+        "Notifications Enabled ✅";
+
+        document.getElementById("enableBtn").style.display = "none";
+
+    } else {
+        document.getElementById("status").innerText =
+        "Enable notifications to continue 🔔";
+
+        document.getElementById("enableBtn").style.display = "block";
+    }
+}
+
+async function enableNotifications() {
+
+    const permission =
+    await OneSignalInstance.Notifications.requestPermission();
+
+    if (permission) {
+        document.getElementById("status").innerText =
+        "Notifications Enabled ✅";
+
+        document.getElementById("enableBtn").style.display = "none";
+    }
+}
+        
     </script>
 </body>
 </html>
