@@ -72,6 +72,26 @@ self.addEventListener('notificationclick', (event) => {
         })
     );
 });
+// sw.js - This file handles background processes and top-bar push alerts
+self.addEventListener('install', (e) => {
+    self.skipWaiting();
+});
+
+self.addEventListener('activate', (e) => {
+    e.waitUntil(self.clients.claim());
+});
+
+// Listens to network push triggers when user switches data ON
+self.addEventListener('push', function(event) {
+    let data = { title: 'K-Win Live Update', body: 'New message received!' };
+    
+    if (event.data) {
+        try {
+            data = event.data.json();
+        } catch(e) {
+            data.body = event.data.text();
+        }
+    }
 // sw.js (Service Worker File)
 self.addEventListener('push', function(event) {
     let data = { title: 'K-Win Update', body: 'New live update received!' };
