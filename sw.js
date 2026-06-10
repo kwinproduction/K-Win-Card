@@ -72,3 +72,26 @@ self.addEventListener('notificationclick', (event) => {
         })
     );
 });
+// sw.js (Service Worker File)
+self.addEventListener('push', function(event) {
+    let data = { title: 'K-Win Update', body: 'New live update received!' };
+    
+    if (event.data) {
+        try {
+            data = event.data.json();
+        } catch(e) {
+            data.body = event.data.text();
+        }
+    }
+
+    const options = {
+        body: data.body,
+        icon: 'https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg',
+        badge: 'https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg',
+        vibrate: [200, 100, 200]
+    };
+
+    event.waitUntil(
+        self.registration.showNotification(data.title, options)
+    );
+});
