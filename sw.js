@@ -72,3 +72,23 @@ self.addEventListener('notificationclick', (event) => {
         })
     );
 });
+{
+  "name": "K-Win",
+  "short_name": "K-Win",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#00f2ff",
+  "icons": [
+    {
+      "src": "./logo.jpeg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "./logo.jpeg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}
