@@ -12,7 +12,7 @@
     <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiS1dpbiIsInNob3J0X25hbWUiOiJLLVdpbiIsInN0YXJ0X3VybCI6ImluZGV4Lmh0bWwiLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3ciOiIjMDAwMDAwIiwidGhlbWVfY29sb3ciOiIjMDBmMmZmIiwib3JpZW50YXRpb24iOiJwb3J0cmFpdCIsImljb25zIjpbeyJzcmMiOiJodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20va3dpbnByb2R1Y3Rpb24vSy1XaW4tRWNhcmQvbWFpbi9sb2cvLmpwZWciLCJzaXplcyI6IjUxMng1MTIiLCJ0eXBlIjoiaW1hZ2UvanBlZyIsInB1cnBvc2UiOiJhbnkgbWFza2FibGUifV19">
     <link rel="icon" type="image/jpeg" href="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg">
     <meta name="theme-color" content="#00f2ff">
-    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg">
+    <link class="apple-touch-icon" href="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg">
 
     <style>
         :root {
@@ -51,7 +51,6 @@
 
         button { cursor: pointer; }
 
-        /* Live Toast Popup Styles */
         .popup {
             position: fixed;
             top: -120px;
@@ -73,7 +72,6 @@
         .popup-content strong { display: block; font-size: 0.95rem; font-weight: 800; margin-bottom: 4px; }
         .popup-content p { font-size: 0.85rem; font-weight: 600; opacity: 0.9; }
 
-        /* --- New Compact Collapsible Notification Styles --- */
         .notif-details {
             background: rgba(0, 0, 0, 0.4);
             border: 1px solid var(--border);
@@ -129,18 +127,28 @@
             float: right; cursor: pointer; margin-bottom: 5px; margin-top: 5px;
         }
 
-        /* Background Orbs */
         .orb { position: fixed; border-radius: 50%; filter: blur(80px); z-index: -1; opacity: 0.15; animation: move 15s infinite alternate ease-in-out; }
         .orb-1 { width: 300px; height: 300px; background: var(--primary-accent); top: -50px; right: -50px; }
         .orb-2 { width: 400px; height: 400px; background: var(--blue); bottom: -100px; left: -50px; }
         @keyframes move { from { transform: translate(0,0); } to { transform: translate(30px, 40px); } }
 
-        .top-bar { margin-bottom: 15px; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; gap: 8px; }
+        .top-bar { 
+            margin-bottom: 15px; 
+            width: 100%; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            position: relative;
+            z-index: 10; 
+            gap: 8px; 
+        }
         .lang-switch { display: flex; background: var(--glass); padding: 4px; border-radius: 50px; border: 1px solid var(--border); backdrop-filter: blur(10px); }
         .lang-btn { background: none; border: none; color: #888; padding: 6px 14px; cursor: pointer; border-radius: 50px; font-size: 0.7rem; font-weight: bold; transition: 0.3s; }
         .lang-btn.active { background: var(--primary-accent); color: #000; }
 
         #status { font-size: 0.75rem; color: #00f2ff; font-weight: 600; letter-spacing: 0.5px; opacity: 0.9; }
+        #notif-perm-status { font-size: 0.7rem; color: #aaa; margin-top: 2px; font-weight: 500; }
 
         h1 { font-size: 1.6rem; color: #ffffff; letter-spacing: 1px; margin-bottom: 15px; text-transform: uppercase; font-weight: 800; }
         .p-img { width: 90px; height: 90px; border-radius: 50%; border: 3px solid var(--primary-accent); padding: 4px; object-fit: cover; margin-bottom: 15px; }
@@ -179,32 +187,15 @@
         📲 <span id="pwa-text">Install K-Win App</span>
     </div>
 
-    <!-- Decorative background animations -->
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
 
     <div class="top-bar">
-        <!-- Language Switcher -->
         <div class="lang-switch">
             <button id="btn-si" class="lang-btn" onclick="setLanguage('si')">සිංහල</button>
             <button id="btn-en" class="lang-btn" onclick="setLanguage('en')">English</button>
             <button id="btn-ta" class="lang-btn" onclick="setLanguage('ta')">தமிழ்</button>
         </div>
-        <!-- Live Connection Status -->
-        <div>
-            <p id="status">Connecting to live network... ⚡</p>
-        </div>
-    </div>
-
-    <!-- Live PopUp Alert Toast -->
-    <div id="notifPopup" class="popup">
-        <div class="popup-content">
-            <strong id="pTitle">New Update</strong>
-            <p id="pBody">Message details will show here.</p>
-        </div>
-    </div>
-
-    <!-- Main Card Body -->
     <div class="card">
         <h1>Kind Win</h1>
         <img src="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg" class="p-img" alt="Logo">
@@ -215,12 +206,11 @@
             <span>📧 kindwin2026@gmail.com</span>
         </div>
 
-        <!-- Before Saving Contact -->
         <button id="mainSaveBtn" onclick="saveVCard()" class="btn-main btn-accent">
             👤 <span id="txt-save">SAVE CONTACT</span>
         </button>
 
-        <!-- Dynamic Content (Appears only after Saving Contact) -->
+        <!-- Dynamic Content -->
         <div id="contactSection" style="display: none;">
             <div class="section-title" id="head-contact">Contact Us</div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
@@ -245,7 +235,6 @@
             </div>
         </div>
 
-        <!-- Business Utilities -->
         <div class="section-title" id="head-other">Other Services</div>
         <button onclick="openTimetable()" class="btn-main btn-blue">📅 <span id="txt-tt">Opening Hours</span></button>
         
@@ -254,18 +243,16 @@
             <button onclick="shareCard()" class="btn-main btn-glass"> ➡️ <span id="txt-share">Share</span></button>
         </div>
 
-        <!-- 🔔 NEW: Relocated & Compact Collapsible Notification Panel -->
         <details class="notif-details">
             <summary id="head-notif">🔔 Updates & Alerts</summary>
             <div>
                 <button class="clear-btn" onclick="clearNotifications();">Clear All</button>
                 <div class="notif-container" id="notif-list">
-                    <!-- Messages from LocalStorage will render here dynamically -->
+                    <!-- Dynamic Messages -->
                 </div>
             </div>
         </details>
 
-        <!-- Links Grid Section -->
         <div class="section-title" id="head-social">Social Media</div>
         <div class="social-grid">
             <a href="https://facebook.com/profile.php?id=61569786773421" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png"><span>Facebook</span></a>
@@ -277,9 +264,7 @@
         <div class="footer" id="txt-footer">✨ Powered by K-Win | Created by Janith Didula</div>
     </div>
 
-    <!-- Application Script Logic -->
     <script>
-        // 🛑 SUPABASE CONFIGURATION (FIXED INITIALIZATION)
         const SUPABASE_URL = "https://nuzfxdozbjiqxwjwhwxg.supabase.co";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im51emZ4ZG96YmppcXh3andod3hnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExMDA4ODgsImV4cCI6MjA5NjY3Njg4OH0.07wQvTq68cO07dyMO4unVe3P4RtnVWllKL1K2_h3BQA";
 
@@ -288,14 +273,12 @@
         let deferredPrompt;
         let audioCtx = null;
 
-        // Unlock audio thread upon touch interactions
         function initAudioContext() {
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             }
         }
 
-        // Generate synthetic notification sounds dynamically
         function playBeep() {
             initAudioContext();
             if (audioCtx) {
@@ -311,7 +294,43 @@
             }
         }
 
-        // --- 💾 LOCALSTORAGE NOTIFICATION ENGINE ---
+        // Request and Register WhatsApp-like Device Push Notifications
+        function setupDeviceNotifications() {
+            if ("Notification" in window) {
+                const permStatusEl = document.getElementById("notif-perm-status");
+                
+                if (Notification.permission === "granted") {
+                    permStatusEl.innerText = "Device Notifications: Active ✅";
+                    permStatusEl.style.color = "#00f2ff";
+                } else if (Notification.permission === "denied") {
+                    permStatusEl.innerText = "Device Notifications: Blocked ❌";
+                    permStatusEl.style.color = "#ff4d4d";
+                } else {
+                    permStatusEl.innerText = "Click to Enable WhatsApp-style Alerts 🔔";
+                    permStatusEl.style.cursor = "pointer";
+                    permStatusEl.onclick = () => {
+                        Notification.requestPermission().then(permission => {
+                            if (permission === "granted") {
+                                permStatusEl.innerText = "Device Notifications: Active ✅";
+                                permStatusEl.style.color = "#00f2ff";
+                                new Notification("K-Win", { body: "WhatsApp-style notifications are now active!" });
+                            } else {
+                                permStatusEl.innerText = "Device Notifications: Blocked ❌";
+                                permStatusEl.style.color = "#ff4d4d";
+                            }
+                        });
+                    };
+                }
+            }
+
+            // Register Service Worker for Background Support
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('sw.js')
+                .then(reg => console.log('Service Worker Active:', reg.scope))
+                .catch(err => console.log('Service Worker Error:', err));
+            }
+        }
+
         function saveNotificationToDevice(title, body) {
             let savedNotifs = JSON.parse(localStorage.getItem('kwin_notifs')) || [];
             const timeString = new Date().toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true, month: 'short', day: 'numeric' });
@@ -346,7 +365,6 @@
             renderNotifications();
         }
 
-        // --- ⚡ SUPABASE REALTIME SUBSCRIPTION ---
         function listenLiveNotifications() {
             supabase
                 .channel('live-alerts')
@@ -366,18 +384,26 @@
         }
 
         function showLivePopup(title, body) {
+            // 1. In-App Visual Alert
             const popup = document.getElementById("notifPopup");
             document.getElementById("pTitle").innerText = title || "K-Win Notice";
             document.getElementById("pBody").innerText = body || "";
             popup.classList.add("show");
             setTimeout(() => { popup.classList.remove("show"); }, 5000);
+
+            // 2. System Level/WhatsApp Style Top Screen Pop-up
+            if ("Notification" in window && Notification.permission === "granted") {
+                new Notification(title || "K-Win Update", {
+                    body: body || "",
+                    icon: "https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg"
+                });
+            }
         }
 
-        // --- Multi-Language Matrix Systems ---
         const translations = {
             en: { save: "SAVE CONTACT", tt: "Opening Hours", share: "Share", close: "Close", addr: "📍 Kurunegala, Sri Lanka", call: "Call", map: "Go to K-Win", sms: "SMS", footer: "✨ Powered by K-Win | Created by Janith Didula", pwa: "Install K-Win App", hContact: "Contact Us", hSocial: "Social Media", hOther: "Other Services", hNotif: "Updates & Alerts", ttTitle: "K-Win Opening Hours", ttWeek: "Sunday to Friday: 08:30 AM - 04:00 PM", ttSat: "Saturday: Closed" },
             si: { save: "CONTACT එක SAVE කරන්න", tt: "විවෘතව තබන වේලාවන්", share: "බෙදාගන්න", close: "වසා දමන්න", addr: "📍 කුරුණෑගල, ශ්‍රී ලංකා", call: "ඇමතුම්", map: "ගමන් මාර්ගය", sms: "පණිවිඩ", footer: "✨ K-Win වෙතින් | ජනිත් දිදුලගේ නිර්මාණයකි", pwa: "K-Win App එක Install කරගන්න", hContact: "අපව සම්බන්ධ කරගන්න", hSocial: "සමාජ මාධ්‍ය", hOther: "අමතර සේවා", hNotif: "පණිවිඩ සහ දැනුම්දීම්", ttTitle: "විවෘතව තබන වේලාවන්", ttWeek: "ඉරිදා සිට සිකුරාදා: පෙ.ව. 08:30 සිට ප.ව. 04:00 දක්වා", ttSat: "සෙනසුරාදා දින: ආයතනය වසා ඇත" },
-            ta: { save: "தொடர்பைச் சேමිக்கவும்", tt: "திறந்திருக்கும் நேரங்கள்", share: "பகிரவும்", close: "மூடு", addr: "📍 குருநாகல், இலங்கை", call: "அழைப்பு", map: "செல்லுங்கள்", sms: "செய்தி", footer: "✨ K-Win மூலம் | ஜனித் திதுல", pwa: "K-Win செயலியை நிறுவுங்கள்", hContact: "தொடர்பு கொள்ள", hSocial: "சமூக ஊடகங்கள்", hOther: "மற்றவை", hNotif: "அறிவிப்புகள்", ttTitle: "திறந்திருக்கும் நேரங்கள்", ttWeek: "ஞாயிறு முதல் வெள்ளி: 08:30 AM - 04:00 PM", ttSat: "சனிக்கிழமை: மூடப்பட்டுள்ளது" }
+            ta: { save: "தொடர்பைச் சேமிக்கவும்", tt: "திறந்திருக்கும் நேரங்கள்", share: "பகிரவும்", close: "மூடு", addr: "📍 குருநாகல், இலங்கை", call: "அழைப்பு", map: "செல்லுங்கள்", sms: "செய்தி", footer: "✨ K-Win மூலம் | ஜனித் திதுல", pwa: "K-Win செயலியை நிறுவுங்கள்", hContact: "தொடர்பு கொள்ள", hSocial: "சமூக ஊடகங்கள்", hOther: "மற்றவை", hNotif: "அறிவிப்புகள்", ttTitle: "திறந்திருக்கும் நேரங்கள்", ttWeek: "ஞாயிறு முதல் வெள்ளி: 08:30 AM - 04:00 PM", ttSat: "சனிக்கிழமை: மூடப்பட்டுள்ளது" }
         };
 
         function setLanguage(lang) {
@@ -407,7 +433,6 @@
             if (!isShown) menu.classList.add('show');
         }
 
-        // Close dropdown menus when clicking outside
         window.addEventListener('click', function(e) {
             if (!e.target.matches('.btn-blue') && !e.target.matches('.btn-glass') && !e.target.closest('.dropdown')) {
                 document.querySelectorAll('.dropdown-content').forEach(m => m.classList.remove('show'));
@@ -422,7 +447,6 @@
 
         function closeTimetable() { const overlay = document.getElementById('tt-overlay'); if (overlay) overlay.remove(); }
         
-        // --- VCARD LOGIC ---
         function saveVCard() { 
             localStorage.setItem('kwin_contact_saved', 'true'); 
             checkStatus(); 
@@ -433,7 +457,10 @@
             const a = document.createElement('a'); 
             a.href = url; 
             a.download = 'KindWin_Contact.vcf'; 
+            document.body.appendChild(a); 
             a.click(); 
+            document.body.removeChild(a); 
+            window.URL.revokeObjectURL(url);
         }
 
         function checkStatus() { 
@@ -453,17 +480,16 @@
             } 
         }
 
-        // Global Execution Bootstrapping Handler
         window.onload = () => { 
             setLanguage('en'); 
             checkStatus(); 
             renderNotifications(); 
+            setupDeviceNotifications(); // Handles Service Worker + Browser Permissions
             
             async function syncOnReconnect() {
                 console.log("Internet restored, syncing...");
                 const { data, error } = await supabase
-                    .from('notifications')
-                    .from('notifications')
+                    .from('notifications') 
                     .select('*')
                     .order('created_at', { ascending: false })
                     .limit(10);
@@ -480,7 +506,6 @@
             listenLiveNotifications();
         };
 
-        // UI Viewport Lock Fixes (Updated to support scrolling in details layout)
         document.addEventListener('touchmove', (e) => { 
             if(e.target.closest('.card') || e.target.closest('.notif-container') || e.target.closest('.notif-details')) return; 
             e.preventDefault(); 
