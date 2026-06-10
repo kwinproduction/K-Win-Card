@@ -244,11 +244,12 @@
 
     <!-- Application Script Logic -->
     <script>
-        // 🛑 SUPABASE CONFIGURATION
+        // 🛑 SUPABASE CONFIGURATION (FIXED INITIALIZATION)
         const SUPABASE_URL = "https://nuzfxdozbjiqxwjwhwxg.supabase.co";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im51emZ4ZG96YmppcXh3andod3hnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExMDA4ODgsImV4cCI6MjA5NjY3Njg4OH0.07wQvTq68cO07dyMO4unVe3P4RtnVWllKL1K2_h3BQA";
 
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // Fixed here: referencing window.supabase to avoid scope hoisting error
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         let currentLang = 'en';
         let deferredPrompt;
         let audioCtx = null;
@@ -390,7 +391,13 @@
 
         function closeTimetable() { const overlay = document.getElementById('tt-overlay'); if (overlay) overlay.remove(); }
         
+        // --- FIXED SAVE VCARD LOGIC ---
         function saveVCard() { 
+            // 1. UI එක සහ LocalStorage එක මුලින්ම Update කරනවා (Phone එකෙන් Code එක Block වෙන්න කලින්)
+            localStorage.setItem('kwin_contact_saved', 'true'); 
+            checkStatus(); 
+
+            // 2. ඊටපස්සේ File එක download වෙන්න සලස්වනවා
             const vcard = "BEGIN:VCARD\nVERSION:3.0\nFN:Kind Win\nTEL:0707140731\nEMAIL:kindwin2026@gmail.com\nEND:VCARD"; 
             const blob = new Blob([vcard], { type: 'text/vcard' }); 
             const url = window.URL.createObjectURL(blob); 
@@ -398,8 +405,6 @@
             a.href = url; 
             a.download = 'KindWin_Contact.vcf'; 
             a.click(); 
-            localStorage.setItem('kwin_contact_saved', 'true'); 
-            checkStatus(); 
         }
 
         function checkStatus() { 
@@ -424,28 +429,29 @@
             setLanguage('en'); 
             checkStatus(); 
             renderNotifications();    // 1. Load historical array rows cached inside phone storage context
+            
             // ඉන්ටර්නෙට් ආවම ඩේටාබේස් එකෙන් අලුත් මැසේජ් ටික ඇදලා ගන්නා කොටස
-async function syncOnReconnect() {
-    console.log("Internet restored, syncing...");
-    
-    // ඩේටාබේස් එකෙන් අලුත්ම මැසේජ් 10ක් අරන් බලනවා
-    const { data, error } = await supabase
-        .from('notifications')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(10);
+            async function syncOnReconnect() {
+                console.log("Internet restored, syncing...");
+                
+                // ඩේටාබේස් එකෙන් අලුත්ම මැසේජ් 10ක් අරන් බලනවා
+                const { data, error } = await supabase
+                    .from('notifications')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                    .limit(10);
 
-    if (error) return;
+                if (error) return;
 
-    if (data) {
-        // අලුත් මැසේජ් ටික පරණ ලිස්ට් එකත් එක්ක එකතු කරලා LocalStorage එක update කරනවා
-        localStorage.setItem('kwin_notifs', JSON.stringify(data));
-        renderNotifications(); // UI එක refresh කරනවා
-    }
-}
+                if (data) {
+                    // අලුත් මැසේජ් ටික පරණ ලිස්ට් එකත් එක්ක එකතු කරලා LocalStorage එක update කරනවා
+                    localStorage.setItem('kwin_notifs', JSON.stringify(data));
+                    renderNotifications(); // UI එක refresh කරනවා
+                }
+            }
 
-// Browser එකේ ඉන්ටර්නෙට් ආව ගමන් මේ ෆන්ක්ෂන් එක වැඩ කරනවා
-window.addEventListener('online', syncOnReconnect);
+            // Browser එකේ ඉන්ටර්නෙට් ආව ගමන් මේ ෆන්ක්ෂන් එක වැඩ කරනවා
+            window.addEventListener('online', syncOnReconnect);
             listenLiveNotifications(); // 2. Establish persistent reactive streaming sockets with Supabase backends
         };
 
