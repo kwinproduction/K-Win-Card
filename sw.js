@@ -1,5 +1,5 @@
 // 1. Version එක (මෙහි අංකය වෙනස් කළ විට පමණක් පරණ Cache එක මැකේ - Date.now දාන්න එපා)
-const CACHE_VERSION = 'v45'; 
+const CACHE_VERSION = 'v46'; 
 const CACHE_NAME = `kwin-ecard-${CACHE_VERSION}`;
 
 const ASSETS = [
