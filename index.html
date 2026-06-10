@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>K-Win</title>
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- PWA Manifest -->
     <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiS1dpbiIsInNob3J0X25hbWUiOiJLLVdpbiIsInN0YXJ0X3VybCI6ImluZGV4Lmh0bWwiLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3ciOiIjMDAwMDAwIiwidGhlbWVfY29sb3ciOiIjMDBmMmZmIiwib3JpZW50YXRpb24iOiJwb3J0cmFpdCIsImljb25zIjpbeyJzcmMiOiJodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20va3dpbnByb2R1Y3Rpb24vSy1XaW4tRWNhcmQvbWFpbi9sb2dvLmpwZWciLCJzaXplcyI6IjUxMng1MTIiLCJ0eXBlIjoiaW1hZ2UvanBlZyIsInB1cnBvc2UiOiJhbnkgbWFza2FibGUifV19">
     <link rel="icon" type="image/jpeg" href="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg">
@@ -36,7 +36,35 @@
             align-items: center;
             justify-content: center;
         }
-
+/* Real-looking WhatsApp Heads-up Notification */
+.wa-notif-container {
+    position: fixed; 
+    top: -150px; 
+    left: 50%; 
+    transform: translateX(-50%);
+    width: 92%; 
+    max-width: 360px; 
+    background: #202c33; 
+    border-radius: 16px; 
+    padding: 12px 14px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); 
+    z-index: 100000;
+    transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex; 
+    flex-direction: column; 
+    gap: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+.wa-notif-container.popup-show { top: 12px; }
+.wa-notif-header { display: flex; align-items: center; gap: 6px; font-size: 0.65rem; color: #8696a0; font-weight: bold; letter-spacing: 0.5px; }
+.wa-app-icon { width: 14px; height: 14px; }
+.wa-app-name { flex: 1; text-transform: uppercase; color: #25d366; }
+.wa-time { font-weight: normal; opacity: 0.8; }
+.wa-notif-body { display: flex; align-items: center; gap: 12px; margin-top: 2px; }
+.wa-profile-pic { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; background: #0a101d; border: 1px solid rgba(255,255,255,0.1); }
+.wa-notif-text { flex: 1; display: flex; flex-direction: column; text-align: left; overflow: hidden; }
+.wa-sender { font-size: 0.85rem; font-weight: 700; color: #e9edef; margin-bottom: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.wa-message { font-size: 0.8rem; color: #d1d7db; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         /* Background Orbs */
         .orb { position: fixed; border-radius: 50%; filter: blur(80px); z-index: -1; opacity: 0.15; animation: move 15s infinite alternate ease-in-out; }
         .orb-1 { width: 300px; height: 300px; background: var(--primary-accent); top: -50px; right: -50px; }
@@ -279,6 +307,72 @@
         window.onload = () => { 
             setLanguage('en'); 
             checkStatus(); 
+            // ⚠️ Supabase Config
+const SUPABASE_URL = "https://nuzfxdozbjiqxwjwhwxg.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im51emZ4ZG96YmppcXh3andod3hnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExMDA4ODgsImV4cCI6MjA5NjY3Njg4OH0.07wQvTq68cO07dyMO4unVe3P4RtnVWllKL1K2_h3BQA";
+let supabase = null;
+
+// HTML එක JS හරහාම Body එකට දාන ක්‍රමය
+function injectWAHtml() {
+    if (document.getElementById('wa-notification')) return;
+    const waHtml = `
+        <div id="wa-notification" class="wa-notif-container">
+            <div class="wa-notif-header">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" class="wa-app-icon" alt="WA">
+                <span class="wa-app-name">WhatsApp</span>
+                <span class="wa-time">• now</span>
+            </div>
+            <div class="wa-notif-body">
+                <img src="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg" class="wa-profile-pic" alt="Sender">
+                <div class="wa-notif-text">
+                    <div id="wa-title" class="wa-sender">Kind Win</div>
+                    <div id="wa-msg" class="wa-message">Tap to read the update.</div>
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', waHtml);
+}
+
+function triggerWANotification(senderName, message) {
+    const waBanner = document.getElementById('wa-notification');
+    if (!waBanner) return;
+    
+    document.getElementById('wa-title').innerText = senderName || "Kind Win";
+    document.getElementById('wa-msg').innerText = message;
+    
+    waBanner.classList.add('popup-show');
+    
+    setTimeout(() => {
+        waBanner.classList.remove('popup-show');
+    }, 5000);
+}
+
+function initSupabase() {
+    injectWAHtml(); // 👈 මෙතනදී HTML එක auto හැදෙනවා
+    
+    if(SUPABASE_URL.includes("YOUR_SUPABASE_PROJECT_ID")) return;
+    
+    try {
+        supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        supabase
+            .channel('schema-db-changes')
+            .on(
+                'postgres_changes',
+                { event: 'INSERT', schema: 'public', table: 'notifications' },
+                (payload) => {
+                    if(payload.new && payload.new.message) {
+                        const sender = payload.new.title || "Kind Win";
+                        triggerWANotification(sender, payload.new.message);
+                    }
+                }
+            )
+            .subscribe();
+    } catch (error) {
+        console.error("Supabase Error:", error);
+    }
+}
         };
 
         // Scroll protection
