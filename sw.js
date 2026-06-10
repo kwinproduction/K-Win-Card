@@ -72,26 +72,3 @@ self.addEventListener('notificationclick', (event) => {
         })
     );
 });
-{
-  "name": "K-Win",
-  "short_name": "K-Win",
-  "description": "K-Win Digital Card",
-  "start_url": "./",
-  "scope": "./",
-  "display": "standalone",
-  "orientation": "portrait",
-  "background_color": "#000000",
-  "theme_color": "#00f2ff",
-  "icons": [
-    {
-      "src": "./logo.jpeg",
-      "sizes": "192x192",
-      "type": "image/jpeg"
-    },
-    {
-      "src": "./logo.jpeg",
-      "sizes": "512x512",
-      "type": "image/jpeg"
-    }
-  ]
-}
