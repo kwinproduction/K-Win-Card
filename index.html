@@ -442,18 +442,17 @@ setTimeout(()=>{
  showWelcomePopup("📞 Save our contact for quick access");
 },14000);
 
-window.OneSignalDeferred = window.OneSignalDeferred || [];
-
 OneSignalDeferred.push(async function(OneSignal) {
 
   await OneSignal.init({
-    appId: "ebdc2cd4-a21d-434f-ab63-d60f21ad3295",
-    notifyButton: {
-      enable: false
-    }
+    appId: "ebdc2cd4-a21d-434f-ab63-d60f21ad3295"
   });
 
-  console.log("OneSignal Connected");
+  const permission = await OneSignal.Notifications.permission;
+
+  if(permission !== true){
+      await OneSignal.Slidedown.promptPush();
+  }
 
 });
 </script>
