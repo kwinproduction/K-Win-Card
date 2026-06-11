@@ -441,12 +441,22 @@ function showWelcomePopup(message){
 setTimeout(()=>{
  showWelcomePopup("📞 Save our contact for quick access");
 },14000);
-        window.OneSignalDeferred = window.OneSignalDeferred || [];
+
+window.OneSignalDeferred = window.OneSignalDeferred || [];
+
 OneSignalDeferred.push(async function(OneSignal) {
+
   await OneSignal.init({
-    appId: "YOUR_ONESIGNAL_APP_ID"
+    appId: "ebdc2cd4-a21d-434f-ab63-d60f21ad3295",
+    notifyButton: {
+      enable: false
+    }
   });
+
+  console.log("OneSignal Connected");
+
 });
+</script>
     </script>
 </body>
 </html>
