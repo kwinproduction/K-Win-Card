@@ -36,6 +36,110 @@
             align-items: center;
             justify-content: center;
         }
+        /* ===== In-app Notification Popup ===== */
+.inapp-notif {
+    position: fixed;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-140%);
+    width: min(92%, 380px);
+    background: rgba(18, 24, 38, 0.96);
+    border: 1px solid rgba(0, 242, 255, 0.25);
+    border-radius: 22px;
+    padding: 14px;
+    z-index: 100000;
+    box-shadow: 0 20px 45px rgba(0,0,0,0.55);
+    backdrop-filter: blur(16px);
+    transition: transform 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.35s ease;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.inapp-notif.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.inapp-notif-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.inapp-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    object-fit: cover;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: #0f1726;
+}
+
+.inapp-meta {
+    flex: 1;
+    min-width: 0;
+    text-align: left;
+}
+
+.inapp-appname {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.6px;
+    color: #25d366;
+    text-transform: uppercase;
+    line-height: 1.2;
+}
+
+.inapp-time {
+    font-size: 0.64rem;
+    color: rgba(255,255,255,0.55);
+    margin-top: 2px;
+}
+
+.inapp-title {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin-bottom: 4px;
+    text-align: left;
+}
+
+.inapp-message {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.82);
+    line-height: 1.5;
+    text-align: left;
+    word-break: break-word;
+}
+
+.inapp-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.inapp-btn {
+    flex: 1;
+    border: none;
+    border-radius: 14px;
+    padding: 10px 12px;
+    font-weight: 800;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.inapp-btn.close {
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.08);
+}
+
+.inapp-btn.open {
+    background: var(--primary-accent);
+    color: #000;
+}
 /* Real-looking WhatsApp Heads-up Notification */
 .wa-notif-container {
     position: fixed; 
@@ -193,205 +297,271 @@
     </div>
 
     <script>
-        let currentLang = 'en';
-        let deferredPrompt;
+      <script>
+    let currentLang = 'en';
+    let deferredPrompt;
 
-        const translations = {
-            en: {
-                save: "SAVE CONTACT", tt: "Opening Hours", share: "Share", close: "Close",
-                addr: "📍 Kurunegala, Sri Lanka", call: "Call", map: "Go to K-Win", sms: "SMS",
-                footer: "✨ Powered by K-Win | Created by Janith Didula", pwa: "Install K-Win App",
-                hContact: "Contact Us", hSocial: "Social Media", hOther: "Other Services",
-                ttTitle: "K-Win Opening Hours",
-                ttWeek: "Sunday to Friday: 08:30 AM - 04:00 PM",
-                ttSat: "Saturday: Closed"
-            },
-            si: {
-                save: "CONTACT එක SAVE කරන්න", tt: "විවෘතව තබන වේලාවන්", share: "බෙදාගන්න", close: "වසා දමන්න",
-                addr: "📍 කුරුණෑගල, ශ්‍රී ලංකා", call: "ඇමතුම්", map: "ගමන් මාර්ගය", sms: "පණිවිඩ",
-                footer: "✨ K-Win වෙතින් | ජනිත් දිදුලගේ නිර්මාණයකි", pwa: "K-Win App එක Install කරගන්න",
-                hContact: "අපව සම්බන්ධ කරගන්න", hSocial: "සමාජ මාධ්‍ය", hOther: "අමතර සේවා",
-                ttTitle: "විවෘතව තබන වේලාවන්",
-                ttWeek: "ඉරිදා සිට සිකුරාදා: පෙ.ව. 08:30 සිට ප.ව. 04:00 දක්වා",
-                ttSat: "සෙනසුරාදා දින: ආයතනය වසා ඇත"
-            },
-            ta: {
-                save: "தொடர்பைச் சேமிக்கவும்", tt: "திறந்திருக்கும் நேரங்கள்", share: "பகிரவும்", close: "மூடு",
-                addr: "📍 குருநாகல், இலங்கை", call: "அழைப்பு", map: "செல்லுங்கள்", sms: "செய்தி",
-                footer: "✨ K-Win மூலம் | ஜனித் திதுல", pwa: "K-Win செயலியை நிறுவுங்கள்",
-                hContact: "தொடர்பு கொள்ள", hSocial: "சமூக ஊடகங்கள்", hOther: "மற்றவை",
-                ttTitle: "திறந்திருக்கும் நேரங்கள்",
-                ttWeek: "ஞாயிறு முதல் வெள்ளி: 08:30 AM - 04:00 PM",
-                ttSat: "சனிக்கிழமை: மூடப்பட்டுள்ளது"
-            }
-        };
+    const SUPABASE_URL = "https://nuzfxdozbjiqxwjwhwxg.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im51emZ4ZG96YmppcXh3andod3hnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExMDA4ODgsImV4cCI6MjA5NjY3Njg4OH0.07wQvTq68cO07dyMO4unVe3P4RtnVWllKL1K2_h3BQA";
 
-        function setLanguage(lang) {
-            currentLang = lang;
-            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('btn-' + lang).classList.add('active');
-            
-            const t = translations[lang];
-            document.getElementById('txt-save').innerText = t.save;
-            document.getElementById('txt-tt').innerText = t.tt;
-            document.getElementById('txt-share').innerText = t.share;
-            document.getElementById('lbl-addr').innerText = t.addr;
-            document.getElementById('txt-call').innerText = t.call;
-            document.getElementById('txt-map').innerText = t.map;
-            document.getElementById('txt-sms').innerText = t.sms;
-            document.getElementById('txt-footer').innerText = t.footer;
-            document.getElementById('pwa-text').innerText = t.pwa;
-            document.getElementById('head-contact').innerText = t.hContact;
-            document.getElementById('head-social').innerText = t.hSocial;
-            document.getElementById('head-other').innerText = t.hOther;
+    let sbClient = null;
+    let hideTimer = null;
+    let audioReady = false;
+
+    const translations = {
+        en: {
+            save: "SAVE CONTACT", tt: "Opening Hours", share: "Share", close: "Close",
+            addr: "📍 Kurunegala, Sri Lanka", call: "Call", map: "Go to K-Win", sms: "SMS",
+            footer: "✨ Powered by K-Win | Created by Janith Didula", pwa: "Install K-Win App",
+            hContact: "Contact Us", hSocial: "Social Media", hOther: "Other Services",
+            ttTitle: "K-Win Opening Hours",
+            ttWeek: "Sunday to Friday: 08:30 AM - 04:00 PM",
+            ttSat: "Saturday: Closed"
+        },
+        si: {
+            save: "CONTACT එක SAVE කරන්න", tt: "විවෘතව තබන වේලාවන්", share: "බෙදාගන්න", close: "වසා දමන්න",
+            addr: "📍 කුරුණෑගල, ශ්‍රී ලංකා", call: "ඇමතුම්", map: "ගමන් මාර්ගය", sms: "පණිවිඩ",
+            footer: "✨ K-Win වෙතින් | ජනිත් දිදුලගේ නිර්මාණයකි", pwa: "K-Win App එක Install කරගන්න",
+            hContact: "අපව සම්බන්ධ කරගන්න", hSocial: "සමාජ මාධ්‍ය", hOther: "අමතර සේවා",
+            ttTitle: "විවෘතව තබන වේලාවන්",
+            ttWeek: "ඉරිදා සිට සිකුරාදා: පෙ.ව. 08:30 සිට ප.ව. 04:00 දක්වා",
+            ttSat: "සෙනසුරාදා දින: ආයතනය වසා ඇත"
+        },
+        ta: {
+            save: "தொடர்பைச் சேமிக்கவும்", tt: "திறந்திருக்கும் நேரங்கள்", share: "பகிரவும்", close: "மூடு",
+            addr: "📍 குருநாகல், இலங்கை", call: "அழைப்பு", map: "செல்லுங்கள்", sms: "செய்தி",
+            footer: "✨ K-Win மூலம் | ஜனித் திதுல", pwa: "K-Win செயலியை நிறுவுங்கள்",
+            hContact: "தொடர்பு கொள்ள", hSocial: "சமூக ஊடகங்கள்", hOther: "மற்றவை",
+            ttTitle: "திறந்திருக்கும் நேரங்கள்",
+            ttWeek: "ஞாயிறு முதல் வெள்ளி: 08:30 AM - 04:00 PM",
+            ttSat: "சனிக்கிழமை: மூடப்பட்டுள்ளது"
         }
+    };
 
-        function toggleMenu(id) {
-            const menu = document.getElementById(id);
-            const isShown = menu.classList.contains('show');
-            document.querySelectorAll('.dropdown-content').forEach(m => m.classList.remove('show'));
-            if (!isShown) menu.classList.add('show');
-        }
+    function setLanguage(lang) {
+        currentLang = lang;
+        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('btn-' + lang).classList.add('active');
 
-        function openTimetable() {
-            const t = translations[currentLang];
-            const ttHtml = `
-                <div id="tt-overlay" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); backdrop-filter:blur(10px); z-index:10000; display:flex; align-items:center; justify-content:center; animation:fadeIn 0.3s;">
-                    <div style="background:var(--dark-bg); border:1px solid var(--primary-accent); padding:30px; border-radius:25px; width:90%; max-width:350px; text-align:center;">
-                        <div style="color:var(--primary-accent); font-weight:bold; margin-bottom:20px; font-size:1.1rem;">${t.ttTitle}</div>
-                        <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:15px; margin-bottom:10px; border-left:4px solid var(--primary-accent); text-align:left;">
-                            <p style="margin:0; font-size:0.9rem; line-height:1.6;">${t.ttWeek}</p>
-                        </div>
-                        <div style="background:rgba(255,0,0,0.1); padding:15px; border-radius:15px; margin-bottom:20px; border-left:4px solid #ff4d4d; text-align:left;">
-                            <p style="margin:0; font-size:0.9rem; color:#ff4d4d;">${t.ttSat}</p>
-                        </div>
-                        <button onclick="closeTimetable()" class="btn-main btn-accent">${t.close}</button>
+        const t = translations[lang];
+        document.getElementById('txt-save').innerText = t.save;
+        document.getElementById('txt-tt').innerText = t.tt;
+        document.getElementById('txt-share').innerText = t.share;
+        document.getElementById('lbl-addr').innerText = t.addr;
+        document.getElementById('txt-call').innerText = t.call;
+        document.getElementById('txt-map').innerText = t.map;
+        document.getElementById('txt-sms').innerText = t.sms;
+        document.getElementById('txt-footer').innerText = t.footer;
+        document.getElementById('pwa-text').innerText = t.pwa;
+        document.getElementById('head-contact').innerText = t.hContact;
+        document.getElementById('head-social').innerText = t.hSocial;
+        document.getElementById('head-other').innerText = t.hOther;
+    }
+
+    function toggleMenu(id) {
+        const menu = document.getElementById(id);
+        const isShown = menu.classList.contains('show');
+        document.querySelectorAll('.dropdown-content').forEach(m => m.classList.remove('show'));
+        if (!isShown) menu.classList.add('show');
+    }
+
+    function openTimetable() {
+        const t = translations[currentLang];
+        const ttHtml = `
+            <div id="tt-overlay" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); backdrop-filter:blur(10px); z-index:10000; display:flex; align-items:center; justify-content:center; animation:fadeIn 0.3s;">
+                <div style="background:var(--dark-bg); border:1px solid var(--primary-accent); padding:30px; border-radius:25px; width:90%; max-width:350px; text-align:center;">
+                    <div style="color:var(--primary-accent); font-weight:bold; margin-bottom:20px; font-size:1.1rem;">${t.ttTitle}</div>
+                    <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:15px; margin-bottom:10px; border-left:4px solid var(--primary-accent); text-align:left;">
+                        <p style="margin:0; font-size:0.9rem; line-height:1.6;">${t.ttWeek}</p>
                     </div>
-                </div>
-            `;
-            document.body.insertAdjacentHTML('beforeend', ttHtml);
-        }
-
-        function closeTimetable() {
-            const overlay = document.getElementById('tt-overlay');
-            if (overlay) overlay.remove();
-        }
-
-        function saveVCard() {
-            const vcard = "BEGIN:VCARD\nVERSION:3.0\nFN:Kind Win\nTEL:0707140731\nEMAIL:kindwin2026@gmail.com\nEND:VCARD";
-            const blob = new Blob([vcard], { type: 'text/vcard' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'KindWin_Contact.vcf';
-            a.click();
-            localStorage.setItem('kwin_contact_saved', 'true');
-            checkStatus();
-        }
-
-        function checkStatus() {
-            if (localStorage.getItem('kwin_contact_saved') === 'true') {
-                document.getElementById('mainSaveBtn').style.display = 'none';
-                document.getElementById('contactSection').style.display = 'block';
-            }
-        }
-
-        async function shareCard() {
-            if (navigator.share) {
-                try {
-                    await navigator.share({ title: 'K-Win', text: 'K-Win Digital Card', url: window.location.href });
-                } catch (err) {}
-            } else { alert("Sharing not supported"); }
-        }
-
-        window.onload = () => { 
-            setLanguage('en'); 
-            checkStatus(); 
-            // ⚠️ Supabase Config
-const SUPABASE_URL = "https://nuzfxdozbjiqxwjwhwxg.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im51emZ4ZG96YmppcXh3andod3hnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExMDA4ODgsImV4cCI6MjA5NjY3Njg4OH0.07wQvTq68cO07dyMO4unVe3P4RtnVWllKL1K2_h3BQA";
-let supabase = null;
-
-// HTML එක JS හරහාම Body එකට දාන ක්‍රමය
-function injectWAHtml() {
-    if (document.getElementById('wa-notification')) return;
-    const waHtml = `
-        <div id="wa-notification" class="wa-notif-container">
-            <div class="wa-notif-header">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" class="wa-app-icon" alt="WA">
-                <span class="wa-app-name">WhatsApp</span>
-                <span class="wa-time">• now</span>
-            </div>
-            <div class="wa-notif-body">
-                <img src="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg" class="wa-profile-pic" alt="Sender">
-                <div class="wa-notif-text">
-                    <div id="wa-title" class="wa-sender">Kind Win</div>
-                    <div id="wa-msg" class="wa-message">Tap to read the update.</div>
+                    <div style="background:rgba(255,0,0,0.1); padding:15px; border-radius:15px; margin-bottom:20px; border-left:4px solid #ff4d4d; text-align:left;">
+                        <p style="margin:0; font-size:0.9rem; color:#ff4d4d;">${t.ttSat}</p>
+                    </div>
+                    <button onclick="closeTimetable()" class="btn-main btn-accent">${t.close}</button>
                 </div>
             </div>
-        </div>
-    `;
-    document.body.insertAdjacentHTML('beforeend', waHtml);
-}
+        `;
+        document.body.insertAdjacentHTML('beforeend', ttHtml);
+    }
 
-function triggerWANotification(senderName, message) {
-    const waBanner = document.getElementById('wa-notification');
-    if (!waBanner) return;
-    
-    document.getElementById('wa-title').innerText = senderName || "Kind Win";
-    document.getElementById('wa-msg').innerText = message;
-    
-    waBanner.classList.add('popup-show');
-    
-    setTimeout(() => {
-        waBanner.classList.remove('popup-show');
-    }, 5000);
-}
+    function closeTimetable() {
+        const overlay = document.getElementById('tt-overlay');
+        if (overlay) overlay.remove();
+    }
 
-function initSupabase() {
-    injectWAHtml(); // 👈 මෙතනදී HTML එක auto හැදෙනවා
-    
-    if(SUPABASE_URL.includes("YOUR_SUPABASE_PROJECT_ID")) return;
-    
-    try {
-        supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        
-        supabase
+    function saveVCard() {
+        const vcard = "BEGIN:VCARD\nVERSION:3.0\nFN:Kind Win\nTEL:0707140731\nEMAIL:kindwin2026@gmail.com\nEND:VCARD";
+        const blob = new Blob([vcard], { type: 'text/vcard' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'KindWin_Contact.vcf';
+        a.click();
+        URL.revokeObjectURL(url);
+        localStorage.setItem('kwin_contact_saved', 'true');
+        checkStatus();
+    }
+
+    function checkStatus() {
+        if (localStorage.getItem('kwin_contact_saved') === 'true') {
+            document.getElementById('mainSaveBtn').style.display = 'none';
+            document.getElementById('contactSection').style.display = 'block';
+        }
+    }
+
+    async function shareCard() {
+        if (navigator.share) {
+            try {
+                await navigator.share({ title: 'K-Win', text: 'K-Win Digital Card', url: window.location.href });
+            } catch (err) {}
+        } else {
+            alert("Sharing not supported");
+        }
+    }
+
+    function injectInAppNotification() {
+        if (document.getElementById('inapp-notification')) return;
+
+        const html = `
+            <div id="inapp-notification" class="inapp-notif" aria-live="polite" role="status">
+                <div class="inapp-notif-top">
+                    <img src="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg" class="inapp-icon" alt="K-Win">
+                    <div class="inapp-meta">
+                        <div class="inapp-appname">K-Win</div>
+                        <div class="inapp-time" id="notif-time">Just now</div>
+                    </div>
+                    <button onclick="closeInAppNotification()" style="background:transparent;border:none;color:#fff;font-size:1.1rem;cursor:pointer;">✕</button>
+                </div>
+                <div class="inapp-title" id="notif-title">New Notification</div>
+                <div class="inapp-message" id="notif-message">A new update has arrived.</div>
+                <div class="inapp-actions">
+                    <button class="inapp-btn close" onclick="closeInAppNotification()">Close</button>
+                    <button class="inapp-btn open" onclick="openTimetable()">View</button>
+                </div>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', html);
+    }
+
+    function playNotifySound() {
+        try {
+            const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+            if (!AudioContextClass) return;
+
+            const ctx = new AudioContextClass();
+            const now = ctx.currentTime;
+
+            const o1 = ctx.createOscillator();
+            const g1 = ctx.createGain();
+            o1.type = 'sine';
+            o1.frequency.setValueAtTime(880, now);
+
+            g1.gain.setValueAtTime(0.0001, now);
+            g1.gain.exponentialRampToValueAtTime(0.08, now + 0.02);
+            g1.gain.exponentialRampToValueAtTime(0.0001, now + 0.25);
+
+            o1.connect(g1);
+            g1.connect(ctx.destination);
+            o1.start(now);
+            o1.stop(now + 0.26);
+
+            setTimeout(() => ctx.close?.(), 400);
+        } catch (e) {}
+    }
+
+    function vibrateSmall() {
+        if (navigator.vibrate) navigator.vibrate(60);
+    }
+
+    function showInAppNotification(title, message) {
+        injectInAppNotification();
+
+        const notif = document.getElementById('inapp-notification');
+        document.getElementById('notif-title').innerText = title || 'New Notification';
+        document.getElementById('notif-message').innerText = message || '';
+        document.getElementById('notif-time').innerText = 'Just now';
+
+        notif.classList.add('show');
+
+        clearTimeout(hideTimer);
+        hideTimer = setTimeout(() => {
+            closeInAppNotification();
+        }, 6000);
+
+        playNotifySound();
+        vibrateSmall();
+    }
+
+    function closeInAppNotification() {
+        const notif = document.getElementById('inapp-notification');
+        if (notif) notif.classList.remove('show');
+        clearTimeout(hideTimer);
+    }
+
+    function initSupabase() {
+        if (!window.supabase || !SUPABASE_URL || !SUPABASE_ANON_KEY) return;
+
+        if (SUPABASE_URL.includes("YOUR_SUPABASE_PROJECT_ID")) return;
+
+        sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        sbClient
             .channel('schema-db-changes')
             .on(
                 'postgres_changes',
                 { event: 'INSERT', schema: 'public', table: 'notifications' },
                 (payload) => {
-                    if(payload.new && payload.new.message) {
-                        const sender = payload.new.title || "Kind Win";
-                        triggerWANotification(sender, payload.new.message);
-                    }
+                    const row = payload?.new || {};
+                    if (!row.message) return;
+
+                    const title = row.title || 'K-Win';
+                    const message = row.message;
+
+                    showInAppNotification(title, message);
                 }
             )
-            .subscribe();
-    } catch (error) {
-        console.error("Supabase Error:", error);
+            .subscribe((status) => {
+                console.log('Supabase channel status:', status);
+            });
     }
-}
-        };
 
-        // Scroll protection
-        document.addEventListener('touchmove', (e) => { if(e.target.closest('.card')) return; e.preventDefault(); }, { passive: false });
+    function initApp() {
+        setLanguage('en');
+        checkStatus();
+        injectInAppNotification();
+        initSupabase();
+    }
 
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            document.getElementById('pwa-installer').style.display = 'block';
-        });
+    document.addEventListener('DOMContentLoaded', initApp);
 
-        async function handleInstallClick() {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') document.getElementById('pwa-installer').style.display = 'none';
-                deferredPrompt = null;
+    // Scroll protection
+    document.addEventListener('touchmove', (e) => {
+        if (e.target.closest('.card')) return;
+        e.preventDefault();
+    }, { passive: false });
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        document.getElementById('pwa-installer').style.display = 'block';
+    });
+
+    async function handleInstallClick() {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                document.getElementById('pwa-installer').style.display = 'none';
             }
+            deferredPrompt = null;
         }
+    }
+
+    // Test trigger for checking popup
+    window.testKWinNotification = function() {
+        showInAppNotification('K-Win', 'This is a test notification from the app.');
+    };
+</script>
     </script>
 </body>
 </html>
