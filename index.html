@@ -36,6 +36,74 @@
             align-items: center;
             justify-content: center;
         }
+        .premium-popup{
+ position:fixed;
+ top:15px;
+ left:50%;
+ transform:translateX(-50%) translateY(-200%);
+ width:92%;
+ max-width:390px;
+ background:rgba(10,15,30,.95);
+ backdrop-filter:blur(25px);
+ border:1px solid rgba(0,242,255,.25);
+ border-radius:25px;
+ overflow:hidden;
+ z-index:999999;
+ transition:.6s cubic-bezier(.175,.885,.32,1.275);
+ box-shadow:
+   0 0 25px rgba(0,242,255,.15),
+   0 20px 50px rgba(0,0,0,.6);
+}
+
+.premium-popup.show{
+ transform:translateX(-50%) translateY(0);
+}
+
+.popup-content{
+ display:flex;
+ gap:12px;
+ padding:16px;
+ align-items:center;
+}
+
+.popup-logo{
+ width:55px;
+ height:55px;
+ border-radius:18px;
+ object-fit:cover;
+ box-shadow:0 0 20px rgba(0,242,255,.4);
+}
+
+.popup-title{
+ color:#00f2ff;
+ font-weight:800;
+ font-size:1rem;
+ margin-bottom:4px;
+}
+
+.popup-text{
+ color:white;
+ font-size:.85rem;
+ line-height:1.5;
+}
+
+.popup-progress{
+ height:4px;
+ width:100%;
+ background:rgba(255,255,255,.08);
+}
+
+.popup-progress-bar{
+ height:100%;
+ width:100%;
+ background:#00f2ff;
+ animation:closeBar 5s linear forwards;
+}
+
+@keyframes closeBar{
+ from{width:100%;}
+ to{width:0%;}
+}
 
         /* Background Orbs */
         .orb { position: fixed; border-radius: 50%; filter: blur(80px); z-index: -1; opacity: 0.15; animation: move 15s infinite alternate ease-in-out; }
@@ -98,7 +166,27 @@
 
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
+<div id="premiumPopup" class="premium-popup">
+    <div class="popup-content">
 
+        <img
+          src="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg"
+          class="popup-logo">
+
+        <div>
+            <div class="popup-title">Welcome to K-Win</div>
+
+            <div class="popup-text" id="popupText">
+                Thank you for installing our application.
+            </div>
+        </div>
+
+    </div>
+
+    <div class="popup-progress">
+        <div class="popup-progress-bar"></div>
+    </div>
+</div>
     <div class="top-bar">
         <div class="lang-switch">
             <button id="btn-si" class="lang-btn" onclick="setLanguage('si')">සිංහල</button>
@@ -298,6 +386,60 @@
                 deferredPrompt = null;
             }
         }
+        function playWelcomeSound(){
+
+ const ctx = new(window.AudioContext||window.webkitAudioContext)();
+
+ const osc = ctx.createOscillator();
+ const gain = ctx.createGain();
+
+ osc.type="sine";
+ osc.frequency.value=900;
+
+ osc.connect(gain);
+ gain.connect(ctx.destination);
+
+ gain.gain.setValueAtTime(0.08,ctx.currentTime);
+
+ osc.start();
+
+ setTimeout(()=>{
+   osc.stop();
+   ctx.close();
+ },250);
+
+}
+
+function showWelcomePopup(message){
+
+ const popup=document.getElementById("premiumPopup");
+ document.getElementById("popupText").innerHTML=message;
+
+ popup.classList.add("show");
+
+ navigator.vibrate?.([120,80,120]);
+
+ playWelcomeSound();
+
+ setTimeout(()=>{
+    popup.classList.remove("show");
+ },5000);
+
+}
+        window.addEventListener("load",()=>{
+
+ showWelcomePopup(
+   "🎉 Welcome to K-Win App.<br><br>Thank you for installing our application."
+ );
+
+});
+        setTimeout(()=>{
+ showWelcomePopup("🔥 New features available");
+},7000);
+
+setTimeout(()=>{
+ showWelcomePopup("📞 Save our contact for quick access");
+},14000);
     </script>
 </body>
 </html>
