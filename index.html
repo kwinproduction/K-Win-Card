@@ -4,17 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>K-Win</title>
-<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 
     <!-- PWA Manifest -->
-    <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiS1dpbiIsInNob3J0X25hbWUiOiJLLVdpbiIsInN0YXJ0X3VybCI6ImluZGV4Lmh0bWwiLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3ciOiIjMDAwMDAwIiwidGhlbWVfY29sb3ciOiIjMDBmMmZmIiwib3JpZW50YXRpb24iOiJwb3J0cmFpdCIsImljb25zIjpbeyJzcmMiOiJodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20va3dpbnByb2R1Y3Rpb24vSy1XaW4tRWNhcmQvbWFpbi9sb2dvLmpwZWciLCJzaXplcyI6IjUxMng1MTIiLCJ0eXBlIjoiaW1hZ2UvanBlZyIsInB1cnBvc2UiOiJhbnkgbWFza2FibGUifV19">
+    <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiS1dpbiIsInNob3J0X25hbWUiOiJLLVdpbiIsInN0YXJ0X3VybCI6ImluZGV4Lmh0bWwiLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjMDAwMDAwIiwidGhlbWVfY29sb3IiOiIjMDBmMmZmIiwib3JpZW50YXRpb24iOiJwb3J0cmFpdCIsImljb25zIjpbeyJzcmMiOiJodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20va3dpbnByb2R1Y3Rpb24vSy1XaW4tRWNhcmQvbWFpbi9sb2dvLmpwZWciLCJzaXplcyI6IjUxMng1MTIiLCJ0eXBlIjoiaW1hZ2UvanBlZyIsInB1cnBvc2UiOiJhbnkgbWFza2FibGUifV19">
     <link rel="icon" type="image/jpeg" href="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg">
     <meta name="theme-color" content="#00f2ff">
     <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg">
 
     <style>
         :root {
-            --primary-accent: #00f2ff; /* Electric Cyan */
+            --primary-accent: #00f2ff;
             --blue: #0062ff;
             --dark-bg: #050a14;
             --glass: rgba(255, 255, 255, 0.08);
@@ -22,10 +23,14 @@
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
-        
+
         html, body {
-            margin: 0; padding: 0; width: 100%; height: 100%;
-            overflow: hidden; position: fixed;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: fixed;
         }
 
         body {
@@ -37,127 +42,113 @@
             align-items: center;
             justify-content: center;
         }
+
         .premium-popup{
- position:fixed;
- top:15px;
- left:50%;
- transform:translateX(-50%) translateY(-200%);
- width:92%;
- max-width:390px;
- background:rgba(10,15,30,.95);
- backdrop-filter:blur(25px);
- border:1px solid rgba(0,242,255,.25);
- border-radius:25px;
- overflow:hidden;
- z-index:999999;
- transition:.6s cubic-bezier(.175,.885,.32,1.275);
- box-shadow:
-   0 0 25px rgba(0,242,255,.15),
-   0 20px 50px rgba(0,0,0,.6);
-}
+            position:fixed;
+            top:15px;
+            left:50%;
+            transform:translateX(-50%) translateY(-200%);
+            width:92%;
+            max-width:390px;
+            background:rgba(10,15,30,.95);
+            backdrop-filter:blur(25px);
+            border:1px solid rgba(0,242,255,.25);
+            border-radius:25px;
+            overflow:hidden;
+            z-index:999999;
+            transition:.6s cubic-bezier(.175,.885,.32,1.275);
+            box-shadow: 0 0 25px rgba(0,242,255,.15), 0 20px 50px rgba(0,0,0,.6);
+        }
 
-.premium-popup.show{
- transform:translateX(-50%) translateY(0);
-}
+        .premium-popup.show{
+            transform:translateX(-50%) translateY(0);
+        }
 
-.popup-content{
- display:flex;
- gap:12px;
- padding:16px;
- align-items:center;
-}
+        .popup-content{
+            display:flex;
+            gap:12px;
+            padding:16px;
+            align-items:center;
+        }
 
-.popup-logo{
- width:55px;
- height:55px;
- border-radius:18px;
- object-fit:cover;
- box-shadow:0 0 20px rgba(0,242,255,.4);
-}
+        .popup-logo{
+            width:55px;
+            height:55px;
+            border-radius:18px;
+            object-fit:cover;
+            box-shadow:0 0 20px rgba(0,242,255,.4);
+        }
 
-.popup-title{
- color:#00f2ff;
- font-weight:800;
- font-size:1rem;
- margin-bottom:4px;
-}
+        .popup-title{
+            color:#00f2ff;
+            font-weight:800;
+            font-size:1rem;
+            margin-bottom:4px;
+        }
 
-.popup-text{
- color:white;
- font-size:.85rem;
- line-height:1.5;
-}
+        .popup-text{
+            color:white;
+            font-size:.85rem;
+            line-height:1.5;
+        }
 
-.popup-progress{
- height:4px;
- width:100%;
- background:rgba(255,255,255,.08);
-}
+        .popup-progress{
+            height:4px;
+            width:100%;
+            background:rgba(255,255,255,.08);
+        }
 
-.popup-progress-bar{
- height:100%;
- width:100%;
- background:#00f2ff;
- animation:closeBar 5s linear forwards;
-}
+        .popup-progress-bar{
+            height:100%;
+            width:100%;
+            background:#00f2ff;
+            animation:closeBar 5s linear forwards;
+        }
 
-@keyframes closeBar{
- from{width:100%;}
- to{width:0%;}
-}
-
-/* Kind Win */
+        @keyframes closeBar{
+            from{width:100%;}
+            to{width:0%;}
+        }
 h1{
-    color:#FFD700;
-    font-size:70px;
+    color:#FFFFFF;
+    font-size:clamp(24px, 6vw, 36px);
     font-weight:900;
-    letter-spacing:3px;
+    letter-spacing:1px;
     text-transform:uppercase;
-
     width:0;
     overflow:hidden;
     white-space:nowrap;
-    border-right:4px solid #FFD700;
-
+    border-right:3px solid #FFFFFF;
     opacity:0;
-
-    animation:
-        showText 0.1s forwards 2.9s,
-        typing 2s steps(8,end) forwards 3s;
+    animation: showText 0.1s forwards 2.9s,
+               typing 2s steps(8,end) forwards 3s,
+               glowPulse 2s infinite;
 }
 
-@keyframes showText{
-    to{
-        opacity:1;
-    }
-}
+        @keyframes showText{
+            to{ opacity:1; }
+        }
 
-@keyframes typing{
-    from{
-        width:0;
-    }
-    to{
-        width:100%;
-        border-right:none; /* Cursor remove */
-    }
-}
-        h1{
-    animation:glowPulse 2s infinite;
-}
+        @keyframes typing{
+            from{ width:0; }
+            to{ width:100%; border-right:none; }
+        }
 
-@keyframes glowPulse{
-    0%,100%{
-        text-shadow:0 0 10px gold;
-    }
-    50%{
-        text-shadow:
-            0 0 20px gold,
-            0 0 40px gold,
-            0 0 60px gold;
-    }
-}
-        /* Background Orbs */
-        .orb { position: fixed; border-radius: 50%; filter: blur(80px); z-index: -1; opacity: 0.15; animation: move 15s infinite alternate ease-in-out; }
+        @keyframes glowPulse{
+            0%,100%{ text-shadow:0 0 10px rgba(255,255,255,0.95); }
+            50%{
+                text-shadow: 0 0 20px rgba(255,255,255,0.95), 0 0 40px rgba(255,255,255,0.75), 0 0 60px rgba(255,255,255,0.5);
+            }
+        }
+
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.15;
+            animation: move 15s infinite alternate ease-in-out;
+        }
         .orb-1 { width: 300px; height: 300px; background: var(--primary-accent); top: -50px; right: -50px; }
         .orb-2 { width: 400px; height: 400px; background: var(--blue); bottom: -100px; left: -50px; }
         @keyframes move { from { transform: translate(0,0); } to { transform: translate(30px, 40px); } }
@@ -168,22 +159,77 @@ h1{
         .lang-btn.active { background: var(--primary-accent); color: #000; }
 
         .card {
-            width: 90%; max-width: 380px; background: rgba(10, 20, 40, 0.7); backdrop-filter: blur(25px);
-            border-radius: 30px; padding: 20px 18px; border: 1px solid var(--border); text-align: center;
+            width: 90%;
+            max-width: 380px;
+            background: rgba(10, 20, 40, 0.7);
+            backdrop-filter: blur(25px);
+            border-radius: 30px;
+            padding: 20px 18px;
+            border: 1px solid var(--border);
+            text-align: center;
             box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            max-height: 90vh; overflow-y: auto; scrollbar-width: none;
+            max-height: 90vh;
+            overflow-y: auto;
+            scrollbar-width: none;
         }
         .card::-webkit-scrollbar { display: none; }
 
-        h1 { font-size: 1.6rem; color: #ffffff; letter-spacing: 1px; margin-bottom: 15px; text-transform: uppercase; font-weight: 800; }
-        .p-img { width: 90px; height: 90px; border-radius: 50%; border: 3px solid var(--primary-accent); padding: 4px; object-fit: cover; margin-bottom: 15px; }
+        .p-img {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 3px solid var(--primary-accent);
+            padding: 4px;
+            object-fit: cover;
+            margin-bottom: 15px;
+        }
 
-        .info-box { background: rgba(0,0,0,0.4); padding: 15px; border-radius: 18px; margin-bottom: 15px; text-align: left; border-left: 4px solid var(--primary-accent); font-size: 0.8rem; line-height: 1.6; }
+        .info-box {
+            background: rgba(0,0,0,0.4);
+            padding: 15px;
+            border-radius: 18px;
+            margin-bottom: 15px;
+            text-align: left;
+            border-left: 4px solid var(--primary-accent);
+            font-size: 0.8rem;
+            line-height: 1.6;
+        }
 
-        .section-title { font-size: 0.75rem; color: var(--primary-accent); margin: 15px 0 10px; font-weight: 700; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 10px; letter-spacing: 1.5px; opacity: 0.7; }
-        .section-title::before, .section-title::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+        .section-title {
+            font-size: 0.75rem;
+            color: var(--primary-accent);
+            margin: 15px 0 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            letter-spacing: 1.5px;
+            opacity: 0.7;
+        }
+        .section-title::before, .section-title::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
 
-        .btn-main { width: 100%; padding: 12px; border-radius: 15px; border: none; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 8px; }
+        .btn-main {
+            width: 100%;
+            padding: 12px;
+            border-radius: 15px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
         .btn-main:active { transform: scale(0.96); }
 
         .btn-accent { background: var(--primary-accent); color: #000; }
@@ -192,24 +238,104 @@ h1{
         .btn-wa { background: #128C7E; color: white; }
         .btn-map { background: #34a853; color: white; }
 
-        /* Dropdowns */
         .dropdown { position: relative; width: 100%; }
-        .dropdown-content { display: none; position: absolute; background: white; width: 100%; border-radius: 12px; z-index: 1000; bottom: 110%; box-shadow: 0 10px 30px rgba(0,0,0,0.5); overflow: hidden; }
-        .dropdown-content a { color: #000; padding: 12px; text-decoration: none; display: block; font-size: 0.85rem; border-bottom: 1px solid #eee; font-weight: 600; }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background: white;
+            width: 100%;
+            border-radius: 12px;
+            z-index: 1000;
+            bottom: 110%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            overflow: hidden;
+        }
+        .dropdown-content a {
+            color: #000;
+            padding: 12px;
+            text-decoration: none;
+            display: block;
+            font-size: 0.85rem;
+            border-bottom: 1px solid #eee;
+            font-weight: 600;
+        }
         .show { display: block !important; animation: slideUp 0.3s ease; }
         @keyframes slideUp { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-        .social-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px; }
-        .grid-btn { background: var(--glass); padding: 10px 5px; border-radius: 15px; text-decoration: none; color: #ccc; font-size: 0.6rem; border: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; }
-        .grid-btn img { width: 22px; height: 22px; margin-bottom: 5px; }
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .grid-btn {
+            background: var(--glass);
+            padding: 10px 5px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: #ccc;
+            font-size: 0.6rem;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .grid-btn img {
+            width: 22px;
+            height: 22px;
+            margin-bottom: 5px;
+        }
 
-        #pwa-installer { display: none; position: fixed; top: 10px; width: 90%; max-width: 380px; background: var(--primary-accent); color: #000; padding: 12px; border-radius: 50px; z-index: 9999; text-align: center; font-weight: 800; font-size: 0.8rem; box-shadow: 0 10px 20px rgba(0,0,0,0.3); cursor: pointer; }
-        .footer { margin-top: 20px; font-size: 0.6rem; opacity: 0.4; color: #fff; }
+        #pwa-installer {
+            display: none;
+            position: fixed;
+            top: 10px;
+            width: 90%;
+            max-width: 380px;
+            background: var(--primary-accent);
+            color: #000;
+            padding: 12px;
+            border-radius: 50px;
+            z-index: 9999;
+            text-align: center;
+            font-weight: 800;
+            font-size: 0.8rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            cursor: pointer;
+        }
 
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        .footer {
+            margin-top: 20px;
+            font-size: 0.6rem;
+            opacity: 0.4;
+            color: #fff;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: clamp(30px, 10vw, 44px);
+                letter-spacing: 1px;
+            }
+        }
     </style>
 </head>
 <body>
+
+    <div id="premiumPopup" class="premium-popup">
+        <div class="popup-content">
+            <img src="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg" class="popup-logo" alt="Logo">
+            <div>
+                <div class="popup-title">K-Win</div>
+                <div id="popupText" class="popup-text">Welcome</div>
+            </div>
+        </div>
+        <div class="popup-progress"><div class="popup-progress-bar"></div></div>
+    </div>
 
     <div id="pwa-installer" onclick="handleInstallClick()">
         📲 <span id="pwa-text">Install K-Win App</span>
@@ -217,7 +343,7 @@ h1{
 
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
-    
+
     <div class="top-bar">
         <div class="lang-switch">
             <button id="btn-si" class="lang-btn" onclick="setLanguage('si')">සිංහල</button>
@@ -229,7 +355,7 @@ h1{
     <div class="card">
         <h1>Kind Win</h1>
         <img src="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg" class="p-img" alt="Logo">
-        
+
         <div class="info-box">
             <span id="lbl-addr">📍 Kurunegala, Sri Lanka</span><br>
             <span>📞 071 733 7818</span><br>
@@ -266,24 +392,26 @@ h1{
 
         <div class="section-title" id="head-other">Other Services</div>
         <button onclick="openTimetable()" class="btn-main btn-blue">📅 <span id="txt-tt">Opening Hours</span></button>
-        
+
         <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 8px;">
             <button class="btn-main btn-map" onclick="window.open('https://maps.app.goo.gl/Ps6yVU6ytJjZexY98')">🗺️ <span id="txt-map">Go to K-Win</span></button>
-            <button onclick="shareCard()" class="btn-main btn-glass"> ➡️ <span id="txt-share">Share</span></button>
+            <button onclick="shareCard()" class="btn-main btn-glass">➡️ <span id="txt-share">Share</span></button>
         </div>
 
         <div class="section-title" id="head-social">Social Media</div>
         <div class="social-grid">
-            <a href="https://facebook.com/profile.php?id=61569786773421" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png"><span>Facebook</span></a>
-            <a href="https://www.youtube.com/@KindWin_18" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"><span>YouTube</span></a>
+            <a href="https://facebook.com/profile.php?id=61569786773421" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook"><span>Facebook</span></a>
+            <a href="https://www.youtube.com/@KindWin_18" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="YouTube"><span>YouTube</span></a>
             <a href="https://kwinproduction.github.io/K-Win/" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/1006/1006771.png" alt="Internet"><span>Kind Win Web</span></a>
-            <a href="#" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"><span>Instagram</span></a>
+            <a href="#" class="grid-btn"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram"><span>Instagram</span></a>
         </div>
-        
+
         <div class="footer" id="txt-footer">✨ Powered by K-Win | Created by Janith Didula</div>
     </div>
 
     <script>
+        window.OneSignalDeferred = window.OneSignalDeferred || [];
+
         let currentLang = 'en';
         let deferredPrompt;
 
@@ -321,7 +449,7 @@ h1{
             currentLang = lang;
             document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
             document.getElementById('btn-' + lang).classList.add('active');
-            
+
             const t = translations[lang];
             document.getElementById('txt-save').innerText = t.save;
             document.getElementById('txt-tt').innerText = t.tt;
@@ -369,13 +497,14 @@ h1{
         }
 
         function saveVCard() {
-            const vcard = "BEGIN:VCARD\nVERSION:3.0\nFN:Kind Win\nTEL:0707140731\nEMAIL:kindwin2026@gmail.com\nEND:VCARD";
+            const vcard = "BEGIN:VCARD\nVERSION:3.0\nFN:Kind Win\nTEL:0717337818\nEMAIL:kindwin2026@gmail.com\nEND:VCARD";
             const blob = new Blob([vcard], { type: 'text/vcard' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
             a.download = 'KindWin_Contact.vcf';
             a.click();
+            window.URL.revokeObjectURL(url);
             localStorage.setItem('kwin_contact_saved', 'true');
             checkStatus();
         }
@@ -392,16 +521,61 @@ h1{
                 try {
                     await navigator.share({ title: 'K-Win', text: 'K-Win Digital Card', url: window.location.href });
                 } catch (err) {}
-            } else { alert("Sharing not supported"); }
+            } else {
+                alert("Sharing not supported");
+            }
         }
 
-        window.onload = () => { 
-            setLanguage('en'); 
-            checkStatus(); 
+        function playWelcomeSound(){
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+
+                osc.type = "sine";
+                osc.frequency.value = 900;
+
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                gain.gain.setValueAtTime(0.08, ctx.currentTime);
+
+                osc.start();
+
+                setTimeout(() => {
+                    osc.stop();
+                    ctx.close();
+                }, 250);
+            } catch (e) {}
+        }
+
+        function showWelcomePopup(message){
+            const popup = document.getElementById("premiumPopup");
+            const popupText = document.getElementById("popupText");
+
+            if (!popup || !popupText) return;
+
+            popupText.innerHTML = message;
+            popup.classList.add("show");
+
+            navigator.vibrate?.([120,80,120]);
+            playWelcomeSound();
+
+            setTimeout(() => {
+                popup.classList.remove("show");
+            }, 5000);
+        }
+
+        window.onload = () => {
+            setLanguage('en');
+            checkStatus();
+            showWelcomePopup("🎉 Welcome to K-Win App.");
         };
 
-        // Scroll protection
-        document.addEventListener('touchmove', (e) => { if(e.target.closest('.card')) return; e.preventDefault(); }, { passive: false });
+        document.addEventListener('touchmove', (e) => {
+            if (e.target.closest('.card')) return;
+            e.preventDefault();
+        }, { passive: false });
 
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
@@ -413,71 +587,24 @@ h1{
             if (deferredPrompt) {
                 deferredPrompt.prompt();
                 const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') document.getElementById('pwa-installer').style.display = 'none';
+                if (outcome === 'accepted') {
+                    document.getElementById('pwa-installer').style.display = 'none';
+                }
                 deferredPrompt = null;
             }
         }
-        function playWelcomeSound(){
 
- const ctx = new(window.AudioContext||window.webkitAudioContext)();
+        OneSignalDeferred.push(async function(OneSignal) {
+            await OneSignal.init({
+                appId: "ebdc2cd4-a21d-434f-ab63-d60f21ad3295"
+            });
 
- const osc = ctx.createOscillator();
- const gain = ctx.createGain();
+            const permission = OneSignal.Notifications.permission;
 
- osc.type="sine";
- osc.frequency.value=900;
-
- osc.connect(gain);
- gain.connect(ctx.destination);
-
- gain.gain.setValueAtTime(0.08,ctx.currentTime);
-
- osc.start();
-
- setTimeout(()=>{
-   osc.stop();
-   ctx.close();
- },250);
-
-}
-
-function showWelcomePopup(message){
-
- const popup=document.getElementById("premiumPopup");
- document.getElementById("popupText").innerHTML=message;
-
- popup.classList.add("show");
-
- navigator.vibrate?.([120,80,120]);
-
- playWelcomeSound();
-
- setTimeout(()=>{
-    popup.classList.remove("show");
- },5000);
-
-}
-        window.addEventListener("load",()=>{
-
- showWelcomePopup(
-   "🎉 Welcome to K-Win App."
- );
-
-});
-OneSignalDeferred.push(async function(OneSignal) {
-
-  await OneSignal.init({
-    appId: "ebdc2cd4-a21d-434f-ab63-d60f21ad3295"
-  });
-
-  const permission = await OneSignal.Notifications.permission;
-
-  if(permission !== true){
-      await OneSignal.Slidedown.promptPush();
-  }
-
-});
-</script>
+            if (permission !== true) {
+                await OneSignal.Slidedown.promptPush();
+            }
+        });
     </script>
 </body>
 </html>
