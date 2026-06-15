@@ -176,14 +176,8 @@
 
         <div>
             <div class="popup-title">Welcome to K-Win</div>
-
-            <div class="popup-text" id="popupText">
-                Thank you for installing our application.
-            </div>
         </div>
-
     </div>
-
     <div class="popup-progress">
         <div class="popup-progress-bar"></div>
     </div>
@@ -430,18 +424,10 @@ function showWelcomePopup(message){
         window.addEventListener("load",()=>{
 
  showWelcomePopup(
-   "🎉 Welcome to K-Win App.<br><br>Thank you for installing our application."
+   "🎉 Welcome to K-Win App."
  );
 
 });
-        setTimeout(()=>{
- showWelcomePopup("🔥 New features available");
-},7000);
-
-setTimeout(()=>{
- showWelcomePopup("📞 Save our contact for quick access");
-},14000);
-
 OneSignalDeferred.push(async function(OneSignal) {
 
   await OneSignal.init({
