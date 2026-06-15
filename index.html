@@ -105,45 +105,61 @@
  from{width:100%;}
  to{width:0%;}
 }
-body{
-    margin:0;
-    height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background:#0a1f44;
-    overflow:hidden;
-    font-family:Arial,sans-serif;
-}
-
-/* Football */
 .ball{
     position:absolute;
-    width:90px;
-    height:90px;
+    left:-120px;
+    bottom:50%;
     font-size:90px;
-    animation:rollBall 3s ease-in-out forwards;
+    animation:rollBall 3s linear forwards;
 }
 
 @keyframes rollBall{
     0%{
-        left:-120px;
-        transform:rotate(0deg);
+        transform:translateX(0) rotate(0deg);
     }
+
     70%{
-        left:calc(50% - 45px);
-        transform:rotate(1080deg);
+        transform:translateX(calc(50vw + 75px)) rotate(1080deg);
     }
+
     100%{
-        left:calc(50% - 45px);
-        transform:rotate(1440deg) scale(0);
+        transform:translateX(calc(50vw + 75px)) rotate(1080deg);
         opacity:0;
     }
 }
+        .ball{
+    position:absolute;
+    left:-120px;
+    top:50%;
+    font-size:90px;
+    animation:footballRoll 3s ease-out forwards;
+}
 
+@keyframes footballRoll{
+    0%{
+        transform:translateX(0) translateY(0) rotate(0deg);
+    }
+
+    25%{
+        transform:translateX(25vw) translateY(-20px) rotate(360deg);
+    }
+
+    50%{
+        transform:translateX(50vw) translateY(0) rotate(720deg);
+    }
+
+    75%{
+        transform:translateX(75vw) translateY(-10px) rotate(1080deg);
+    }
+
+    100%{
+        transform:translateX(100vw) translateY(0) rotate(1440deg);
+        opacity:0;
+    }
+}
 /* Kind Win */
 h1{
-    color:#FFD700; /* ඔයාගේ පාටම */
+    color:#FFD700;
     font-size:70px;
     font-weight:900;
     letter-spacing:3px;
@@ -158,8 +174,7 @@ h1{
 
     animation:
         showText 0.1s forwards 2.9s,
-        typing 2s steps(8,end) forwards 3s,
-        blink .6s infinite 3s;
+        typing 2s steps(8,end) forwards 3s;
 }
 
 @keyframes showText{
@@ -169,13 +184,12 @@ h1{
 }
 
 @keyframes typing{
-    from{width:0}
-    to{width:420px}
-}
-
-@keyframes blink{
-    50%{
-        border-color:transparent;
+    from{
+        width:0;
+    }
+    to{
+        width:100%;
+        border-right:none; /* Cursor remove */
     }
 }
         /* Background Orbs */
@@ -264,7 +278,7 @@ h1{
 
     <div class="card">
         <div class="ball">⚽</div>
-        <h1><centeraling>Kind Win</centeraling></h1>
+        <h1>Kind Win</h1>
         <img src="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg" class="p-img" alt="Logo">
         
         <div class="info-box">
