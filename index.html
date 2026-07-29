@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>K-Win</title>
 
-    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+   
 
     <!-- PWA Manifest -->
     <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiS1dpbiIsInNob3J0X25hbWUiOiJLLVdpbiIsInN0YXJ0X3VybCI6ImluZGV4Lmh0bWwiLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjMDAwMDAwIiwidGhlbWVfY29sb3IiOiIjMDBmMmZmIiwib3JpZW50YXRpb24iOiJwb3J0cmFpdCIsImljb25zIjpbeyJzcmMiOiJodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20va3dpbnByb2R1Y3Rpb24vSy1XaW4tRWNhcmQvbWFpbi9sb2dvLmpwZWciLCJzaXplcyI6IjUxMng1MTIiLCJ0eXBlIjoiaW1hZ2UvanBlZyIsInB1cnBvc2UiOiJhbnkgbWFza2FibGUifV19">
@@ -322,6 +322,118 @@ h1{
                 letter-spacing: 1px;
             }
         }
+        .apk-popup{
+    position:fixed;
+    inset:0;
+    display:none;
+    justify-content:center;
+    align-items:center;
+    background:rgba(0,0,0,0.85);
+    backdrop-filter:blur(12px);
+    z-index:999999;
+    animation:fadeIn .4s ease;
+}
+
+.apk-card{
+    width:90%;
+    max-width:370px;
+    padding:30px 25px;
+    border-radius:30px;
+    text-align:center;
+    background:linear-gradient(
+        145deg,
+        rgba(10,15,30,.98),
+        rgba(20,30,60,.95)
+    );
+    border:1px solid rgba(0,242,255,.25);
+    box-shadow:
+        0 0 30px rgba(0,242,255,.15),
+        0 20px 50px rgba(0,0,0,.6);
+    animation:popupShow .5s ease;
+}
+
+.apk-logo{
+    width:100px;
+    height:100px;
+    object-fit:cover;
+    border-radius:24px;
+    margin-bottom:15px;
+    border:3px solid #00f2ff;
+    box-shadow:0 0 25px rgba(0,242,255,.4);
+}
+
+.apk-card h2{
+    color:#00f2ff;
+    font-size:1.6rem;
+    margin-bottom:10px;
+    font-weight:800;
+}
+
+.apk-card p{
+    color:#d8e7ff;
+    line-height:1.7;
+    font-size:.95rem;
+    margin-bottom:20px;
+}
+
+.apk-btn{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:16px;
+    cursor:pointer;
+    font-size:1rem;
+    font-weight:800;
+    background:linear-gradient(
+        135deg,
+        #00f2ff,
+        #00a2ff
+    );
+    color:#000;
+    transition:.3s;
+}
+
+.apk-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 25px rgba(0,242,255,.35);
+}
+
+.apk-later{
+    width:100%;
+    padding:13px;
+    margin-top:10px;
+    border:none;
+    border-radius:16px;
+    cursor:pointer;
+    font-weight:700;
+    background:rgba(255,255,255,.08);
+    color:#fff;
+    transition:.3s;
+}
+
+.apk-later:hover{
+    background:rgba(255,255,255,.15);
+}
+
+@keyframes popupShow{
+    from{
+        opacity:0;
+        transform:translateY(30px) scale(.9);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0) scale(1);
+    }
+}
+
+@keyframes fadeIn{
+    from{
+        opacity:0;
+    }
+    to{
+        opacity:1;
+    }
+}
     </style>
 </head>
 <body>
@@ -331,16 +443,35 @@ h1{
             <img src="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg" class="popup-logo" alt="Logo">
             <div>
                 <div class="popup-title">K-Win</div>
-                <div id="popupText" class="popup-text">Welcome</div>
             </div>
-        </div>
-        <div class="popup-progress"><div class="popup-progress-bar"></div></div>
     </div>
 
     <div id="pwa-installer" onclick="handleInstallClick()">
         📲 <span id="pwa-text">Install K-Win App</span>
     </div>
+        
+<div id="apkPopup" class="apk-popup">
+    <div class="apk-card">
 
+        <img src="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg"
+             class="apk-logo">
+
+        <h2>Install K-Win App</h2>
+
+        <p>
+            Install the official K-Win App for faster access and a better experience.
+        </p>
+
+        <button onclick="downloadAPK()" class="apk-btn">
+            📲 INSTALL NOW
+        </button>
+
+        <button onclick="closeAPKPopup()" class="apk-later">
+            Maybe Later
+        </button>
+
+    </div>
+</div>
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
 
@@ -605,6 +736,37 @@ h1{
                 await OneSignal.Slidedown.promptPush();
             }
         });
+        const APK_LINK =
+"https://raw.githubusercontent.com/kwinproduction/K-Win-Card/main/app-release.apk";
+
+function downloadAPK(){
+    window.open(APK_LINK, "_blank");
+}
+
+function closeAPKPopup(){
+    document.getElementById("apkPopup").style.display = "none";
+    localStorage.setItem("hideApkPopup","true");
+}
+
+window.addEventListener("load", () => {
+
+    const isApp =
+        new URLSearchParams(location.search).get("app") === "true" ||
+        window.matchMedia('(display-mode: standalone)').matches ||
+        navigator.userAgent.includes("KWINAPP");
+
+    const hidden =
+        localStorage.getItem("hideApkPopup") === "true";
+
+    if(isApp || hidden){
+        return;
+    }
+
+    setTimeout(() => {
+        document.getElementById("apkPopup").style.display = "flex";
+    }, 2500);
+
+});
     </script>
 </body>
 </html>
