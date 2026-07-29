@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>K-Win</title>
 
-   
-
     <!-- PWA Manifest -->
     <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiS1dpbiIsInNob3J0X25hbWUiOiJLLVdpbiIsInN0YXJ0X3VybCI6ImluZGV4Lmh0bWwiLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjMDAwMDAwIiwidGhlbWVfY29sb3IiOiIjMDBmMmZmIiwib3JpZW50YXRpb24iOiJwb3J0cmFpdCIsImljb25zIjpbeyJzcmMiOiJodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20va3dpbnByb2R1Y3Rpb24vSy1XaW4tRWNhcmQvbWFpbi9sb2dvLmpwZWciLCJzaXplcyI6IjUxMng1MTIiLCJ0eXBlIjoiaW1hZ2UvanBlZyIsInB1cnBvc2UiOiJhbnkgbWFza2FibGUifV19">
     <link rel="icon" type="image/jpeg" href="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg">
@@ -43,101 +41,102 @@
             justify-content: center;
         }
 
-        .premium-popup{
-            position:fixed;
-            top:15px;
-            left:50%;
-            transform:translateX(-50%) translateY(-200%);
-            width:92%;
-            max-width:390px;
-            background:rgba(10,15,30,.95);
-            backdrop-filter:blur(25px);
-            border:1px solid rgba(0,242,255,.25);
-            border-radius:25px;
-            overflow:hidden;
-            z-index:999999;
-            transition:.6s cubic-bezier(.175,.885,.32,1.275);
-            box-shadow: 0 0 25px rgba(0,242,255,.15), 0 20px 50px rgba(0,0,0,.6);
+        .premium-popup {
+            position: fixed;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-200%);
+            width: 92%;
+            max-width: 390px;
+            background: rgba(10, 15, 30, .95);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(0, 242, 255, .25);
+            border-radius: 25px;
+            overflow: hidden;
+            z-index: 999999;
+            transition: .6s cubic-bezier(.175, .885, .32, 1.275);
+            box-shadow: 0 0 25px rgba(0, 242, 255, .15), 0 20px 50px rgba(0, 0, 0, .6);
         }
 
-        .premium-popup.show{
-            transform:translateX(-50%) translateY(0);
+        .premium-popup.show {
+            transform: translateX(-50%) translateY(0);
         }
 
-        .popup-content{
-            display:flex;
-            gap:12px;
-            padding:16px;
-            align-items:center;
+        .popup-content {
+            display: flex;
+            gap: 12px;
+            padding: 16px;
+            align-items: center;
         }
 
-        .popup-logo{
-            width:55px;
-            height:55px;
-            border-radius:18px;
-            object-fit:cover;
-            box-shadow:0 0 20px rgba(0,242,255,.4);
+        .popup-logo {
+            width: 55px;
+            height: 55px;
+            border-radius: 18px;
+            object-fit: cover;
+            box-shadow: 0 0 20px rgba(0, 242, 255, .4);
         }
 
-        .popup-title{
-            color:#00f2ff;
-            font-weight:800;
-            font-size:1rem;
-            margin-bottom:4px;
+        .popup-title {
+            color: #00f2ff;
+            font-weight: 800;
+            font-size: 1rem;
+            margin-bottom: 4px;
         }
 
-        .popup-text{
-            color:white;
-            font-size:.85rem;
-            line-height:1.5;
+        .popup-text {
+            color: white;
+            font-size: .85rem;
+            line-height: 1.5;
         }
 
-        .popup-progress{
-            height:4px;
-            width:100%;
-            background:rgba(255,255,255,.08);
+        .popup-progress {
+            height: 4px;
+            width: 100%;
+            background: rgba(255, 255, 255, .08);
         }
 
-        .popup-progress-bar{
-            height:100%;
-            width:100%;
-            background:#00f2ff;
-            animation:closeBar 5s linear forwards;
+        .popup-progress-bar {
+            height: 100%;
+            width: 100%;
+            background: #00f2ff;
+            animation: closeBar 5s linear forwards;
         }
 
-        @keyframes closeBar{
-            from{width:100%;}
-            to{width:0%;}
-        }
-h1{
-    color:#FFFFFF;
-    font-size:clamp(24px, 6vw, 36px);
-    font-weight:900;
-    letter-spacing:1px;
-    text-transform:uppercase;
-    width:0;
-    overflow:hidden;
-    white-space:nowrap;
-    border-right:3px solid #FFFFFF;
-    opacity:0;
-    animation: showText 0.1s forwards 2.9s,
-               typing 2s steps(8,end) forwards 3s,
-               glowPulse 2s infinite;
-}
-
-        @keyframes showText{
-            to{ opacity:1; }
+        @keyframes closeBar {
+            from { width: 100%; }
+            to { width: 0%; }
         }
 
-        @keyframes typing{
-            from{ width:0; }
-            to{ width:100%; border-right:none; }
+        h1 {
+            color: #FFFFFF;
+            font-size: clamp(24px, 6vw, 36px);
+            font-weight: 900;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            width: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 3px solid #FFFFFF;
+            opacity: 0;
+            animation: showText 0.1s forwards 2.9s,
+                       typing 2s steps(8, end) forwards 3s,
+                       glowPulse 2s infinite;
         }
 
-        @keyframes glowPulse{
-            0%,100%{ text-shadow:0 0 10px rgba(255,255,255,0.95); }
-            50%{
-                text-shadow: 0 0 20px rgba(255,255,255,0.95), 0 0 40px rgba(255,255,255,0.75), 0 0 60px rgba(255,255,255,0.5);
+        @keyframes showText {
+            to { opacity: 1; }
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; border-right: none; }
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { text-shadow: 0 0 10px rgba(255, 255, 255, 0.95); }
+            50% {
+                text-shadow: 0 0 20px rgba(255, 255, 255, 0.95), 0 0 40px rgba(255, 255, 255, 0.75), 0 0 60px rgba(255, 255, 255, 0.5);
             }
         }
 
@@ -149,6 +148,7 @@ h1{
             opacity: 0.15;
             animation: move 15s infinite alternate ease-in-out;
         }
+
         .orb-1 { width: 300px; height: 300px; background: var(--primary-accent); top: -50px; right: -50px; }
         .orb-2 { width: 400px; height: 400px; background: var(--blue); bottom: -100px; left: -50px; }
         @keyframes move { from { transform: translate(0,0); } to { transform: translate(30px, 40px); } }
@@ -322,118 +322,94 @@ h1{
                 letter-spacing: 1px;
             }
         }
-        .apk-popup{
-    position:fixed;
-    inset:0;
-    display:none;
-    justify-content:center;
-    align-items:center;
-    background:rgba(0,0,0,0.85);
-    backdrop-filter:blur(12px);
-    z-index:999999;
-    animation:fadeIn .4s ease;
-}
 
-.apk-card{
-    width:90%;
-    max-width:370px;
-    padding:30px 25px;
-    border-radius:30px;
-    text-align:center;
-    background:linear-gradient(
-        145deg,
-        rgba(10,15,30,.98),
-        rgba(20,30,60,.95)
-    );
-    border:1px solid rgba(0,242,255,.25);
-    box-shadow:
-        0 0 30px rgba(0,242,255,.15),
-        0 20px 50px rgba(0,0,0,.6);
-    animation:popupShow .5s ease;
-}
+        .apk-popup {
+            position: fixed;
+            inset: 0;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(12px);
+            z-index: 999999;
+            animation: fadeIn .4s ease;
+        }
 
-.apk-logo{
-    width:100px;
-    height:100px;
-    object-fit:cover;
-    border-radius:24px;
-    margin-bottom:15px;
-    border:3px solid #00f2ff;
-    box-shadow:0 0 25px rgba(0,242,255,.4);
-}
+        .apk-card {
+            width: 90%;
+            max-width: 370px;
+            padding: 30px 25px;
+            border-radius: 30px;
+            text-align: center;
+            background: linear-gradient(145deg, rgba(10,15,30,.98), rgba(20,30,60,.95));
+            border: 1px solid rgba(0,242,255,.25);
+            box-shadow: 0 0 30px rgba(0,242,255,.15), 0 20px 50px rgba(0,0,0,.6);
+            animation: popupShow .5s ease;
+        }
 
-.apk-card h2{
-    color:#00f2ff;
-    font-size:1.6rem;
-    margin-bottom:10px;
-    font-weight:800;
-}
+        .apk-logo {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 24px;
+            margin-bottom: 15px;
+            border: 3px solid #00f2ff;
+            box-shadow: 0 0 25px rgba(0,242,255,.4);
+        }
 
-.apk-card p{
-    color:#d8e7ff;
-    line-height:1.7;
-    font-size:.95rem;
-    margin-bottom:20px;
-}
+        .apk-card h2 {
+            color: #00f2ff;
+            font-size: 1.6rem;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
 
-.apk-btn{
-    width:100%;
-    padding:15px;
-    border:none;
-    border-radius:16px;
-    cursor:pointer;
-    font-size:1rem;
-    font-weight:800;
-    background:linear-gradient(
-        135deg,
-        #00f2ff,
-        #00a2ff
-    );
-    color:#000;
-    transition:.3s;
-}
+        .apk-card p {
+            color: #d8e7ff;
+            line-height: 1.7;
+            font-size: .95rem;
+            margin-bottom: 20px;
+        }
 
-.apk-btn:hover{
-    transform:translateY(-2px);
-    box-shadow:0 10px 25px rgba(0,242,255,.35);
-}
+        .apk-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #00f2ff, #00a2ff);
+            color: #000;
+            transition: .3s;
+        }
 
-.apk-later{
-    width:100%;
-    padding:13px;
-    margin-top:10px;
-    border:none;
-    border-radius:16px;
-    cursor:pointer;
-    font-weight:700;
-    background:rgba(255,255,255,.08);
-    color:#fff;
-    transition:.3s;
-}
+        .apk-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,242,255,.35);
+        }
 
-.apk-later:hover{
-    background:rgba(255,255,255,.15);
-}
+        .apk-later {
+            width: 100%;
+            padding: 13px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            font-weight: 700;
+            background: rgba(255,255,255,.08);
+            color: #fff;
+            transition: .3s;
+        }
 
-@keyframes popupShow{
-    from{
-        opacity:0;
-        transform:translateY(30px) scale(.9);
-    }
-    to{
-        opacity:1;
-        transform:translateY(0) scale(1);
-    }
-}
+        .apk-later:hover {
+            background: rgba(255,255,255,.15);
+        }
 
-@keyframes fadeIn{
-    from{
-        opacity:0;
-    }
-    to{
-        opacity:1;
-    }
-}
+        @keyframes popupShow {
+            from { opacity: 0; transform: translateY(30px) scale(.9); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
     </style>
 </head>
 <body>
@@ -443,35 +419,28 @@ h1{
             <img src="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg" class="popup-logo" alt="Logo">
             <div>
                 <div class="popup-title">K-Win</div>
+                <div id="popupText" class="popup-text"></div>
             </div>
+        </div>
+        <div class="popup-progress">
+            <div class="popup-progress-bar"></div>
+        </div>
     </div>
 
     <div id="pwa-installer" onclick="handleInstallClick()">
         📲 <span id="pwa-text">Install K-Win App</span>
     </div>
-        
-<div id="apkPopup" class="apk-popup">
-    <div class="apk-card">
 
-        <img src="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg"
-             class="apk-logo">
-
-        <h2>Install K-Win App</h2>
-
-        <p>
-            Install the official K-Win App for faster access and a better experience.
-        </p>
-
-        <button onclick="downloadAPK()" class="apk-btn">
-            📲 INSTALL NOW
-        </button>
-
-        <button onclick="closeAPKPopup()" class="apk-later">
-            Maybe Later
-        </button>
-
+    <div id="apkPopup" class="apk-popup">
+        <div class="apk-card">
+            <img src="https://raw.githubusercontent.com/kwinproduction/K-Win-Ecard/main/logo.jpeg" class="apk-logo" alt="App Logo">
+            <h2>Install K-Win App</h2>
+            <p>Install the official K-Win App for faster access and a better experience.</p>
+            <button onclick="downloadAPK()" class="apk-btn">📲 INSTALL NOW</button>
+            <button onclick="closeAPKPopup()" class="apk-later">Maybe Later</button>
+        </div>
     </div>
-</div>
+
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
 
@@ -657,7 +626,7 @@ h1{
             }
         }
 
-        function playWelcomeSound(){
+        function playWelcomeSound() {
             try {
                 const ctx = new (window.AudioContext || window.webkitAudioContext)();
                 const osc = ctx.createOscillator();
@@ -680,7 +649,7 @@ h1{
             } catch (e) {}
         }
 
-        function showWelcomePopup(message){
+        function showWelcomePopup(message) {
             const popup = document.getElementById("premiumPopup");
             const popupText = document.getElementById("popupText");
 
@@ -689,19 +658,13 @@ h1{
             popupText.innerHTML = message;
             popup.classList.add("show");
 
-            navigator.vibrate?.([120,80,120]);
+            navigator.vibrate?.([120, 80, 120]);
             playWelcomeSound();
 
             setTimeout(() => {
                 popup.classList.remove("show");
             }, 5000);
         }
-
-        window.onload = () => {
-            setLanguage('en');
-            checkStatus();
-            showWelcomePopup("🎉 Welcome to K-Win App.");
-        };
 
         document.addEventListener('touchmove', (e) => {
             if (e.target.closest('.card')) return;
@@ -736,37 +699,38 @@ h1{
                 await OneSignal.Slidedown.promptPush();
             }
         });
-        const APK_LINK =
-"https://raw.githubusercontent.com/kwinproduction/K-Win-Card/main/app-release.apk";
 
-function downloadAPK(){
-    window.open(APK_LINK, "_blank");
-}
+        const APK_LINK = "https://raw.githubusercontent.com/kwinproduction/K-Win-Card/main/app-release.apk";
 
-function closeAPKPopup(){
-    document.getElementById("apkPopup").style.display = "none";
-    localStorage.setItem("hideApkPopup","true");
-}
+        function downloadAPK() {
+            window.open(APK_LINK, "_blank");
+        }
 
-window.addEventListener("load", () => {
+        function closeAPKPopup() {
+            document.getElementById("apkPopup").style.display = "none";
+            localStorage.setItem("hideApkPopup", "true");
+        }
 
-    const isApp =
-        new URLSearchParams(location.search).get("app") === "true" ||
-        window.matchMedia('(display-mode: standalone)').matches ||
-        navigator.userAgent.includes("KWINAPP");
+        window.addEventListener("load", () => {
+            setLanguage('en');
+            checkStatus();
+            showWelcomePopup("🎉 Welcome to K-Win App.");
 
-    const hidden =
-        localStorage.getItem("hideApkPopup") === "true";
+            const isApp =
+                new URLSearchParams(location.search).get("app") === "true" ||
+                window.matchMedia('(display-mode: standalone)').matches ||
+                navigator.userAgent.includes("KWINAPP");
 
-    if(isApp || hidden){
-        return;
-    }
+            const hidden = localStorage.getItem("hideApkPopup") === "true";
 
-    setTimeout(() => {
-        document.getElementById("apkPopup").style.display = "flex";
-    }, 2500);
+            if (isApp || hidden) {
+                return;
+            }
 
-});
+            setTimeout(() => {
+                document.getElementById("apkPopup").style.display = "flex";
+            }, 2500);
+        });
     </script>
 </body>
 </html>
